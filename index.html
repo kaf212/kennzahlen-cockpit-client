@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kennzahlen Cockpit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex flex-col items-center p-4">
+
+<!-- Hauptcontainer -->
+<div class="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6">
+
+  <!-- Header mit Titel & Login-Button -->
+  <div class="flex justify-between items-center border-b pb-4 mb-4">
+    <h1 class="text-xl font-bold">Kennzahlen Cockpit</h1>
+    <a href="login.html" class="bg-gray-800 text-white px-4 py-2 rounded">Login</a>
+  </div>
+
+  <!-- Dropdown links & Import-Button rechts -->
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
+      <select id="category" class="border p-2 rounded mt-1">
+        <option>Leistungskategorie 1</option>
+        <option>Leistungskategorie 2</option>
+        <option>Leistungskategorie 3</option>
+      </select>
+    </div>
+    <a href="import.html" class="bg-blue-500 text-white px-4 py-2 rounded">Excel Import</a>
+  </div>
+
+  <!-- Tab-Steuerung -->
+  <div class="flex mt-6 border-b">
+    <button id="tab-graph" class="active-tab px-4 py-2 border-b-2 border-gray-800">Graph</button>
+    <button id="tab-table" class="px-4 py-2 border-b-2 border-transparent">Kennzahlen</button>
+  </div>
+
+  <!-- Inhalt: Graph -->
+  <div id="graph-section" class="content-section mt-4">
+    <p class="text-center text-gray-600">[Graphische Darstellung]</p>
+  </div>
+
+  <!-- Inhalt: Tabelle -->
+  <div id="table-section" class="content-section mt-4 hidden">
+    <table class="w-full border-collapse border border-gray-300">
+      <thead>
+      <tr class="bg-gray-200">
+        <th class="border border-gray-300 px-4 py-2">Kennzahl</th>
+        <th class="border border-gray-300 px-4 py-2">Wert</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="border border-gray-300 px-4 py-2">Liquid</td>
+        <td class="border border-gray-300 px-4 py-2 text-green-500 font-bold">Grün</td>
+      </tr>
+      <tr>
+        <td class="border border-gray-300 px-4 py-2">Leistungskategorie 2</td>
+        <td class="border border-gray-300 px-4 py-2 text-yellow-500 font-bold">Gelb</td>
+      </tr>
+      <tr>
+        <td class="border border-gray-300 px-4 py-2">Leistungskategorie 3</td>
+        <td class="border border-gray-300 px-4 py-2 text-red-500 font-bold">Rot</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
