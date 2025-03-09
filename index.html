@@ -9,7 +9,6 @@
 </head>
 <body class="bg-gray-100 flex flex-col items-center p-4">
 
-<!-- Hauptcontainer -->
 <div class="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6">
 
   <!-- Header mit Titel & Login-Button -->
@@ -18,7 +17,6 @@
     <a href="login.html" class="bg-gray-800 text-white px-4 py-2 rounded">Login</a>
   </div>
 
-  <!-- Dropdown links & Import-Button rechts -->
   <div class="flex justify-between items-center mb-4">
     <div>
       <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
@@ -31,18 +29,15 @@
     <a href="import.html" class="bg-blue-500 text-white px-4 py-2 rounded">Excel Import</a>
   </div>
 
-  <!-- Tab-Steuerung -->
   <div class="flex mt-6 border-b">
-    <button id="tab-graph" class="active-tab px-4 py-2 border-b-2 border-gray-800">Graph</button>
-    <button id="tab-table" class="px-4 py-2 border-b-2 border-transparent">Kennzahlen</button>
+    <button id="tab-graph" class="tab-button px-4 py-2 border-b-2 border-gray-800" onclick="showTab('graph')">Graph</button>
+    <button id="tab-table" class="tab-button px-4 py-2 border-b-2 border-transparent" onclick="showTab('table')">Kennzahlen</button>
   </div>
 
-  <!-- Inhalt: Graph -->
   <div id="graph-section" class="content-section mt-4">
     <p class="text-center text-gray-600">[Graphische Darstellung]</p>
   </div>
 
-  <!-- Inhalt: Tabelle -->
   <div id="table-section" class="content-section mt-4 hidden">
     <table class="w-full border-collapse border border-gray-300">
       <thead>
@@ -67,6 +62,7 @@
       </tbody>
     </table>
   </div>
+
 </div>
 
 </body>

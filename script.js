@@ -30,12 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const dropArea = document.getElementById("drop-area");
     const fileInput = document.getElementById("file-input");
     const uploadButton = document.getElementById("upload-file");
-    let file; // Speichert die ausgewählte Datei
+    let file;
 
-    // Klick auf Drop-Bereich öffnet Datei-Explorer
     dropArea.addEventListener("click", () => fileInput.click());
 
-    // Datei per Drag & Drop hinzufügen
     dropArea.addEventListener("dragover", (e) => {
         e.preventDefault();
         dropArea.classList.add("active");
@@ -55,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Datei per Datei-Explorer hinzufügen
     fileInput.addEventListener("change", () => {
         if (fileInput.files.length > 0) {
             file = fileInput.files[0];
@@ -63,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Datei hochladen
     uploadButton.addEventListener("click", () => {
         if (file) {
             alert("Datei hochgeladen: " + file.name);
@@ -73,3 +69,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
+function showTab(tab) {
+    // Alle Tabs verstecken
+    document.getElementById("graph-section").classList.add("hidden");
+    document.getElementById("table-section").classList.add("hidden");
+
+    // Ausgewählten Tab anzeigen
+    document.getElementById(tab + "-section").classList.remove("hidden");
+
+    document.querySelectorAll(".tab-button").forEach(button => {
+        button.classList.remove("border-gray-800");
+        button.classList.add("border-transparent");
+    });
+
+    document.getElementById("tab-" + tab).classList.add("border-gray-800");
+    document.getElementById("tab-" + tab).classList.remove("border-transparent");
+}
