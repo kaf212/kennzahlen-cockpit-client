@@ -11,7 +11,6 @@
 
 <div class="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6">
 
-  <!-- Header mit Titel & Login-Button -->
   <div class="flex justify-between items-center border-b pb-4 mb-4">
     <h1 class="text-xl font-bold">Kennzahlen Cockpit</h1>
     <a href="login.html" class="bg-gray-800 text-white px-4 py-2 rounded">Login</a>
@@ -21,17 +20,17 @@
     <div>
       <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
       <select id="category" class="border p-2 rounded mt-1">
-        <option>Leistungskategorie 1</option>
-        <option>Leistungskategorie 2</option>
-        <option>Leistungskategorie 3</option>
+        <option>Anlagedeckungsgrad 1</option>
+        <option>Liquiditätsgrad 2</option>
+        <option>Anlagedeckungsgrad 2</option>
       </select>
     </div>
     <a href="import.html" class="bg-blue-500 text-white px-4 py-2 rounded">Excel Import</a>
   </div>
 
   <div class="flex mt-6 border-b">
-    <button id="tab-graph" class="tab-button px-4 py-2 border-b-2 border-gray-800" onclick="showTab('graph')">Graph</button>
-    <button id="tab-table" class="tab-button px-4 py-2 border-b-2 border-transparent" onclick="showTab('table')">Kennzahlen</button>
+    <button id="tab-graph" class="tab-button px-4 py-2 border-b-2 border-gray-800" onclick="showTab('graph')">Gewünschtes Jahr</button>
+    <button id="tab-table" class="tab-button px-4 py-2 border-b-2 border-transparent" onclick="showTab('table')">Aktuell</button>
   </div>
 
   <div id="graph-section" class="content-section mt-4">
@@ -48,15 +47,15 @@
       </thead>
       <tbody>
       <tr>
-        <td class="border border-gray-300 px-4 py-2">Liquid</td>
+        <td class="border border-gray-300 px-4 py-2">Anlagedeckungsgrad 1</td>
         <td class="border border-gray-300 px-4 py-2 text-green-500 font-bold">Grün</td>
       </tr>
       <tr>
-        <td class="border border-gray-300 px-4 py-2">Leistungskategorie 2</td>
+        <td class="border border-gray-300 px-4 py-2">Liquiditätsgrad 2</td>
         <td class="border border-gray-300 px-4 py-2 text-yellow-500 font-bold">Gelb</td>
       </tr>
       <tr>
-        <td class="border border-gray-300 px-4 py-2">Leistungskategorie 3</td>
+        <td class="border border-gray-300 px-4 py-2">Anlagedeckungsgrad 2</td>
         <td class="border border-gray-300 px-4 py-2 text-red-500 font-bold">Rot</td>
       </tr>
       </tbody>
@@ -64,6 +63,8 @@
   </div>
 
 </div>
+
+<script src="script.js"></script>
 
 </body>
 </html>

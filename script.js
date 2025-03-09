@@ -69,13 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 function showTab(tab) {
-    // Alle Tabs verstecken
     document.getElementById("graph-section").classList.add("hidden");
     document.getElementById("table-section").classList.add("hidden");
 
-    // Ausgewählten Tab anzeigen
     document.getElementById(tab + "-section").classList.remove("hidden");
 
     document.querySelectorAll(".tab-button").forEach(button => {
@@ -86,3 +83,7 @@ function showTab(tab) {
     document.getElementById("tab-" + tab).classList.add("border-gray-800");
     document.getElementById("tab-" + tab).classList.remove("border-transparent");
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    showTab('graph');
+});
