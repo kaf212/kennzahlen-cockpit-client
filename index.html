@@ -7,62 +7,74 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-100 flex flex-col items-center p-4">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 
-<div class="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6">
+<div class="flex-grow flex items-center justify-center">
+  <div class="main-container">
 
-  <div class="flex justify-between items-center border-b pb-4 mb-4">
-    <h1 class="text-xl font-bold">Kennzahlen Cockpit</h1>
-    <a href="login.html" class="bg-gray-800 text-white px-4 py-2 rounded">Login</a>
-  </div>
-
-  <div class="flex justify-between items-center mb-4">
-    <div>
-      <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
-      <select id="category" class="border p-2 rounded mt-1">
-        <option>Anlagedeckungsgrad 1</option>
-        <option>Liquiditätsgrad 2</option>
-        <option>Anlagedeckungsgrad 2</option>
-      </select>
+    <div class="header-section">
+      <h1 class="text-xl font-bold">Kennzahlen Cockpit</h1>
+      <a href="login.html" class="button">Login</a>
     </div>
-    <a href="import.html" class="bg-blue-500 text-white px-4 py-2 rounded">Excel Import</a>
-  </div>
 
-  <div class="flex mt-6 border-b">
-    <button id="tab-graph" class="tab-button px-4 py-2 border-b-2 border-gray-800" onclick="showTab('graph')">Gewünschtes Jahr</button>
-    <button id="tab-table" class="tab-button px-4 py-2 border-b-2 border-transparent" onclick="showTab('table')">Aktuell</button>
-  </div>
+    <div class="control-section">
+      <div>
+        <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
+        <select id="category" class="select-dropdown mt-1">
+          <option>Anlagedeckungsgrad 1</option>
+          <option>Liquiditätsgrad 2</option>
+          <option>Anlagedeckungsgrad 2</option>
+        </select>
+      </div>
+      <a href="import.html" class="import-button">Excel Import</a>
+    </div>
 
-  <div id="graph-section" class="content-section mt-4">
-    <p class="text-center text-gray-600">[Graphische Darstellung]</p>
-  </div>
+    <div class="tab-navigation">
+      <button id="tab-graph" class="tab-button active-tab" onclick="showTab('graph')">Historischer Verlauf</button>
+      <button id="tab-table" class="tab-button" onclick="showTab('table')">Aktuell</button>
+    </div>
 
-  <div id="table-section" class="content-section mt-4 hidden">
-    <table class="w-full border-collapse border border-gray-300">
-      <thead>
-      <tr class="bg-gray-200">
-        <th class="border border-gray-300 px-4 py-2">Kennzahl</th>
-        <th class="border border-gray-300 px-4 py-2">Wert</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="border border-gray-300 px-4 py-2">Anlagedeckungsgrad 1</td>
-        <td class="border border-gray-300 px-4 py-2 text-green-500 font-bold">Grün</td>
-      </tr>
-      <tr>
-        <td class="border border-gray-300 px-4 py-2">Liquiditätsgrad 2</td>
-        <td class="border border-gray-300 px-4 py-2 text-yellow-500 font-bold">Gelb</td>
-      </tr>
-      <tr>
-        <td class="border border-gray-300 px-4 py-2">Anlagedeckungsgrad 2</td>
-        <td class="border border-gray-300 px-4 py-2 text-red-500 font-bold">Rot</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <div id="graph-section" class="content-box">
+      <p class="text-center text-gray-600">[Graphische Darstellung]</p>
+    </div>
 
+    <div id="table-section" class="content-box hidden">
+      <table class="data-table">
+        <thead>
+        <tr>
+          <th>Kennzahl</th>
+          <th>Wert</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Anlagedeckungsgrad 1</td>
+          <td class="text-green-500 font-bold">Grün</td>
+        </tr>
+        <tr>
+          <td>Liquiditätsgrad 2</td>
+          <td class="text-yellow-500 font-bold">Gelb</td>
+        </tr>
+        <tr>
+          <td>Anlagedeckungsgrad 2</td>
+          <td class="text-red-500 font-bold">Rot</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
 </div>
+
+<footer class="footer-container">
+  <div class="footer-content">
+    <p class="footer-text">&copy; 2025 Kennzahlen Cockpit. Alle Rechte vorbehalten. | ISO 9001:2015 | ISO 27001</p>
+    <div class="footer-links">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </div>
+  </div>
+</footer>
 
 <script src="script.js"></script>
 

@@ -3,26 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Kennzahlen Cockpit</title>
+  <title>Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-100 flex justify-center items-center h-screen">
 
-<div class="login-container">
-  <h1 class="text-2xl font-bold text-center">Account einloggen</h1>
+<div class="login-box">
+  <h1 class="title">Login</h1>
 
-  <form id="loginForm" class="mt-6">
-    <label for="userRole" class="block text-gray-700 font-medium">Benutzer auswählen</label>
-    <select id="userRole" class="mt-2 w-full border p-2 rounded">
-      <option value="admin">Admin</option>
-      <option value="user">Standardnutzer</option>
-    </select>
+  <form id="form" class="mt-6 flex flex-col gap-4">
+    <div>
+      <label for="role" class="label">Benutzer</label>
+      <select id="role" class="select-dropdown w-full">
+        <option value="admin">Admin</option>
+        <option value="user">Standartbenutzer</option>
+      </select>
+    </div>
 
-    <label class="block mt-4 text-gray-700 font-medium">Passwort</label>
-    <p class="text-gray-500">12345678</p>
+    <div>
+      <label for="pass" class="label">Passwort</label>
+      <input type="password" id="pass" class="input w-full" placeholder="Passwort eingeben">
+    </div>
 
-    <button type="submit" class="mt-6 w-full bg-gray-800 text-white p-2 rounded">Sign in</button>
+    <button type="submit" class="button w-full mt-4">Login</button>
   </form>
 </div>
 
