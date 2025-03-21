@@ -33,17 +33,32 @@ const translations = {
     "Liegenschaftsertrag": "real_estate_income"
 }
 
+const accountButtonDiv = document.getElementById("accountButtons")
+for (let acc in translations) {
+    const buttonHtml = `<button class='accountButton'>${acc}</button>`
+    accountButtonDiv.innerHTML += buttonHtml
+}
+
+
+const formulaField = document.getElementById("formulaField")
 Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
     button.addEventListener("click", (event)=>{
-        const formulaField = document.getElementById("formulaField")
-        formulaField.value += translations[event.currentTarget.innerText]
+        formulaField.value += button.innerText
     })
 })
 
 Array.from(document.getElementsByClassName("operatorButton")).forEach(button => {
     button.addEventListener("click", (event)=>{
         const operator = event.currentTarget.innerText
-        const formulaField = document.getElementById("formulaField")
-        formulaField.value += operator
+        let strToInsert = ""
+        if (operator === "(" || operator === ")") {
+            strToInsert = operator // insert parentheses without any whitespace
+        }
+        else {
+            strToInsert = " " + operator + " "
+            // insert all other arithmetic operators with whitespaces before and after them
+        }
+
+        formulaField.value += strToInsert
     })
 })
