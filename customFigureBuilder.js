@@ -71,5 +71,21 @@ function addButtonEventListeners() {
     })
 }
 
+function parseFormulaString(formulaStr) {
+
+    // Source: https://stackoverflow.com/questions/10800355/remove-whitespaces-inside-a-string-in-javascript
+    formulaStr = formulaStr.replace(/\s+/g, "") // remove all whitespaces from the formula
+
+    for (let germanAccountName in translations) {
+        if (formulaStr.includes(germanAccountName)) {
+            // replace german account name with english translation
+            formulaStr = formulaStr.replace(germanAccountName, translations[germanAccountName])
+        }
+    }
+
+    console.log(formulaStr)
+}
+
 addButtonEventListeners()
 
+parseFormulaString("(Liegenschaftsaufwand + Betriebsertrag) / Betriebsaufwand")
