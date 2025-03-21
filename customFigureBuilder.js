@@ -39,26 +39,37 @@ for (let acc in translations) {
     accountButtonDiv.innerHTML += buttonHtml
 }
 
+function addButtonEventListeners() {
+    /*
+    Adds the necessary eventListeners to all input buttons in the custom figure builder which
+    insert the respective button's value into the text field for the formula when triggered.
+     */
+    const formulaField = document.getElementById("formulaField")
 
-const formulaField = document.getElementById("formulaField")
-Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
-    button.addEventListener("click", (event)=>{
-        formulaField.value += button.innerText
+    // Add eventListeners to all account buttons
+    Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
+        button.addEventListener("click", (event)=>{
+            formulaField.value += button.innerText
+        })
     })
-})
 
-Array.from(document.getElementsByClassName("operatorButton")).forEach(button => {
-    button.addEventListener("click", (event)=>{
-        const operator = event.currentTarget.innerText
-        let strToInsert = ""
-        if (operator === "(" || operator === ")") {
-            strToInsert = operator // insert parentheses without any whitespace
-        }
-        else {
-            strToInsert = " " + operator + " "
-            // insert all other arithmetic operators with whitespaces before and after them
-        }
+    // Add eventListeners to all operator buttons
+    Array.from(document.getElementsByClassName("operatorButton")).forEach(button => {
+        button.addEventListener("click", (event)=>{
+            const operator = event.currentTarget.innerText
+            let strToInsert = ""
+            if (operator === "(" || operator === ")") {
+                strToInsert = operator // insert parentheses without any whitespace
+            }
+            else {
+                strToInsert = " " + operator + " "
+                // insert all other arithmetic operators with whitespaces before and after them
+            }
 
-        formulaField.value += strToInsert
+            formulaField.value += strToInsert
+        })
     })
-})
+}
+
+addButtonEventListeners()
+
