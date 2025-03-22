@@ -24,7 +24,7 @@ const translations = {
     "Gewinnvortrag": "retained_earnings",
     "Betriebsaufwand": "operating_expense",
     "Personalaufwand": "staff_expense",
-    "Sonst. Betriebsaufwand": "other_expenses",
+    "Sonstiger BA": "other_expenses",
     "Abschreibungen": "depreciation",
     "Finanzaufwand": "financial_expense",
     "Liegenschaftsaufwand": "real_estate_expense",
@@ -32,6 +32,9 @@ const translations = {
     "Finanzertrag": "financial_income",
     "Liegenschaftsertrag": "real_estate_income"
 }
+
+const formulaField = document.getElementById("formulaField")
+
 
 const accountButtonDiv = document.getElementById("accountButtons")
 for (let acc in translations) {
@@ -44,7 +47,6 @@ function addButtonEventListeners() {
     Adds the necessary eventListeners to all input buttons in the custom figure builder which
     insert the respective button's value into the text field for the formula when triggered.
      */
-    const formulaField = document.getElementById("formulaField")
 
     // Add eventListeners to all account buttons
     Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
@@ -72,10 +74,6 @@ function addButtonEventListeners() {
 }
 
 function parseFormulaString(formulaStr) {
-
-    // Source: https://stackoverflow.com/questions/10800355/remove-whitespaces-inside-a-string-in-javascript
-    formulaStr = formulaStr.replace(/\s+/g, "") // remove all whitespaces from the formula
-
     for (let germanAccountName in translations) {
         if (formulaStr.includes(germanAccountName)) {
             // replace german account name with english translation
@@ -83,9 +81,18 @@ function parseFormulaString(formulaStr) {
         }
     }
 
-    console.log(formulaStr)
+    // Source: https://stackoverflow.com/questions/10800355/remove-whitespaces-inside-a-string-in-javascript
+    formulaStr = formulaStr.replace(/\s+/g, "") // remove all whitespaces from the formula
+
+    return formulaStr
+}
+
+function addSubmitEventListener() {
+    const submitButton = document.getElementById("submitCustomFigure")
+    submitButton.addEventListener("click", (event)=>{
+        console.log(parseFormulaString(formulaField.value))
+    })
 }
 
 addButtonEventListeners()
-
-parseFormulaString("(Liegenschaftsaufwand + Betriebsertrag) / Betriebsaufwand")
+addSubmitEventListener()
