@@ -1,5 +1,4 @@
 const translations = {
-    "Aktiven": "actives",
     "Umlaufvermögen": "current_assets",
     "Flüssige Mittel": "liquid_assets",
     "Kasse": "cash",
@@ -11,7 +10,6 @@ const translations = {
     "Maschinen": "machines",
     "Mobilien": "movables",
     "Immobilien": "real_estate",
-    "Passiven": "passives",
     "Fremdkapital": "debt",
     "Kurzfristiges FK": "short_term",
     "Verb. L+L": "liabilities",
