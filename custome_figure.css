@@ -90,9 +90,19 @@ body {
 }
 
 
-.category-included {
-    color: #087c2a;
+.custom-button {
+    background-color: #3B82F6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
 }
+
+.custom-button:hover {
+    background-color: #60A5FA;
+}
+
 
 .category-excluded {
     color: #da1e28;

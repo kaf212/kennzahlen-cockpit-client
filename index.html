@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
 <div class="flex-grow flex flex-row">
@@ -26,14 +25,19 @@
           <option>Anlagedeckungsgrad 2</option>
         </select>
       </div>
-      <a href="import.html" class="import-button bg-green-500 text-white px-4 py-2 rounded">Excel Import</a>
+
+      <div class="flex space-x-2">
+        <a href="custom_figure.html" class="custom-button bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-300 transition">Neue Kennzahl</a>
+        <a href="import.html" class="import-button bg-emerald-400 text-white px-4 py-2 rounded hover:bg-emerald-300 transition">Excel Import</a>
+      </div>
     </div>
 
     <div class="tab-navigation flex space-x-4 mb-4">
       <button id="tab-graph" class="tab-button active-tab px-4 py-2 bg-gray-200 rounded" onclick="showTab('graph')">Historischer Verlauf</button>
       <button id="tab-table" class="tab-button px-4 py-2 bg-gray-100 rounded" onclick="showTab('table')">Aktuell</button>
     </div>
-    
+
+    <div id="graph-section" class="content-box mb-4">
       <p class="text-center text-gray-600">[Graphische Darstellung]</p>
     </div>
 
