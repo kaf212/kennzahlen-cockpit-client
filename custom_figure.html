@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neue Kennzahl erstellen</title>
+  <link rel="stylesheet" href="custome_figure.css" />
+</head>
+<body>
+<div class="main-container">
+  <h1 class="header">Neue Kennzahl erstellen</h1>
+  <form>
+    <label for="bezeichnung" class="form-label">Bezeichnung</label>
+    <input type="text" id="bezeichnung" class="form-input" />
+
+    <div class="category-tabs">
+      <button type="button" class="category-tab category-included">Aktiven</button>
+      <button type="button" class="category-tab category-included">Passiven</button>
+      <button type="button" class="category-tab category-excluded">Aufwand</button>
+      <button type="button" class="category-tab category-excluded">Ertrag</button>
+    </div>
+
+
+    <label for="formel" class="form-label">Formel</label>
+      <input type="text" id="formel" class="form-input" />
+
+
+      <div class="big-placeholder-box"></div>
+    </div>
+
+    <div class="button-gruppe">
+      <button type="submit" class="button save-button">Kennzahl speichern</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
