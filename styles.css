@@ -70,9 +70,9 @@ body {
 
 /* Tabs */
 .tab-button {
-    background-color: #f1f5f9;
-    color: #1e3a8a;
-    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ffffff;
 }
 
 .tab-button:hover {
@@ -80,10 +80,10 @@ body {
 }
 
 .active-tab {
-    background-color: #3b82f6;
+    background-color: #6581ad;
     color: white;
     font-weight: 600;
-    border-color: #3b82f6;
+    border-color: #ffffff;
 }
 
 /* Content-Boxen */
