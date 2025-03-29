@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Neue Kennzahl erstellen</title>
   <link rel="stylesheet" href="custome_figure.css" />
+    <script src="customFigureBuilder.js" defer></script>
 </head>
 <body>
 <div class="main-container">
@@ -14,10 +15,10 @@
     <input type="text" id="bezeichnung" class="form-input" />
 
     <div class="category-tabs">
-      <button type="button" class="category-tab category-included">Aktiven</button>
-      <button type="button" class="category-tab category-included">Passiven</button>
-      <button type="button" class="category-tab category-excluded">Aufwand</button>
-      <button type="button" class="category-tab category-excluded">Ertrag</button>
+      <button type="button" id="activesTabButton" data-account-group="actives" class="tab-button category-included">Aktiven</button>
+      <button type="button" id="passivesTabButton" data-account-group="passives" class="tab-button category-included">Passiven</button>
+      <button type="button" id="expenseTabButton" data-account-group="expense" class="tab-button category-excluded">Aufwand</button>
+      <button type="button" id="earningsTabButton" data-account-group="earnings" class="tab-button category-excluded">Ertrag</button>
     </div>
 
 
@@ -25,7 +26,11 @@
       <input type="text" id="formel" class="form-input" />
 
 
-      <div class="big-placeholder-box"></div>
+      <div id="activesTab" data-account-group="actives" class="custom-figure-builder-tab">aktiven</div>
+      <div id="passivesTab" data-account-group="passives" class="custom-figure-builder-tab invisible">passiven</div>
+      <div id="expenseTab" data-account-group="expense" class="custom-figure-builder-tab invisible">aufwände</div>
+      <div id="earningsTab" data-account-group="earnings" class="custom-figure-builder-tab invisible">erträge</div>
+
     </div>
 
     <div class="button-gruppe">

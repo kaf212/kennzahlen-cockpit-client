@@ -31,6 +31,25 @@ const translations = {
     "Liegenschaftsertrag": "real_estate_income"
 }
 
+function addTabButtonEventListeners() {
+    Array.from(document.getElementsByClassName("tab-button")).forEach(tabButton=>{
+        console.log(tabButton)
+        tabButton.addEventListener( "click",(event) =>{
+            Array.from(document.getElementsByClassName("custom-figure-builder-tab")).forEach(tab=>{
+                if (tab.dataset.accountGroup !== event.currentTarget.dataset.accountGroup) {
+                    tab.classList.add("invisible")
+                }
+                else {
+                    tab.classList.remove("invisible")
+                }
+            })
+        })
+    })
+}
+
+addTabButtonEventListeners()
+
+
 const formulaField = document.getElementById("formulaField")
 
 
