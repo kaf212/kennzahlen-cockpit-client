@@ -59,7 +59,6 @@ function addTabButtonEventListeners() {
     })
 }
 
-addTabButtonEventListeners()
 
 
 function createAccountButtons() {
@@ -73,7 +72,6 @@ function createAccountButtons() {
     }
 }
 
-createAccountButtons()
 
 function addButtonEventListeners() {
     /*
@@ -110,12 +108,15 @@ function addButtonEventListeners() {
 }
 
 function parseFormulaString(formulaStr) {
-    for (let germanAccountName in translations) {
-        if (formulaStr.includes(germanAccountName)) {
-            // replace german account name with english translation
-            formulaStr = formulaStr.replace(germanAccountName, translations[germanAccountName])
+    for (const [accountGroup, accounts] of Object.entries(translations)) {
+        for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
+            if (formulaStr.includes(germanAccount)) {
+                // replace german account name with english translation
+                formulaStr = formulaStr.replace(germanAccount, englishAccount)
+            }
         }
     }
+
 
     // Source: https://stackoverflow.com/questions/10800355/remove-whitespaces-inside-a-string-in-javascript
     formulaStr = formulaStr.replace(/\s+/g, "") // remove all whitespaces from the formula
@@ -124,11 +125,15 @@ function parseFormulaString(formulaStr) {
 }
 
 function addSubmitEventListener() {
+    const formulaField = document.getElementById("formulaField")
     const submitButton = document.getElementById("submitCustomFigureButton")
     submitButton.addEventListener("click", (event)=>{
+        event.preventDefault()
         console.log(parseFormulaString(formulaField.value))
     })
 }
 
+addTabButtonEventListeners()
+createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
