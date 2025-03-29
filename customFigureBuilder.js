@@ -128,7 +128,6 @@ function addSubmitEventListener() {
     const formulaField = document.getElementById("formulaField")
     const submitButton = document.getElementById("submitCustomFigureButton")
     submitButton.addEventListener("click", (event)=>{
-        event.preventDefault()
         console.log(parseFormulaString(formulaField.value))
     })
 }
