@@ -1,34 +1,42 @@
 const translations = {
-    "Umlaufvermögen": "current_assets",
-    "Flüssige Mittel": "liquid_assets",
-    "Kasse": "cash",
-    "Post": "postal",
-    "Bank": "bank",
-    "Ford. L+L": "receivables",
-    "Warenvorrat": "stocks",
-    "Anlagevermögen": "fixed_assets",
-    "Maschinen": "machines",
-    "Mobilien": "movables",
-    "Immobilien": "real_estate",
-    "Fremdkapital": "debt",
-    "Kurzfristiges FK": "short_term",
-    "Verb. L+L": "liabilities",
-    "Langfristiges FK": "long_term",
-    "Passivdarlehen": "loans",
-    "Hypothek": "mortgage",
-    "Eigenkapital": "equity",
-    "Aktienkapital": "shares",
-    "Ges. Gewinnreserve": "legal_reserve",
-    "Gewinnvortrag": "retained_earnings",
-    "Betriebsaufwand": "operating_expense",
-    "Personalaufwand": "staff_expense",
-    "Sonstiger BA": "other_expenses",
-    "Abschreibungen": "depreciation",
-    "Finanzaufwand": "financial_expense",
-    "Liegenschaftsaufwand": "real_estate_expense",
-    "Betriebsertrag": "operating_income",
-    "Finanzertrag": "financial_income",
-    "Liegenschaftsertrag": "real_estate_income"
+    "actives": {
+        "Umlaufvermögen": "current_assets",
+        "Flüssige Mittel": "liquid_assets",
+        "Kasse": "cash",
+        "Post": "postal",
+        "Bank": "bank",
+        "Ford. L+L": "receivables",
+        "Warenvorrat": "stocks",
+        "Anlagevermögen": "fixed_assets",
+        "Maschinen": "machines",
+        "Mobilien": "movables",
+        "Immobilien": "real_estate"
+    },
+    "passives": {
+        "Fremdkapital": "debt",
+        "Kurzfristiges FK": "short_term",
+        "Verb. L+L": "liabilities",
+        "Langfristiges FK": "long_term",
+        "Passivdarlehen": "loans",
+        "Hypothek": "mortgage",
+        "Eigenkapital": "equity",
+        "Aktienkapital": "shares",
+        "Ges. Gewinnreserve": "legal_reserve",
+        "Gewinnvortrag": "retained_earnings"
+    },
+   "expense": {
+       "Betriebsaufwand": "operating_expense",
+       "Personalaufwand": "staff_expense",
+       "Sonstiger BA": "other_expenses",
+       "Abschreibungen": "depreciation",
+       "Finanzaufwand": "financial_expense",
+       "Liegenschaftsaufwand": "real_estate_expense"
+   },
+    "earnings": {
+        "Betriebsertrag": "operating_income",
+        "Finanzertrag": "financial_income",
+        "Liegenschaftsertrag": "real_estate_income"
+    }
 }
 
 function addTabButtonEventListeners() {
@@ -54,14 +62,19 @@ function addTabButtonEventListeners() {
 addTabButtonEventListeners()
 
 
-const formulaField = document.getElementById("formulaField")
+function createAccountButtons() {
+    for (const [accountGroup, accounts] of Object.entries(translations)) {
+        for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
+            console.log(germanAccount)
+            const targetAccountButtonDiv = `${accountGroup}Tab` // Is equal to the id of the account button divs
+            const buttonHtml = `<button class='accountButton' data-translation="${englishAccount}">${germanAccount}</button>`
 
-
-const accountButtonDiv = document.getElementById("accountButtons")
-for (let acc in translations) {
-    const buttonHtml = `<button class='accountButton'>${acc}</button>`
-    accountButtonDiv.innerHTML += buttonHtml
+            document.getElementById(targetAccountButtonDiv).innerHTML += buttonHtml
+        }
+    }
 }
+
+createAccountButtons()
 
 function addButtonEventListeners() {
     /*
