@@ -91,8 +91,9 @@ function addButtonEventListeners() {
     })
 
     // Add eventListeners to all operator buttons
-    Array.from(document.getElementsByClassName("operatorButton")).forEach(button => {
+    Array.from(document.getElementsByClassName("operator-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
+            event.preventDefault()
             const operator = event.currentTarget.innerText
             let strToInsert = ""
             if (operator === "(" || operator === ")") {
