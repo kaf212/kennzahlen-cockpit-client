@@ -65,7 +65,6 @@ addTabButtonEventListeners()
 function createAccountButtons() {
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
-            console.log(germanAccount)
             const targetAccountButtonDiv = `${accountGroup}Tab` // Is equal to the id of the account button divs
             const buttonHtml = `<button class='accountButton' data-translation="${englishAccount}">${germanAccount}</button>`
 
@@ -81,10 +80,12 @@ function addButtonEventListeners() {
     Adds the necessary eventListeners to all input buttons in the custom figure builder which
     insert the respective button's value into the text field for the formula when triggered.
      */
+    const formulaField = document.getElementById("formulaField")
 
     // Add eventListeners to all account buttons
     Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
         button.addEventListener("click", (event)=>{
+            event.preventDefault() // buttons inside the form would else automatically trigger a submit when pressed
             formulaField.value += button.innerText
         })
     })
@@ -122,7 +123,7 @@ function parseFormulaString(formulaStr) {
 }
 
 function addSubmitEventListener() {
-    const submitButton = document.getElementById("submitCustomFigure")
+    const submitButton = document.getElementById("submitCustomFigureButton")
     submitButton.addEventListener("click", (event)=>{
         console.log(parseFormulaString(formulaField.value))
     })
