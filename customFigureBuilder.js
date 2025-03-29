@@ -126,10 +126,24 @@ function parseFormulaString(formulaStr) {
 
 function addSubmitEventListener() {
     const formulaField = document.getElementById("formulaField")
-    const submitButton = document.getElementById("submitCustomFigureButton")
-    submitButton.addEventListener("click", (event)=>{
-        console.log(parseFormulaString(formulaField.value))
+    const customFigureBuilderForm = document.getElementById("customFigureBuilderForm")
+    customFigureBuilderForm.addEventListener("submit", (event)=>{
+        const parsedFormula = parseFormulaString(formulaField.value)
+        const formulaName = document.getElementById("formulaNameField").value
+        saveNewCustomKeyFigure(formulaName, parsedFormula)
     })
+}
+
+function saveNewCustomKeyFigure(formulaName, formulaStr) {
+    // Causes NetworkError in firefox for some reason. (https://github.com/kaf212/kennzahlen-cockpit-client/issues/7)
+    fetch("http://localhost:5000/customKeyFigures", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name: formulaName, formula: formulaStr})
+    })
+        .then(res=>res.json())
+        .then(data=>console.log(data))
+        .catch(err=>console.error(err))
 }
 
 addTabButtonEventListeners()
