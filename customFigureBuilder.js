@@ -33,14 +33,18 @@ const translations = {
 
 function addTabButtonEventListeners() {
     Array.from(document.getElementsByClassName("tab-button")).forEach(tabButton=>{
-        console.log(tabButton)
         tabButton.addEventListener( "click",(event) =>{
+            /*
+            When a tab button is clicked, it iterates over all tab buttons and adds the invisible class
+            except for the account group that corresponds to the given button
+             */
             Array.from(document.getElementsByClassName("custom-figure-builder-tab")).forEach(tab=>{
+                // if the account group of the button is the same as the one of the tab:
                 if (tab.dataset.accountGroup !== event.currentTarget.dataset.accountGroup) {
                     tab.classList.add("invisible")
                 }
                 else {
-                    tab.classList.remove("invisible")
+                    tab.classList.remove("invisible") // All other tabs should remain or be made invisible
                 }
             })
         })
