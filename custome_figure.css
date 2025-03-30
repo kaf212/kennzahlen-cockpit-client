@@ -134,3 +134,11 @@ body {
     text-align: center;
 }
 
+.success-message {
+    color: #25B24E;
+}
+
+.error-message {
+    color: #da1e28;
+}
+

@@ -136,11 +136,20 @@ function addSubmitEventListener() {
 }
 
 function handleServerResponse(res) {
-    const statusCode = res.status
+    const statusCode = res.status.toString()
 
     res.json().then(data=>{
+        const infoBox = document.querySelector(".infobox")
+
+        if (statusCode.startsWith("20")) {
+            infoBox.classList.add("success-message")
+        }
+        else if (statusCode.startsWith("40")) {
+            infoBox.classList.add("error-message")
+        }
+
         document.querySelector(".infobox-overlay").style.display = "flex"
-        document.querySelector(".infobox").innerText = data.message
+        infoBox.innerText = data.message
     })
 
 
