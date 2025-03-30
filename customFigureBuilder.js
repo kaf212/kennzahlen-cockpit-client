@@ -131,7 +131,28 @@ function addSubmitEventListener() {
         const parsedFormula = parseFormulaString(formulaField.value)
         const formulaName = document.getElementById("formulaNameField").value
         saveNewCustomKeyFigure(formulaName, parsedFormula)
+        event.preventDefault()
     })
+}
+
+function handleServerResponse(res) {
+    const statusCode = res.status.toString()
+
+    res.json().then(data=>{
+        const infoBox = document.querySelector(".infobox")
+
+        if (statusCode.startsWith("20")) {
+            infoBox.classList.add("success-message")
+        }
+        else if (statusCode.startsWith("40")) {
+            infoBox.classList.add("error-message")
+        }
+
+        document.querySelector(".infobox-overlay").style.display = "flex"
+        infoBox.innerText = data.message
+    })
+
+
 }
 
 function saveNewCustomKeyFigure(formulaName, formulaStr) {
@@ -141,8 +162,7 @@ function saveNewCustomKeyFigure(formulaName, formulaStr) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({name: formulaName, formula: formulaStr})
     })
-        .then(res=>res.json())
-        .then(data=>console.log(data))
+        .then(res=>handleServerResponse(res))
         .catch(err=>console.error(err))
 }
 
