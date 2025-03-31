@@ -16,7 +16,9 @@
 
     <div class="header-section flex justify-between items-center mb-6">
       <h1 class="text-xl font-bold">Kennzahlen Cockpit</h1>
+      <button onclick="logout()" class="text-red-600 font-semibold hover:underline">Logout</button>
     </div>
+
 
     <div class="control-section flex justify-between items-center mb-4">
       <div>
@@ -75,10 +77,6 @@
     <ul class="space-y-2">
       <div id="companyList" class="company-list"></div>
       <input type="text" id="companyNameInput" class="form-input" placeholder="Neues Unternehmen" />
-
-
-
-
     </ul>
   </div>
 </div>
@@ -92,6 +90,7 @@
     </div>
   </div>
 </footer>
+
 
 <script src="script.js"></script>
 </body>

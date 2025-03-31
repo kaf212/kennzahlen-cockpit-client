@@ -154,3 +154,63 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const role = document.getElementById("role").value;
+            const password = document.getElementById("pass").value;
+
+            // Passwortlogik
+            const credentials = {
+                admin: "admin123",
+                user: "user123"
+            };
+
+            if (password === credentials[role]) {
+                // Token erstellen
+                const tokenPayload = {
+                    role: role,
+                    exp: Date.now() + 1000 * 60 * 60 // 1 Stunde
+                };
+                const token = btoa(JSON.stringify(tokenPayload));
+                localStorage.setItem("jwt_token", token);
+                window.location.href = "index.html";
+            } else {
+                alert("Falsches Passwort für die Rolle \"" + role + "\"!");
+            }
+        });
+    }
+
+    // Token-Check auf index.html
+    if (window.location.pathname.endsWith("index.html")) {
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+            window.location.href = "login.html";
+        } else {
+            try {
+                const decoded = JSON.parse(atob(token));
+                if (Date.now() > decoded.exp) {
+                    alert("Session abgelaufen!");
+                    localStorage.removeItem("jwt_token");
+                    window.location.href = "login.html";
+                }
+            } catch (e) {
+                console.error("Ungültiger Token.");
+                localStorage.removeItem("jwt_token");
+                window.location.href = "login.html";
+            }
+        }
+    }
+});
+
+function logout() {
+    localStorage.removeItem("jwt_token");
+    window.location.href = "login.html";
+}
+
+
