@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center h-screen">
+
+<div class="import-box">
+  <h2 class="title">Datei Import</h2>
+
+  <div id="drop" class="upload-area border-2 border-dashed border-gray-300 p-4 rounded-lg cursor-pointer">
+    <p class="text-gray-600">Datei hier ziehen oder klicken</p>
+    <input type="file" id="file" accept=".xlsx, .xls" class="hidden">
+  </div>
+
+
+  <button id="upload" class="upload-button">Hochladen</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

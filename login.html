@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+
+<div class="login-box">
+  <h1 class="title">Login</h1>
+
+  <form id="form" class="mt-6 flex flex-col gap-4">
+    <div>
+      <label for="role" class="label">Benutzer</label>
+      <select id="role" class="select-dropdown w-full">
+        <option value="admin">Admin</option>
+        <option value="user">Standartbenutzer</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="pass" class="label">Passwort</label>
+      <input type="password" id="pass" class="input w-full" placeholder="Passwort eingeben">
+    </div>
+
+    <button type="submit" class="button w-full mt-4">Login</button>
+  </form>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
