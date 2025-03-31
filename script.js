@@ -94,3 +94,63 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Elemente nicht gefunden! Stelle sicher, dass IDs korrekt sind.");
     }
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const companyInput = document.getElementById("companyNameInput");
+    const companyList = document.getElementById("companyList");
+
+    const defaultCompanies = [
+
+    ];
+
+    let companies = JSON.parse(localStorage.getItem("companies"));
+
+    if (!companies) {
+        companies = defaultCompanies;
+        localStorage.setItem("companies", JSON.stringify(companies));
+    }
+
+    renderCompanies();
+
+    companyInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const name = companyInput.value.trim();
+            if (name && !companies.includes(name)) {
+                companies.unshift(name);
+                saveCompanies();
+                renderCompanies();
+                companyInput.value = "";
+            }
+        }
+    });
+
+    function saveCompanies() {
+        localStorage.setItem("companies", JSON.stringify(companies));
+    }
+
+    function renderCompanies() {
+        companyList.innerHTML = "";
+        companies.forEach((name, index) => {
+            const li = document.createElement("li");
+            li.className = "company-list-item";
+
+            const link = document.createElement("a");
+            link.href = "#";
+            link.textContent = name;
+            link.className = "company-link";
+
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "×";
+            delBtn.className = "delete-button";
+            delBtn.addEventListener("click", () => {
+                companies.splice(index, 1);
+                saveCompanies();
+                renderCompanies();
+            });
+
+            li.appendChild(link);
+            li.appendChild(delBtn);
+            companyList.appendChild(li);
+        });
+    }
+});

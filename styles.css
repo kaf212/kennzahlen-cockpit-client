@@ -193,3 +193,37 @@ body {
 .upload-button:hover {
     background-color: #60a5fa;
 }
+
+.company-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.company-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.company-link:hover {
+    text-decoration: underline;
+    color: #1d4ed8;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.delete-button:hover {
+    color: #dc2626;
+}
+
+
