@@ -5,31 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Neue Kennzahl erstellen</title>
   <link rel="stylesheet" href="custome_figure.css" />
+    <script src="customFigureBuilder.js" defer></script>
 </head>
 <body>
 <div class="main-container">
+
+  <div class="infobox-overlay" onclick="this.style.display='none'">
+    <div class="infobox"></div>
+  </div>
+
   <h1 class="header">Neue Kennzahl erstellen</h1>
-  <form>
-    <label for="bezeichnung" class="form-label">Bezeichnung</label>
-    <input type="text" id="bezeichnung" class="form-input" />
+  <form id="customFigureBuilderForm">
+    <label for="formulaNameField" class="form-label">Bezeichnung</label>
+    <input type="text" id="formulaNameField" class="form-input" required/>
 
     <div class="category-tabs">
-      <button type="button" class="category-tab category-included">Aktiven</button>
-      <button type="button" class="category-tab category-included">Passiven</button>
-      <button type="button" class="category-tab category-excluded">Aufwand</button>
-      <button type="button" class="category-tab category-excluded">Ertrag</button>
+      <button type="button" id="activesTabButton" data-account-group="actives" class="tab-button category-included">Aktiven</button>
+      <button type="button" id="passivesTabButton" data-account-group="passives" class="tab-button category-included">Passiven</button>
+      <button type="button" id="expenseTabButton" data-account-group="expense" class="tab-button category-excluded">Aufwand</button>
+      <button type="button" id="earningsTabButton" data-account-group="earnings" class="tab-button category-excluded">Ertrag</button>
     </div>
 
 
-    <label for="formel" class="form-label">Formel</label>
-      <input type="text" id="formel" class="form-input" />
+    <label for="formulaField" class="form-label">Formel</label>
+      <input type="text" id="formulaField" class="form-input" required/>
 
+      <div id="operatorButtonContainer">
+        <button class="operator-button">+</button>
+        <button class="operator-button">-</button>
+        <button class="operator-button">*</button>
+        <button class="operator-button">/</button>
+        <button class="operator-button">(</button>
+        <button class="operator-button">)</button>
+      </div>
 
-      <div class="big-placeholder-box"></div>
+      <div id="activesTab" data-account-group="actives" class="custom-figure-builder-tab"></div>
+      <div id="passivesTab" data-account-group="passives" class="custom-figure-builder-tab invisible"></div>
+      <div id="expenseTab" data-account-group="expense" class="custom-figure-builder-tab invisible"></div>
+      <div id="earningsTab" data-account-group="earnings" class="custom-figure-builder-tab invisible"></div>
+
     </div>
+
+
 
     <div class="button-gruppe">
-      <button type="submit" class="button save-button">Kennzahl speichern</button>
+      <button type="submit" class="button save-button" id="submitCustomFigureButton">Kennzahl speichern</button>
     </div>
   </form>
 </div>
