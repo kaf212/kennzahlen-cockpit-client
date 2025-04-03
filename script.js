@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Tabs wechseln
     function showTab(tab) {
         document.getElementById("graph-section").classList.add("hidden");
         document.getElementById("table-section").classList.add("hidden");
@@ -25,20 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById("tab-table").addEventListener("click", function() {
             showTab('table');
-        });
-    }
-
-    // Login-Redirect
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            let userRole = document.getElementById("userRole").value;
-            if (userRole === "admin") {
-                window.location.href = "admin_dashboard.html";
-            } else {
-                window.location.href = "user_dashboard.html";
-            }
         });
     }
 
@@ -91,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
             dropArea.innerHTML = `<p class='text-green-600 font-bold'>${fileName} wurde ausgewählt</p>`;
         }
     } else {
-        console.error("Elemente nicht gefunden! Stelle sicher, dass IDs korrekt sind.");
+        console.error("Elemente nicht gefunden! Stelle sicher, dask,iots IDs korrekt sind.");
     }
 });
 document.addEventListener("DOMContentLoaded", () => {
@@ -157,60 +142,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
+    const form = document.getElementById("loginForm");
 
-    if (loginForm) {
-        loginForm.addEventListener("submit", function (event) {
-            event.preventDefault();
+    if (form) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
             const role = document.getElementById("role").value;
             const password = document.getElementById("pass").value;
 
-            // Passwortlogik
-            const credentials = {
-                admin: "admin123",
-                user: "user123"
-            };
+            console.log("Login versendet:", role, password);
 
-            if (password === credentials[role]) {
-                // Token erstellen
-                const tokenPayload = {
-                    role: role,
-                    exp: Date.now() + 1000 * 60 * 60 // 1 Stunde
-                };
-                const token = btoa(JSON.stringify(tokenPayload));
-                localStorage.setItem("jwt_token", token);
+            const response = await fetch("http://localhost:3000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ role, password })
+            });
+
+            console.log("Status:", response.status);
+
+            const result = await response.json();
+            console.log("Antwort-Token:", result.token);
+
+            if (response.ok) {
+                sessionStorage.setItem("token", result.token);
                 window.location.href = "index.html";
             } else {
-                alert("Falsches Passwort für die Rolle \"" + role + "\"!");
+                alert("Login fehlgeschlagen");
             }
         });
     }
 
     // Token-Check auf index.html
     if (window.location.pathname.endsWith("index.html")) {
-        const token = localStorage.getItem("jwt_token");
+        const token = sessionStorage.getItem("token");
+
         if (!token) {
             window.location.href = "login.html";
-        } else {
-            try {
-                const decoded = JSON.parse(atob(token));
-                if (Date.now() > decoded.exp) {
-                    alert("Session abgelaufen!");
-                    localStorage.removeItem("jwt_token");
-                    window.location.href = "login.html";
-                }
-            } catch (e) {
-                console.error("Ungültiger Token.");
-                localStorage.removeItem("jwt_token");
+            return;
+        }
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+
+            if (Date.now() >= payload.exp * 1000) {
+                alert("Session abgelaufen");
+                sessionStorage.removeItem("token");
                 window.location.href = "login.html";
             }
+        } catch {
+            sessionStorage.removeItem("token");
+            window.location.href = "login.html";
         }
     }
 });
 
+
 function logout() {
-    localStorage.removeItem("jwt_token");
+    sessionStorage.removeItem("token");
     window.location.href = "login.html";
 }
-
-
