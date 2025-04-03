@@ -214,3 +214,40 @@ function logout() {
 }
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    const list = document.getElementById("kennzahl-liste");
+    const form = document.querySelector("form");
+    const bezeichnungInput = document.getElementById("bezeichnung");
+    const formelInput = document.getElementById("formel");
+
+    // Löschen einer Kennzahl
+    list.addEventListener("click", (event) => {
+        if (event.target.classList.contains("delete-button")) {
+            const item = event.target.closest("li");
+            if (item) item.remove();
+        }
+    });
+
+    // Neue Kennzahl hinzufügen
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = bezeichnungInput.value.trim();
+        const formel = formelInput.value.trim();
+
+        if (name && formel) {
+            const li = document.createElement("li");
+
+            li.innerHTML = `
+        <strong>${name}</strong>: ${formel}
+        <button class="delete-button">✕</button>
+      `;
+
+            list.appendChild(li);
+
+            // Eingabefelder zurücksetzen
+            bezeichnungInput.value = "";
+            formelInput.value = "";
+        }
+    });
+});
