@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.log("Login versendet:", role, password);
 
-            const response = await fetch("http://localhost:3000/api/auth/login", {
+            const response = await fetch("http://localhost:5000/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ role, password })
