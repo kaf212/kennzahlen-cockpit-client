@@ -175,14 +175,15 @@ function handleServerResponse(res) {
     :return: void
      */
     const statusCode = res.status.toString()
-
     res.json().then(data=>{
         const infoBox = document.querySelector(".infobox")
 
         if (statusCode.startsWith("20")) {
+            infoBox.classList.remove("error-message")
             infoBox.classList.add("success-message")
         }
         else if (statusCode.startsWith("40")) {
+            infoBox.classList.remove("success-message")
             infoBox.classList.add("error-message")
         }
 
