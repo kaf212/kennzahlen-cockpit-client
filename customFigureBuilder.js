@@ -284,6 +284,7 @@ async function loadSidebar() {
             sidebar.innerHTML += htmlToInsert
         })
     }
+    addDeleteButtonEventListeners()
 
 }
 
@@ -298,18 +299,14 @@ function deleteCustomKeyFigure(customKeyFigureId) {
 }
 
 function addDeleteButtonEventListeners() {
-    console.log(document.getElementsByClassName("delete-custom-key-figure-button"))
     const asdf = Array.from(document.getElementsByClassName("delete-custom-key-figure-button"))
-    console.log(asdf
-    )
 
     Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
-        console.log(button)
         button.addEventListener("click", (event)=>{
-            console.log("test")
-            const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
+            const customKeyFigureItem = event.currentTarget.parentNode
+            const customKeyFigureId = customKeyFigureItem.dataset.customKeyFigureId
             deleteCustomKeyFigure(customKeyFigureId)
-
+            customKeyFigureItem.remove()
         })
     })
 }
@@ -329,7 +326,5 @@ createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
 addInfoBoxEventListener()
-loadSidebar().then(()=>{
-    addDeleteButtonEventListeners()
-})
+loadSidebar()
 
