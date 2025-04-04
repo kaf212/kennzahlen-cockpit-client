@@ -273,7 +273,7 @@ async function loadSidebar() {
         
         customKeyFigures.forEach(customKeyFigure => {
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
-            const htmlToInsert = `<div class="custom-key-figure-item"><b>${customKeyFigure.name}</b>${reverseParsedFormula}</div>`
+            const htmlToInsert = `<div class="custom-key-figure-item"><div class="custom-key-figure-item-content-wrapper"><b>${customKeyFigure.name}</b>${reverseParsedFormula}</div><button class="delete-custom-key-figure-button">×</button></div>`
             sidebar.innerHTML += htmlToInsert
         })
     }
