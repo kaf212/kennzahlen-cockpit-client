@@ -270,11 +270,12 @@ async function loadSidebar() {
         // Remove all custom key figures from the sidebar to avoid duplicates
         const itemsToRemove = sidebar.querySelectorAll(".custom-key-figure-item")
         itemsToRemove.forEach(item => item.remove())
-        
+
         customKeyFigures.forEach(customKeyFigure => {
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
             const htmlToInsert = `<div class="custom-key-figure-item" 
-                                           data-custom-key-figure-id="${customKeyFigure._id}">
+                                           data-custom-key-figure-id="${customKeyFigure._id}"
+                                           data-custom-key-figure-name="${customKeyFigure.name}">
                                            <div class="custom-key-figure-item-content-wrapper">
                                            <b>${customKeyFigure.name}</b>${reverseParsedFormula}
                                            </div>
@@ -289,7 +290,6 @@ async function loadSidebar() {
 }
 
 function deleteCustomKeyFigure(customKeyFigureId) {
-
     fetch("http://localhost:5000/customKeyFigures/" + customKeyFigureId, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" }
@@ -305,8 +305,13 @@ function addDeleteButtonEventListeners() {
         button.addEventListener("click", (event)=>{
             const customKeyFigureItem = event.currentTarget.parentNode
             const customKeyFigureId = customKeyFigureItem.dataset.customKeyFigureId
-            deleteCustomKeyFigure(customKeyFigureId)
-            customKeyFigureItem.remove()
+            const customKeyFigureName = customKeyFigureItem.dataset.customKeyFigureName
+
+            if (confirm(`Sind Sie sicher, dass sie die Custom-Kennzahl "${customKeyFigureName}" löschen wollen?`)) {
+                deleteCustomKeyFigure(customKeyFigureId)
+                customKeyFigureItem.remove()
+            }
+
         })
     })
 }
