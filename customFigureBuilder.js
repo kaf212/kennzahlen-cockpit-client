@@ -148,6 +148,27 @@ function parseFormulaString(formulaStr) {
     return formulaStr
 }
 
+function reverseParseFormulaString(formulaStr) {
+    /*
+    Iterates over all English account names in the translations object and checks if they are found
+    in the provided formula string. If yes, the substring is replaced with the corresponding German
+    translation from the translations object.
+    At the end, whitespace is re-added between elements, assuming camelCase or other patterns to detect boundaries.
+    :param: formulaStr (str): The English formula provided by the backend
+    :return: formulaStr (str): The translated formula with German terms and added whitespaces
+    */
+    for (const [accountGroup, accounts] of Object.entries(translations)) {
+        for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
+            if (formulaStr.includes(englishAccount)) {
+                // Replace English account name with German translation
+                formulaStr = formulaStr.replace(new RegExp(englishAccount, 'g'), germanAccount)
+            }
+        }
+    }
+
+    return formulaStr
+}
+
 function addSubmitEventListener() {
     /*
     Adds the EventListener to the custom figure builder form that gets triggered with the form submit.
@@ -231,7 +252,8 @@ async function loadSidebar() {
     if (customKeyFigures) {
         const sidebar = document.getElementById("customKeyFigureContainer")
         customKeyFigures.forEach(customKeyFigure => {
-           const htmlToInsert = `<div class="custom-key-figure-item">${customKeyFigure.name}<br>${customKeyFigure.formula}</div>`
+            const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
+            const htmlToInsert = `<div class="custom-key-figure-item">${customKeyFigure.name}<br>${reverseParsedFormula}</div>`
             sidebar.innerHTML += htmlToInsert
         })
     }
