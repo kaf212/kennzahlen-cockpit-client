@@ -152,9 +152,9 @@ body {
     width: 100%;
 }
 
-.custom-key-figure-delete-button {
-    background: none;
+.delete-custom-key-figure-button {
     border: none;
+    border-radius: 4px;
     color: red;
     font-size: 16px;
     cursor: pointer;
