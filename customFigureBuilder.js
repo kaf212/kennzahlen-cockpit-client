@@ -273,11 +273,45 @@ async function loadSidebar() {
         
         customKeyFigures.forEach(customKeyFigure => {
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
-            const htmlToInsert = `<div class="custom-key-figure-item"><div class="custom-key-figure-item-content-wrapper"><b>${customKeyFigure.name}</b>${reverseParsedFormula}</div><button class="delete-custom-key-figure-button">×</button></div>`
+            const htmlToInsert = `<div class="custom-key-figure-item" 
+                                           data-custom-key-figure-id="${customKeyFigure._id}">
+                                           <div class="custom-key-figure-item-content-wrapper">
+                                           <b>${customKeyFigure.name}</b>${reverseParsedFormula}
+                                           </div>
+                                           <button class="delete-custom-key-figure-button">×</button>
+                                           </div>`
+
             sidebar.innerHTML += htmlToInsert
         })
     }
 
+}
+
+function deleteCustomKeyFigure(customKeyFigureId) {
+
+    fetch("http://localhost:5000/customKeyFigures/" + customKeyFigureId, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+    })
+        .then(res=>handleServerResponse(res))
+        .catch(err=>console.error(err))
+}
+
+function addDeleteButtonEventListeners() {
+    console.log(document.getElementsByClassName("delete-custom-key-figure-button"))
+    const asdf = Array.from(document.getElementsByClassName("delete-custom-key-figure-button"))
+    console.log(asdf
+    )
+
+    Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
+        console.log(button)
+        button.addEventListener("click", (event)=>{
+            console.log("test")
+            const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
+            deleteCustomKeyFigure(customKeyFigureId)
+
+        })
+    })
 }
 
 function addInfoBoxEventListener() {
@@ -295,4 +329,7 @@ createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
 addInfoBoxEventListener()
-loadSidebar()
+loadSidebar().then(()=>{
+    addDeleteButtonEventListeners()
+})
+
