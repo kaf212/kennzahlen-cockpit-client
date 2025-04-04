@@ -266,6 +266,11 @@ async function loadSidebar() {
     const customKeyFigures = await getCustomKeyFigures()
     if (customKeyFigures) {
         const sidebar = document.getElementById("customKeyFigureContainer")
+
+        // Remove all custom key figures from the sidebar to avoid duplicates
+        const itemsToRemove = sidebar.querySelectorAll(".custom-key-figure-item")
+        itemsToRemove.forEach(item => item.remove())
+        
         customKeyFigures.forEach(customKeyFigure => {
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
             const htmlToInsert = `<div class="custom-key-figure-item">${customKeyFigure.name}<br>${reverseParsedFormula}</div>`
@@ -275,8 +280,19 @@ async function loadSidebar() {
 
 }
 
+function addInfoBoxEventListener() {
+    const infoBox = document.getElementById("customFigureBuilderInfoBox")
+
+    infoBox.addEventListener("click", ()=>{
+        document.querySelector(".infobox-overlay").style.display = "none"
+        document.getElementById("customFigureBuilderForm").reset()
+        loadSidebar()
+    })
+}
+
 addTabButtonEventListeners()
 createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
+addInfoBoxEventListener()
 loadSidebar()
