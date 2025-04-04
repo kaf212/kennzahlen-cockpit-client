@@ -149,14 +149,14 @@ function parseFormulaString(formulaStr) {
 }
 
 function reverseParseFormulaString(formulaStr) {
-    /*
-    Iterates over all English account names in the translations object and checks if they are found
-    in the provided formula string. If yes, the substring is replaced with the corresponding German
-    translation from the translations object.
-    At the end, whitespace is re-added between elements, assuming camelCase or other patterns to detect boundaries.
-    :param: formulaStr (str): The English formula provided by the backend
-    :return: formulaStr (str): The translated formula with German terms and added whitespaces
-    */
+    /**
+     * Translates english account names in the formula string to their german translations
+     * using the translations object and re-adds the missing whitespaces in front
+     *
+     * @param {string} formulaStr - The formula string with english accounts
+     * @returns {string} - The formula string translated into german with whitespaces
+     */
+
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             if (formulaStr.includes(englishAccount)) {
@@ -165,6 +165,21 @@ function reverseParseFormulaString(formulaStr) {
             }
         }
     }
+
+    // Add whitespace before and after arithmetic operators
+    const operators = ["+", "-", "*", "/"]
+    let result = ""
+
+    for (let i = 0; i < formulaStr.length; i++) {
+        const char = formulaStr[i]
+        if (operators.includes(char)) {
+            result += ` ${char} ` // Add whitespace before and after the operator
+        } else {
+            result += char // Add the character without any whitespaces
+        }
+    }
+
+    formulaStr = result
 
     return formulaStr
 }
