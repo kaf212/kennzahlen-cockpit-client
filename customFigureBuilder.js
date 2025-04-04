@@ -212,7 +212,34 @@ function saveNewCustomKeyFigure(formulaName, formulaStr) {
         .catch(err=>console.error(err))
 }
 
+async function getCustomKeyFigures() {
+    try {
+        const response = await fetch("http://localhost:5000/customKeyFigures", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
+        const data = await response.json()
+        return data
+    } catch (err) {
+        console.error("Error fetching custom key figures:", err)
+        return undefined
+    }
+}
+
+async function loadSidebar() {
+    const customKeyFigures = await getCustomKeyFigures()
+    if (customKeyFigures) {
+        const sidebar = document.getElementById("customKeyFigureContainer")
+        customKeyFigures.forEach(customKeyFigure => {
+           const htmlToInsert = `<div class="custom-key-figure-item">${customKeyFigure.name}<br>${customKeyFigure.formula}</div>`
+            sidebar.innerHTML += htmlToInsert
+        })
+    }
+
+}
+
 addTabButtonEventListeners()
 createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
+loadSidebar()
