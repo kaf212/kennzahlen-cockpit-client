@@ -1,4 +1,4 @@
-export  function handleServerResponse(res) {
+function handleServerResponse(res, displaySuccessMessage = true) {
     /*
     Gets called upon receiving a response from the server in saveNewCustomKeyFigure() to process the response.
     The response message will be displayed in the infobox in the UI and the font color will be green, if the status is
@@ -10,7 +10,7 @@ export  function handleServerResponse(res) {
     res.json().then(data=>{
         const infoBox = document.querySelector(".infobox")
 
-        if (statusCode.startsWith("20")) {
+        if (statusCode.startsWith("20") && displaySuccessMessage === true) {
             infoBox.classList.remove("error-message")
             infoBox.classList.add("success-message")
         }
@@ -32,3 +32,20 @@ export function addInfoBoxEventListener(callback) {
         callback()
     })
 }
+
+export async function sendServerRequest(method, url, body = null) {
+    return fetch(url, {
+        method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + sessionStorage.getItem("token"),
+        },
+        body: JSON.stringify(body),
+    })
+        .then(res => handleServerResponse(res))
+        .catch(error => {
+            console.error("Error during the fetch request:", error)
+            throw error
+        })
+}
+
