@@ -5,20 +5,42 @@ body {
     color: #1e293b;
 }
 
+/* Wrapper für Sidebar + Hauptinhalt */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    width: 60%;
+}
+
 /* Main-Container */
 .main-container {
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 2rem;
-    border: 1px solid #e2e8f0;
+    width: 65%;
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    border-radius: 8px;
 }
 
 /* Header */
 .header-section h1 {
     color: #1e3a8a;
+}
+
+/* Is needed to overwrite tailwind styles */
+.main-title {
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+    margin: 1rem 0 1rem 0 !important;
+}
+
+/* Is needed to overwrite tailwind styles */
+.sidebar-title {
+    font-size: 1.2rem !important;
+    font-weight: bold !important;
+    margin: 1rem 0 1rem 0 !important;
 }
 
 /* Dropdown */
@@ -105,25 +127,7 @@ body {
     border-top: 1px solid #e5e7eb;
 }
 
-/* Sidebar */
-.sidebar {
-    background-color: #ffffff;
-    border-left: 1px solid #e2e8f0;
-}
 
-.sidebar h2 {
-    color: #1e3a8a;
-}
-
-.sidebar a {
-    color: #2563eb;
-    transition: color 0.2s ease;
-}
-
-.sidebar a:hover {
-    color: #1d4ed8;
-    text-decoration: underline;
-}
 
 /* Footer */
 .footer-container {
