@@ -254,16 +254,12 @@ async function loadSidebar() {
 }
 
 function deleteCustomKeyFigure(customKeyFigureId) {
-    fetch("http://localhost:5000/customKeyFigures/" + customKeyFigureId, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-    })
-        .then(res=>handleServerResponse(res))
-        .catch(err=>console.error(err))
+    const url = "http://localhost:5000/customKeyFigures/" + customKeyFigureId
+    sendServerRequest("DELETE", url)
 }
 
 function addCustomKeyFigureDeleteButtonEventListeners() {
-    Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
+    Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             const customKeyFigureItem = event.currentTarget.parentNode
             const customKeyFigureId = customKeyFigureItem.dataset.customKeyFigureId
