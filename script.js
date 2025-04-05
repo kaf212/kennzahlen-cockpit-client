@@ -201,7 +201,7 @@ function logout() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("logout").addEventListener("click", logout);
+    document.getElementById("logoutButton").addEventListener("click", logout);
 })
 
 addInfoBoxEventListener(()=>{
