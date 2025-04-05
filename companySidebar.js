@@ -1,10 +1,12 @@
+import {handleServerResponse, addInfoBoxEventListener} from "./serverResponseHandling.js"
+
 
 function deleteCompany(companyId) {
     fetch("http://localhost:5000/companies/" + companyId, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" }
     })
-        .then(res=>console.log(res))
+        .then(res=>handleServerResponse(res))
         .catch(err=>console.error(err))
 }
 
@@ -65,13 +67,13 @@ async function loadCompanySidebar() {
 
 }
 
-function saveNewCustomKeyFigure(companyName) {
+function saveNewCompany(companyName) {
     fetch("http://localhost:5000/companies", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({name: companyName})
     })
-        .then(res=>console.log(res))
+        .then(res=>handleServerResponse(res))
         .catch(err=>console.error(err))
 }
 
@@ -87,7 +89,7 @@ function addCompanySidebarTextFieldEventListener() {
             if (!companyName) {
                 return null
             }
-            saveNewCustomKeyFigure(companyName)
+            saveNewCompany(companyName)
             loadCompanySidebar()
             companyInputField.value = ""
 
@@ -98,3 +100,4 @@ function addCompanySidebarTextFieldEventListener() {
 
 addCompanySidebarTextFieldEventListener()
 loadCompanySidebar()
+addInfoBoxEventListener(loadCompanySidebar)
