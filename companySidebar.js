@@ -1,13 +1,8 @@
 import {addInfoBoxEventListener, sendServerRequest} from "./serverResponseHandling.js"
 
 
-function deleteCompany(companyId) {
-    fetch("http://localhost:5000/companies/" + companyId, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-    })
-        .then(res=>handleServerResponse(res))
-        .catch(err=>console.error(err))
+async function deleteCompany(companyId) {
+    await sendServerRequest("DELETE", "http://localhost:5000/companies/" + companyId, null, false)
 }
 
 function addCompanyDeleteButtonEventListeners() {
