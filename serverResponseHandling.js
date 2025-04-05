@@ -14,15 +14,15 @@ async function handleServerResponse(res, displaySuccessMessage) {
     if (statusCode.startsWith("20") && displaySuccessMessage === true) {
         infoBox.classList.remove("error-message")
         infoBox.classList.add("success-message")
+        infoBox.innerText = `${jsonData.message} displaySuccessMessage = ${displaySuccessMessage}`
         document.querySelector(".infobox-overlay").style.display = "flex"
     }
     else if (statusCode.startsWith("40")) {
         infoBox.classList.remove("success-message")
         infoBox.classList.add("error-message")
+        infoBox.innerText = jsonData.message
         document.querySelector(".infobox-overlay").style.display = "flex"
     }
-
-    infoBox.innerText = jsonData.message
 
     return jsonData
 }

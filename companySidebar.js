@@ -1,4 +1,4 @@
-import {sendServerREquest, addInfoBoxEventListener} from "./serverResponseHandling.js"
+import {addInfoBoxEventListener, sendServerRequest} from "./serverResponseHandling.js"
 
 
 function deleteCompany(companyId) {
@@ -27,17 +27,8 @@ function addCompanyDeleteButtonEventListeners() {
 }
 
 async function getCompanies() {
-    try {
-        const response = await fetch("http://localhost:5000/companies", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        });
-        const data = await response.json()
-        return data
-    } catch (err) {
-        console.error("Error fetching custom key figures:", err)
-        return undefined
-    }
+    const data = await sendServerRequest("GET", "http://localhost:5000/companies", null, false)
+    return data
 }
 
 
@@ -67,14 +58,8 @@ async function loadCompanySidebar() {
     addCompanyElementEventListeners()
 }
 
-function saveNewCompany(companyName) {
-    fetch("http://localhost:5000/companies", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name: companyName})
-    })
-        .then(res=>handleServerResponse(res))
-        .catch(err=>console.error(err))
+async function saveNewCompany(companyName) {
+    await sendServerRequest("POST", "http://localhost:5000/companies", {name: companyName})
 }
 
 
@@ -89,8 +74,7 @@ function addCompanySidebarTextFieldEventListener() {
             if (!companyName) {
                 return null
             }
-            saveNewCompany(companyName)
-            loadCompanySidebar()
+            saveNewCompany(companyName).then(loadCompanySidebar)
             companyInputField.value = ""
 
         }
