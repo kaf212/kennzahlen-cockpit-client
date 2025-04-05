@@ -54,7 +54,7 @@ async function loadCompanySidebar() {
             const htmlToInsert = `<div class="sidebar-item" 
                                            data-company-id="${company._id}"
                                            data-company-name="${company.name}">
-                                           <div class="sidebar-item-content-wrapper">
+                                           <div class="sidebar-item-content-wrapper company-sidebar-item">
                                            <b>${company.name}</b>
                                            </div>
                                            <button class="sidebar-delete-button">×</button>
@@ -64,7 +64,7 @@ async function loadCompanySidebar() {
         })
     }
     addCompanyDeleteButtonEventListeners()
-
+    addCompanyElementEventListeners()
 }
 
 function saveNewCompany(companyName) {
@@ -96,6 +96,17 @@ function addCompanySidebarTextFieldEventListener() {
         }
     })
 
+}
+
+function addCompanyElementEventListeners() {
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(companyItem => {
+        companyItem.addEventListener("click", (event)=>{
+            const companyId = companyItem.dataset.companyId
+            const companyName = companyItem.dataset.companyName
+
+            window.location.href = `${window.location.pathname}?id=${companyId}?company=${companyName}`
+        })
+    })
 }
 
 addCompanySidebarTextFieldEventListener()
