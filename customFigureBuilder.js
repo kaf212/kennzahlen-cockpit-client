@@ -148,6 +148,42 @@ function parseFormulaString(formulaStr) {
     return formulaStr
 }
 
+function reverseParseFormulaString(formulaStr) {
+    /**
+     * Translates english account names in the formula string to their german translations
+     * using the translations object and re-adds the missing whitespaces in front
+     *
+     * @param {string} formulaStr - The formula string with english accounts
+     * @returns {string} - The formula string translated into german with whitespaces
+     */
+
+    for (const [accountGroup, accounts] of Object.entries(translations)) {
+        for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
+            if (formulaStr.includes(englishAccount)) {
+                // Replace English account name with German translation
+                formulaStr = formulaStr.replace(new RegExp(englishAccount, 'g'), germanAccount)
+            }
+        }
+    }
+
+    // Add whitespace before and after arithmetic operators
+    const operators = ["+", "-", "*", "/"]
+    let result = ""
+
+    for (let i = 0; i < formulaStr.length; i++) {
+        const char = formulaStr[i]
+        if (operators.includes(char)) {
+            result += ` ${char} ` // Add whitespace before and after the operator
+        } else {
+            result += char // Add the character without any whitespaces
+        }
+    }
+
+    formulaStr = result
+
+    return formulaStr
+}
+
 function addSubmitEventListener() {
     /*
     Adds the EventListener to the custom figure builder form that gets triggered with the form submit.
@@ -175,14 +211,15 @@ function handleServerResponse(res) {
     :return: void
      */
     const statusCode = res.status.toString()
-
     res.json().then(data=>{
         const infoBox = document.querySelector(".infobox")
 
         if (statusCode.startsWith("20")) {
+            infoBox.classList.remove("error-message")
             infoBox.classList.add("success-message")
         }
         else if (statusCode.startsWith("40")) {
+            infoBox.classList.remove("success-message")
             infoBox.classList.add("error-message")
         }
 
@@ -211,7 +248,88 @@ function saveNewCustomKeyFigure(formulaName, formulaStr) {
         .catch(err=>console.error(err))
 }
 
+async function getCustomKeyFigures() {
+    try {
+        const response = await fetch("http://localhost:5000/customKeyFigures", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
+        const data = await response.json()
+        return data
+    } catch (err) {
+        console.error("Error fetching custom key figures:", err)
+        return undefined
+    }
+}
+
+async function loadSidebar() {
+    const customKeyFigures = await getCustomKeyFigures()
+    if (customKeyFigures) {
+        const sidebar = document.getElementById("customKeyFigureContainer")
+
+        // Remove all custom key figures from the sidebar to avoid duplicates
+        const itemsToRemove = sidebar.querySelectorAll(".custom-key-figure-item")
+        itemsToRemove.forEach(item => item.remove())
+
+        customKeyFigures.forEach(customKeyFigure => {
+            const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
+            const htmlToInsert = `<div class="custom-key-figure-item" 
+                                           data-custom-key-figure-id="${customKeyFigure._id}"
+                                           data-custom-key-figure-name="${customKeyFigure.name}">
+                                           <div class="custom-key-figure-item-content-wrapper">
+                                           <b>${customKeyFigure.name}</b>${reverseParsedFormula}
+                                           </div>
+                                           <button class="delete-custom-key-figure-button">×</button>
+                                           </div>`
+
+            sidebar.innerHTML += htmlToInsert
+        })
+    }
+    addDeleteButtonEventListeners()
+
+}
+
+function deleteCustomKeyFigure(customKeyFigureId) {
+    fetch("http://localhost:5000/customKeyFigures/" + customKeyFigureId, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+    })
+        .then(res=>handleServerResponse(res))
+        .catch(err=>console.error(err))
+}
+
+function addDeleteButtonEventListeners() {
+    const asdf = Array.from(document.getElementsByClassName("delete-custom-key-figure-button"))
+
+    Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
+        button.addEventListener("click", (event)=>{
+            const customKeyFigureItem = event.currentTarget.parentNode
+            const customKeyFigureId = customKeyFigureItem.dataset.customKeyFigureId
+            const customKeyFigureName = customKeyFigureItem.dataset.customKeyFigureName
+
+            if (confirm(`Sind Sie sicher, dass sie die Custom-Kennzahl "${customKeyFigureName}" löschen wollen?`)) {
+                deleteCustomKeyFigure(customKeyFigureId)
+                customKeyFigureItem.remove()
+            }
+
+        })
+    })
+}
+
+function addInfoBoxEventListener() {
+    const infoBox = document.getElementById("customFigureBuilderInfoBox")
+
+    infoBox.addEventListener("click", ()=>{
+        document.querySelector(".infobox-overlay").style.display = "none"
+        document.getElementById("customFigureBuilderForm").reset()
+        loadSidebar()
+    })
+}
+
 addTabButtonEventListeners()
 createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
+addInfoBoxEventListener()
+loadSidebar()
+

@@ -154,3 +154,100 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const role = document.getElementById("role").value;
+            const password = document.getElementById("pass").value;
+
+            // Passwortlogik
+            const credentials = {
+                admin: "admin123",
+                user: "user123"
+            };
+
+            if (password === credentials[role]) {
+                // Token erstellen
+                const tokenPayload = {
+                    role: role,
+                    exp: Date.now() + 1000 * 60 * 60 // 1 Stunde
+                };
+                const token = btoa(JSON.stringify(tokenPayload));
+                localStorage.setItem("jwt_token", token);
+                window.location.href = "index.html";
+            } else {
+                alert("Falsches Passwort für die Rolle \"" + role + "\"!");
+            }
+        });
+    }
+
+    // Token-Check auf index.html
+    if (window.location.pathname.endsWith("index.html")) {
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+            window.location.href = "login.html";
+        } else {
+            try {
+                const decoded = JSON.parse(atob(token));
+                if (Date.now() > decoded.exp) {
+                    alert("Session abgelaufen!");
+                    localStorage.removeItem("jwt_token");
+                    window.location.href = "login.html";
+                }
+            } catch (e) {
+                console.error("Ungültiger Token.");
+                localStorage.removeItem("jwt_token");
+                window.location.href = "login.html";
+            }
+        }
+    }
+});
+
+function logout() {
+    localStorage.removeItem("jwt_token");
+    window.location.href = "login.html";
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const list = document.getElementById("kennzahl-liste");
+    const form = document.querySelector("form");
+    const bezeichnungInput = document.getElementById("bezeichnung");
+    const formelInput = document.getElementById("formel");
+
+    // Löschen einer Kennzahl
+    list.addEventListener("click", (event) => {
+        if (event.target.classList.contains("delete-button")) {
+            const item = event.target.closest("li");
+            if (item) item.remove();
+        }
+    });
+
+    // Neue Kennzahl hinzufügen
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = bezeichnungInput.value.trim();
+        const formel = formelInput.value.trim();
+
+        if (name && formel) {
+            const li = document.createElement("li");
+
+            li.innerHTML = `
+        <strong>${name}</strong>: ${formel}
+        <button class="delete-button">✕</button>
+      `;
+
+            list.appendChild(li);
+
+            // Eingabefelder zurücksetzen
+            bezeichnungInput.value = "";
+            formelInput.value = "";
+        }
+    });
+});
