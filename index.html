@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="infobox.css">
   <script type="module" src="companySidebar.js" defer></script>
   <script src="loadCompanyData.js" defer></script>
+  <script type="module" src="script.js" defer></script>
 </head>
 
 
@@ -24,7 +25,7 @@
 
     <div class="header-section flex justify-between items-center mb-6">
       <h1 class="text-xl font-bold">Kennzahlen Cockpit</h1>
-      <button onclick="logout()" class="text-red-600 font-semibold hover:underline">Logout</button>
+      <button id="logoutButton" class="text-red-600 font-semibold hover:underline">Logout</button>
     </div>
 
 
@@ -100,6 +101,5 @@
 </footer>
 
 
-<script src="script.js"></script>
 </body>
 </html>
