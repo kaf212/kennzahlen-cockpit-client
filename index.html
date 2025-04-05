@@ -6,6 +6,8 @@
   <title>Kennzahlen Cockpit</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="sidebar.css">
+  <script src="companySidebar.js" defer></script>
 </head>
 
 
@@ -74,10 +76,10 @@
 
   <div class="sidebar w-64 bg-white shadow p-4 border-l border-gray-200">
     <h2 class="text-lg font-semibold mb-4">Unternehmen</h2>
-    <ul class="space-y-2">
-      <div id="companyList" class="company-list"></div>
-      <input type="text" id="companyNameInput" class="form-input" placeholder="Neues Unternehmen" />
-    </ul>
+    <input type="text" id="companyNameInput" class="form-input" placeholder="Neues Unternehmen" />
+    <div id="companyContainer">
+
+    </div>
   </div>
 </div>
 

@@ -110,18 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderCompanies();
 
-    companyInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            const name = companyInput.value.trim();
-            if (name && !companies.includes(name)) {
-                companies.unshift(name);
-                saveCompanies();
-                renderCompanies();
-                companyInput.value = "";
-            }
-        }
-    });
 
     function saveCompanies() {
         localStorage.setItem("companies", JSON.stringify(companies));

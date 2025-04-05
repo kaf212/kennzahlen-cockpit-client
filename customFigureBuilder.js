@@ -268,24 +268,24 @@ async function loadSidebar() {
         const sidebar = document.getElementById("customKeyFigureContainer")
 
         // Remove all custom key figures from the sidebar to avoid duplicates
-        const itemsToRemove = sidebar.querySelectorAll(".custom-key-figure-item")
+        const itemsToRemove = sidebar.querySelectorAll(".sidebar-item")
         itemsToRemove.forEach(item => item.remove())
 
         customKeyFigures.forEach(customKeyFigure => {
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
-            const htmlToInsert = `<div class="custom-key-figure-item" 
+            const htmlToInsert = `<div class="sidebar-item" 
                                            data-custom-key-figure-id="${customKeyFigure._id}"
                                            data-custom-key-figure-name="${customKeyFigure.name}">
-                                           <div class="custom-key-figure-item-content-wrapper">
+                                           <div class="sidebar-item-content-wrapper">
                                            <b>${customKeyFigure.name}</b>${reverseParsedFormula}
                                            </div>
-                                           <button class="delete-custom-key-figure-button">×</button>
+                                           <button class="sidebar-delete-button">×</button>
                                            </div>`
 
             sidebar.innerHTML += htmlToInsert
         })
     }
-    addDeleteButtonEventListeners()
+    addCustomKeyFigureDeleteButtonEventListeners()
 
 }
 
@@ -298,9 +298,7 @@ function deleteCustomKeyFigure(customKeyFigureId) {
         .catch(err=>console.error(err))
 }
 
-function addDeleteButtonEventListeners() {
-    const asdf = Array.from(document.getElementsByClassName("delete-custom-key-figure-button"))
-
+function addCustomKeyFigureDeleteButtonEventListeners() {
     Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             const customKeyFigureItem = event.currentTarget.parentNode
