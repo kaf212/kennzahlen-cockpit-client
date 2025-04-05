@@ -84,7 +84,10 @@ function addCompanySidebarTextFieldEventListener() {
 
 function addCompanyElementEventListeners() {
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(companyItem => {
-        companyItem.addEventListener("click", (event)=>{
+        const companyItemContentWrapper = companyItem.querySelector(".sidebar-item-content-wrapper")
+        /* Add the EventListener for URI-parameter modification only to the content-wrapper,
+        so that the delete button doesn't also have this EventListener (fix for issue #22). */
+        companyItemContentWrapper.addEventListener("click", (event)=>{
             const companyId = companyItem.dataset.companyId
             const companyName = companyItem.dataset.companyName
 
