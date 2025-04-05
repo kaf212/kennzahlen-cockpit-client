@@ -222,17 +222,8 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr) {
 }
 
 async function getCustomKeyFigures() {
-    try {
-        const response = await fetch("http://localhost:5000/customKeyFigures", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        });
-        const data = await response.json()
-        return data
-    } catch (err) {
-        console.error("Error fetching custom key figures:", err)
-        return undefined
-    }
+    const data = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    return data
 }
 
 async function loadSidebar() {
