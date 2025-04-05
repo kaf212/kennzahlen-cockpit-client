@@ -41,7 +41,6 @@ async function getCompanies() {
 
 async function loadCompanySidebar() {
     const companies = await getCompanies()
-    console.log(companies)
     if (companies) {
         const sidebar = document.getElementById("companyContainer")
 
@@ -90,6 +89,7 @@ function addCompanySidebarTextFieldEventListener() {
             }
             saveNewCustomKeyFigure(companyName)
             loadCompanySidebar()
+            companyInputField.value = ""
 
         }
     })

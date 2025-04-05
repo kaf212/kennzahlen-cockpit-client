@@ -125,6 +125,10 @@ body {
     text-decoration: underline;
 }
 
+#companyNameInput {
+    margin-bottom: 1rem;
+}
+
 /* Footer */
 .footer-container {
     background-color: #f3f4f6;
