@@ -255,7 +255,7 @@ async function loadSidebar() {
 
 function deleteCustomKeyFigure(customKeyFigureId) {
     const url = "http://localhost:5000/customKeyFigures/" + customKeyFigureId
-    sendServerRequest("DELETE", url)
+    sendServerRequest("DELETE", url, null, false)
 }
 
 function addCustomKeyFigureDeleteButtonEventListeners() {
