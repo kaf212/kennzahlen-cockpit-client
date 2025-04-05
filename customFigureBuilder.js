@@ -1,4 +1,4 @@
-import {handleServerResponse, addInfoBoxEventListener} from "./serverResponseHandling.js"
+import {addInfoBoxEventListener, sendServerRequest} from "./serverResponseHandling.js"
 
 const translations = {
     "actives": {
@@ -207,7 +207,7 @@ function addSubmitEventListener() {
 
 
 
-function saveNewCustomKeyFigure(formulaName, formulaStr) {
+async function saveNewCustomKeyFigure(formulaName, formulaStr) {
     /*
     Sends a POST request to the backend to save the new custom key figure on the server.
     The response is then passed to handleServerResponse() to display the success or error message in the UI.
@@ -215,28 +215,15 @@ function saveNewCustomKeyFigure(formulaName, formulaStr) {
     :param: formulaStr (str): The translated formula
     :return: void
      */
-    // Causes NetworkError in firefox for some reason. (https://github.com/kaf212/kennzahlen-cockpit-client/issues/7)
-    fetch("http://localhost:5000/customKeyFigures", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name: formulaName, formula: formulaStr})
+    await sendServerRequest("POST", "http://localhost:5000/customKeyFigures", {
+        name: formulaName,
+        formula: formulaStr
     })
-        .then(res=>handleServerResponse(res))
-        .catch(err=>console.error(err))
 }
 
 async function getCustomKeyFigures() {
-    try {
-        const response = await fetch("http://localhost:5000/customKeyFigures", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        });
-        const data = await response.json()
-        return data
-    } catch (err) {
-        console.error("Error fetching custom key figures:", err)
-        return undefined
-    }
+    const data = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    return data
 }
 
 async function loadSidebar() {
@@ -267,16 +254,12 @@ async function loadSidebar() {
 }
 
 function deleteCustomKeyFigure(customKeyFigureId) {
-    fetch("http://localhost:5000/customKeyFigures/" + customKeyFigureId, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-    })
-        .then(res=>handleServerResponse(res))
-        .catch(err=>console.error(err))
+    const url = "http://localhost:5000/customKeyFigures/" + customKeyFigureId
+    sendServerRequest("DELETE", url, null, false)
 }
 
 function addCustomKeyFigureDeleteButtonEventListeners() {
-    Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
+    Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             const customKeyFigureItem = event.currentTarget.parentNode
             const customKeyFigureId = customKeyFigureItem.dataset.customKeyFigureId

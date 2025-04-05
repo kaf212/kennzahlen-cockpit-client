@@ -1,3 +1,5 @@
+import {sendServerRequest, addInfoBoxEventListener} from "./serverResponseHandling.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     // Tabs wechseln
     function showTab(tab) {
@@ -159,22 +161,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.log("Login versendet:", role, password);
 
-            const response = await fetch("http://localhost:5000/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ role, password })
-            });
+            const jsonData = await sendServerRequest("POST", "http://localhost:5000/auth/login", {role, password}, false)
 
-            console.log("Status:", response.status);
 
-            const result = await response.json();
-            console.log("Antwort-Token:", result.token);
-
-            if (response.ok) {
-                sessionStorage.setItem("token", result.token);
+            if (jsonData.hasOwnProperty("token")) {
+                sessionStorage.setItem("token", jsonData.token);
                 window.location.href = "index.html";
-            } else {
-                alert("Login fehlgeschlagen");
             }
         });
     }
@@ -203,10 +195,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
 function logout() {
     sessionStorage.removeItem("token");
     window.location.href = "login.html";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("logoutButton").addEventListener("click", logout);
+})
+
+addInfoBoxEventListener(()=>{
+    document.getElementById("loginForm").reset();
+})
+
+
 
 

@@ -1,4 +1,4 @@
-export  function handleServerResponse(res) {
+async function handleServerResponse(res, displaySuccessMessage) {
     /*
     Gets called upon receiving a response from the server in saveNewCustomKeyFigure() to process the response.
     The response message will be displayed in the infobox in the UI and the font color will be green, if the status is
@@ -7,21 +7,24 @@ export  function handleServerResponse(res) {
     :return: void
      */
     const statusCode = res.status.toString()
-    res.json().then(data=>{
-        const infoBox = document.querySelector(".infobox")
+    const jsonData = await res.json()
 
-        if (statusCode.startsWith("20")) {
-            infoBox.classList.remove("error-message")
-            infoBox.classList.add("success-message")
-        }
-        else if (statusCode.startsWith("40")) {
-            infoBox.classList.remove("success-message")
-            infoBox.classList.add("error-message")
-        }
+    const infoBox = document.querySelector(".infobox")
 
+    if (statusCode.startsWith("20") && displaySuccessMessage === true) {
+        infoBox.classList.remove("error-message")
+        infoBox.classList.add("success-message")
+        infoBox.innerText = jsonData.message
         document.querySelector(".infobox-overlay").style.display = "flex"
-        infoBox.innerText = data.message
-    })
+    }
+    else if (statusCode.startsWith("40")) {
+        infoBox.classList.remove("success-message")
+        infoBox.classList.add("error-message")
+        infoBox.innerText = jsonData.message
+        document.querySelector(".infobox-overlay").style.display = "flex"
+    }
+
+    return jsonData
 }
 
 export function addInfoBoxEventListener(callback) {
@@ -32,3 +35,17 @@ export function addInfoBoxEventListener(callback) {
         callback()
     })
 }
+
+export async function sendServerRequest(method, url, body = null, displaySuccessMessage = true) {
+    const res = await fetch(url, {
+        method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + sessionStorage.getItem("token"),
+        },
+        body: body ? JSON.stringify(body) : undefined, // Only send body if one is provided in the parameters
+    })
+    const data = await handleServerResponse(res, displaySuccessMessage)
+    return data
+}
+
