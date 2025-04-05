@@ -51,8 +51,8 @@ async function loadCompanySidebar() {
 
         companies.forEach(company => {
             const htmlToInsert = `<div class="sidebar-item" 
-                                           data-custom-key-figure-id="${company._id}"
-                                           data-custom-key-figure-name="${company.name}">
+                                           data-company-id="${company._id}"
+                                           data-company-name="${company.name}">
                                            <div class="sidebar-item-content-wrapper">
                                            <b>${company.name}</b>
                                            </div>
