@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Tabs wechseln
     function showTab(tab) {
         document.getElementById("graph-section").classList.add("hidden");
         document.getElementById("table-section").classList.add("hidden");
@@ -24,6 +25,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById("tab-table").addEventListener("click", function() {
             showTab('table');
+        });
+    }
+
+    // Login-Redirect
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            let userRole = document.getElementById("userRole").value;
+            if (userRole === "admin") {
+                window.location.href = "admin_dashboard.html";
+            } else {
+                window.location.href = "user_dashboard.html";
+            }
         });
     }
 
@@ -202,3 +217,5 @@ function logout() {
     sessionStorage.removeItem("token");
     window.location.href = "login.html";
 }
+
+

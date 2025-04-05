@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <!-- Create new branch from commit 52c2db5030247b40c7a4e8daa0a47bc22313b42f because code was lost in faulty merge -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Neue Kennzahl erstellen</title>
@@ -8,11 +9,12 @@
     <script src="customFigureBuilder.js" defer></script>
 </head>
 <body>
-<div class="main-container">
+<div class="content-wrapper">
+  <div class="main-container">
 
-  <div class="infobox-overlay" onclick="this.style.display='none'">
-    <div class="infobox"></div>
-  </div>
+    <div class="infobox-overlay" id="customFigureBuilderInfoBox">
+      <div class="infobox"></div>
+    </div>
 
   <h1 class="header">Neue Kennzahl erstellen</h1>
   <form id="customFigureBuilderForm">
@@ -26,32 +28,40 @@
       <button type="button" id="earningsTabButton" data-account-group="earnings" class="tab-button category-excluded">Ertrag</button>
     </div>
 
-
     <label for="formulaField" class="form-label">Formel</label>
-      <input type="text" id="formulaField" class="form-input" required/>
+    <input type="text" id="formulaField" class="form-input" required/>
 
-      <div id="operatorButtonContainer">
-        <button class="operator-button">+</button>
-        <button class="operator-button">-</button>
-        <button class="operator-button">*</button>
-        <button class="operator-button">/</button>
-        <button class="operator-button">(</button>
-        <button class="operator-button">)</button>
+    <div id="operatorButtonContainer">
+      <button class="operator-button">+</button>
+      <button class="operator-button">-</button>
+      <button class="operator-button">*</button>
+      <button class="operator-button">/</button>
+      <button class="operator-button">(</button>
+      <button class="operator-button">)</button>
+    </div>
+
+    <div id="activesTab" data-account-group="actives" class="custom-figure-builder-tab"></div>
+    <div id="passivesTab" data-account-group="passives" class="custom-figure-builder-tab invisible"></div>
+    <div id="expenseTab" data-account-group="expense" class="custom-figure-builder-tab invisible"></div>
+    <div id="earningsTab" data-account-group="earnings" class="custom-figure-builder-tab invisible"></div>
+
+      <div class="button-gruppe">
+        <button type="submit" class="button save-button">Kennzahl speichern</button>
       </div>
+    </form>
+  </div>
 
-      <div id="activesTab" data-account-group="actives" class="custom-figure-builder-tab"></div>
-      <div id="passivesTab" data-account-group="passives" class="custom-figure-builder-tab invisible"></div>
-      <div id="expenseTab" data-account-group="expense" class="custom-figure-builder-tab invisible"></div>
-      <div id="earningsTab" data-account-group="earnings" class="custom-figure-builder-tab invisible"></div>
+  <div class="sidebar">
+    <h2>Custom-Kennzahlen</h2>
+    <div class="sidebar-figure-container" id="customKeyFigureContainer">
 
     </div>
-
-
-
-    <div class="button-gruppe">
-      <button type="submit" class="button save-button" id="submitCustomFigureButton">Kennzahl speichern</button>
-    </div>
-  </form>
+  </div>
 </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+
 </body>
 </html>
