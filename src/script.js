@@ -1,4 +1,4 @@
-import {sendServerRequest, addInfoBoxEventListener} from "./serverResponseHandling.js";
+import {sendServerRequest, addInfoBoxEventListener} from "./js/utils/serverResponseHandling.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     // Tabs wechseln

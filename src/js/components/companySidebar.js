@@ -1,4 +1,4 @@
-import {addInfoBoxEventListener, sendServerRequest} from "./serverResponseHandling.js"
+import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js"
 
 
 async function deleteCompany(companyId) {
