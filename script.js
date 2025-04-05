@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("tab-" + tab).classList.remove("border-transparent");
     }
 
-    // Tabs initial anzeigen
     if (document.getElementById("tab-graph") && document.getElementById("tab-table")) {
         showTab('graph');
 
@@ -111,18 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderCompanies();
 
-    companyInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            const name = companyInput.value.trim();
-            if (name && !companies.includes(name)) {
-                companies.unshift(name);
-                saveCompanies();
-                renderCompanies();
-                companyInput.value = "";
-            }
-        }
-    });
 
     function saveCompanies() {
         localStorage.setItem("companies", JSON.stringify(companies));
@@ -143,10 +130,14 @@ document.addEventListener("DOMContentLoaded", () => {
             delBtn.textContent = "×";
             delBtn.className = "delete-button";
             delBtn.addEventListener("click", () => {
-                companies.splice(index, 1);
-                saveCompanies();
-                renderCompanies();
+                const confirmed = confirm(`Möchtest du "${name}" wirklich löschen?`);
+                if (confirmed) {
+                    companies.splice(index, 1);
+                    saveCompanies();
+                    renderCompanies();
+                }
             });
+
 
             li.appendChild(link);
             li.appendChild(delBtn);

@@ -6,10 +6,18 @@
   <title>Kennzahlen Cockpit</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="infobox.css">
+  <script type="module" src="companySidebar.js" defer></script>
+  <script src="loadCompanyData.js" defer></script>
 </head>
 
 
 <body class="bg-gray-100 flex flex-col min-h-screen">
+
+<div class="infobox-overlay" id="infoBoxOverlay">
+  <div class="infobox"></div>
+</div>
 
 <div class="flex-grow flex flex-row">
   <div class="main-container flex-grow p-4">
@@ -74,10 +82,10 @@
 
   <div class="sidebar w-64 bg-white shadow p-4 border-l border-gray-200">
     <h2 class="text-lg font-semibold mb-4">Unternehmen</h2>
-    <ul class="space-y-2">
-      <div id="companyList" class="company-list"></div>
-      <input type="text" id="companyNameInput" class="form-input" placeholder="Neues Unternehmen" />
-    </ul>
+    <input type="text" id="companyNameInput" class="form-input" placeholder="Neues Unternehmen" />
+    <div id="companyContainer">
+
+    </div>
   </div>
 </div>
 

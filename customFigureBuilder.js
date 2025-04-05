@@ -1,3 +1,5 @@
+import {handleServerResponse, addInfoBoxEventListener} from "./serverResponseHandling.js"
+
 const translations = {
     "actives": {
         "Umlaufvermögen": "current_assets",
@@ -199,36 +201,11 @@ function addSubmitEventListener() {
         const formulaName = document.getElementById("formulaNameField").value
         saveNewCustomKeyFigure(formulaName, parsedFormula)
         event.preventDefault() // Prevent page from refreshing
+        document.getElementById("customFigureBuilderForm").reset()
     })
 }
 
-function handleServerResponse(res) {
-    /*
-    Gets called upon receiving a response from the server in saveNewCustomKeyFigure() to process the response.
-    The response message will be displayed in the infobox in the UI and the font color will be green, if the status is
-    20x and red if it's 40x.
-    :param: res (Response): The HTTP-response from the backend
-    :return: void
-     */
-    const statusCode = res.status.toString()
-    res.json().then(data=>{
-        const infoBox = document.querySelector(".infobox")
 
-        if (statusCode.startsWith("20")) {
-            infoBox.classList.remove("error-message")
-            infoBox.classList.add("success-message")
-        }
-        else if (statusCode.startsWith("40")) {
-            infoBox.classList.remove("success-message")
-            infoBox.classList.add("error-message")
-        }
-
-        document.querySelector(".infobox-overlay").style.display = "flex"
-        infoBox.innerText = data.message
-    })
-
-
-}
 
 function saveNewCustomKeyFigure(formulaName, formulaStr) {
     /*
@@ -268,24 +245,24 @@ async function loadSidebar() {
         const sidebar = document.getElementById("customKeyFigureContainer")
 
         // Remove all custom key figures from the sidebar to avoid duplicates
-        const itemsToRemove = sidebar.querySelectorAll(".custom-key-figure-item")
+        const itemsToRemove = sidebar.querySelectorAll(".sidebar-item")
         itemsToRemove.forEach(item => item.remove())
 
         customKeyFigures.forEach(customKeyFigure => {
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
-            const htmlToInsert = `<div class="custom-key-figure-item" 
+            const htmlToInsert = `<div class="sidebar-item" 
                                            data-custom-key-figure-id="${customKeyFigure._id}"
                                            data-custom-key-figure-name="${customKeyFigure.name}">
-                                           <div class="custom-key-figure-item-content-wrapper">
+                                           <div class="sidebar-item-content-wrapper">
                                            <b>${customKeyFigure.name}</b>${reverseParsedFormula}
                                            </div>
-                                           <button class="delete-custom-key-figure-button">×</button>
+                                           <button class="sidebar-delete-button">×</button>
                                            </div>`
 
             sidebar.innerHTML += htmlToInsert
         })
     }
-    addDeleteButtonEventListeners()
+    addCustomKeyFigureDeleteButtonEventListeners()
 
 }
 
@@ -298,9 +275,7 @@ function deleteCustomKeyFigure(customKeyFigureId) {
         .catch(err=>console.error(err))
 }
 
-function addDeleteButtonEventListeners() {
-    const asdf = Array.from(document.getElementsByClassName("delete-custom-key-figure-button"))
-
+function addCustomKeyFigureDeleteButtonEventListeners() {
     Array.from(document.getElementsByClassName("delete-custom-key-figure-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             const customKeyFigureItem = event.currentTarget.parentNode
@@ -316,20 +291,12 @@ function addDeleteButtonEventListeners() {
     })
 }
 
-function addInfoBoxEventListener() {
-    const infoBox = document.getElementById("customFigureBuilderInfoBox")
 
-    infoBox.addEventListener("click", ()=>{
-        document.querySelector(".infobox-overlay").style.display = "none"
-        document.getElementById("customFigureBuilderForm").reset()
-        loadSidebar()
-    })
-}
 
 addTabButtonEventListeners()
 createAccountButtons()
 addButtonEventListeners()
 addSubmitEventListener()
-addInfoBoxEventListener()
+addInfoBoxEventListener(loadSidebar)
 loadSidebar()
 
