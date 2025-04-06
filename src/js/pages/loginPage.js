@@ -1,4 +1,4 @@
-import {sendServerRequest} from "../utils/serverResponseHandling.js"
+import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js"
 
 const form = document.getElementById("loginForm");
 
@@ -20,3 +20,7 @@ if (form) {
         }
     });
 }
+
+addInfoBoxEventListener(()=>{
+    document.getElementById("loginForm").reset();
+})
