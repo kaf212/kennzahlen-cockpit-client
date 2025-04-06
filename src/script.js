@@ -29,19 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Login-Redirect
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            let userRole = document.getElementById("userRole").value;
-            if (userRole === "admin") {
-                window.location.href = "admin_dashboard.html";
-            } else {
-                window.location.href = "user_dashboard.html";
-            }
-        });
-    }
+
 
     // Datei-Upload per Drag & Drop
     const dropArea = document.getElementById("drop");

@@ -1,5 +1,19 @@
 // Put authentication logic here
-import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling";
+import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js";
+
+// Login-Redirect
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+    loginForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        let userRole = document.getElementById("userRole").value;
+        if (userRole === "admin") {
+            window.location.href = "admin_dashboard.html";
+        } else {
+            window.location.href = "user_dashboard.html";
+        }
+    });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("loginForm");
