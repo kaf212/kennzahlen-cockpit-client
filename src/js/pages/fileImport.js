@@ -1,3 +1,5 @@
+import {sendServerRequest, addInfoBoxEventListener} from "../utils/serverResponseHandling.js";
+
 // Datei-Upload per Drag & Drop
 const dropArea = document.getElementById("drop");
 const fileInput = document.getElementById("file");
@@ -37,7 +39,7 @@ if (dropArea && fileInput && uploadButton) {
 
     uploadButton.addEventListener("click", () => {
         if (selectedFile) {
-            alert("Datei hochgeladen: " + selectedFile.name);
+            uploadFile()
         } else {
             alert("Bitte eine Datei auswählen.");
         }
@@ -49,3 +51,17 @@ if (dropArea && fileInput && uploadButton) {
 } else {
     console.error("Elemente nicht gefunden! Stelle sicher, dask,iots IDs korrekt sind.");
 }
+
+function uploadFile() {
+    const formData = new FormData()
+    formData.append("file", selectedFile)
+
+    sendServerRequest("POST", "http://localhost:5000/upload", formData, true, false)
+}
+
+function resetUploadField() {
+    fileInput.value = ""
+    dropArea.innerHTML = "<p>Datei auswählen oder per Drag & Drop hochladen</p>"
+}
+
+addInfoBoxEventListener(resetUploadField)

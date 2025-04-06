@@ -36,14 +36,20 @@ export function addInfoBoxEventListener(callback) {
     })
 }
 
-export async function sendServerRequest(method, url, body = null, displaySuccessMessage = true) {
+export async function sendServerRequest(method, url, body = null, displaySuccessMessage = true, contentTypeIsJson = true) {
+    const headers = {
+        "Authorization": "Bearer " + sessionStorage.getItem("token"),
+    }
+
+    if (contentTypeIsJson && body) {
+        body = JSON.stringify(body)
+        headers["Content-Type"] = "application/json"
+    }
+
     const res = await fetch(url, {
         method,
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + sessionStorage.getItem("token"),
-        },
-        body: body ? JSON.stringify(body) : undefined, // Only send body if one is provided in the parameters
+        headers: headers,
+        body: body ? body : undefined, // Only send body if one is provided in the parameters
     })
     const data = await handleServerResponse(res, displaySuccessMessage)
     return data
