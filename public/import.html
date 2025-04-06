@@ -6,9 +6,14 @@
   <title>Import</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="../src/js/auth/auth.js" defer></script>
+  <script src="../src/js/pages/fileImport.js" defer></script>
   <link rel="stylesheet" href="../src/styles/styles.css">
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-center h-screen">
+
+<div class="infobox-overlay" id="infoBoxOverlay">
+  <div class="infobox"></div>
+</div>
 
 <div class="import-box">
   <h2 class="title">Datei Import</h2>
@@ -22,6 +27,5 @@
   <button id="upload" class="upload-button">Hochladen</button>
 </div>
 
-<script src="../src/script.js"></script>
 </body>
 </html>
