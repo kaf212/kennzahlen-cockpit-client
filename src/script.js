@@ -171,8 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Token-Check auf index.html
-    if (window.location.pathname.endsWith("index.html")) {
+    if (!window.location.pathname.endsWith("login.html")) { // Redirect to login except user is already on login page
         const token = sessionStorage.getItem("token");
 
         if (!token) {
