@@ -60,14 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function logout() {
-    sessionStorage.removeItem("token");
-    window.location.href = "login.html";
-}
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("logoutButton").addEventListener("click", logout);
-})
 
 addInfoBoxEventListener(()=>{
     document.getElementById("loginForm").reset();
