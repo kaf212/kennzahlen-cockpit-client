@@ -1,18 +1,14 @@
-
-
-function loadCompanyData() {
-    const params = new URLSearchParams(window.location.search)
-    const companyId = params.get('id')
-    if (!companyId) {
-        return null
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const companyId = params.get('id');
+    if (!companyId) return;
 
     fetch(`http://localhost:5000/keyFigures/current/${companyId}`)
-        .then(response => {
-            return response.json()
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.keyFigures) {
+                insertKeyFiguresToTable(data);
+            }
         })
-        .then(data => console.log(data))
-        .catch(error => console.error(error))
-}
-
-loadCompanyData()
+        .catch(console.error);
+});
