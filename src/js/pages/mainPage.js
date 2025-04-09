@@ -1,3 +1,5 @@
+import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
+
 function logout() {
     sessionStorage.removeItem("token");
     window.location.href = "login.html";
@@ -34,19 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Daten laden und in Tabelle einfügen
-    const params = new URLSearchParams(window.location.search);
-    const companyId = params.get('id');
-    if (!companyId) return;
-
-    fetch(`http://localhost:5000/keyFigures/current/${companyId}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data && data.keyFigures) {
-                insertKeyFiguresToTable(data);
-            }
-        })
-        .catch(console.error);
+    getCurrentKeyFigureData().then((keyFigureData) => {
+        insertKeyFiguresToTable(keyFigureData);
+    })
 });
 
 function insertKeyFiguresToTable(data) {
