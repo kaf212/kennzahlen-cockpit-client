@@ -73,7 +73,8 @@ function insertKeyFiguresToTable(data) {
 
         const valueCell = document.createElement("td");
         valueCell.className = "p-2 border";
-        valueCell.textContent = `${value.toFixed(2) * 100} %`
+        const percentage = (value * 100).toFixed(0)
+        valueCell.textContent = `${percentage} %`
 
         row.appendChild(nameCell);
         row.appendChild(valueCell);
