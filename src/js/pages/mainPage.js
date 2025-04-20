@@ -47,6 +47,12 @@ function insertKeyFiguresToTable(data) {
 
     const figures = data.keyFigures;
 
+    const period = data.period
+    const urlParams = new URLSearchParams(window.location.search)
+    const companyName = urlParams.get("company")
+    const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo")
+    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`
+
     const keyFigureNames = {
         cashRatio: "Liquiditätsgrad 1",
         quickCash: "Liquiditätsgrad 2",

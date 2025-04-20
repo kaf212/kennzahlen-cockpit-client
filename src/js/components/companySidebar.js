@@ -86,7 +86,7 @@ function addCompanyElementEventListeners() {
             const companyId = companyItem.dataset.companyId
             const companyName = companyItem.dataset.companyName
 
-            window.location.href = `${window.location.pathname}?id=${companyId}?company=${companyName}`
+            window.location.href = `${window.location.pathname}?id=${companyId}&company=${companyName}`
         })
     })
 }
