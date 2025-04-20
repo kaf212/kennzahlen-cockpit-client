@@ -47,7 +47,7 @@ function insertKeyFiguresToTable(data) {
 
     const figures = data.keyFigures;
 
-    const period = data.period
+    const period = data.period ? data.period : ""
     const urlParams = new URLSearchParams(window.location.search)
     const companyName = urlParams.get("company")
     const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo")
