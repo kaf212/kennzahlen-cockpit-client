@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="../src/styles/sidebar.css">
   <link rel="stylesheet" href="../src/styles/infobox.css">
   <script type="module" src="../src/js/components/companySidebar.js" defer></script>
-  <script src="../src/js/keyFigureData/loadCompanyData.js" defer></script>
+  <script type="module" src="../src/js/keyFigureData/loadCompanyData.js" defer></script>
   <script type="module" src="../src/js/auth/auth.js" defer></script>
-  <script src="../src/js/pages/mainPage.js" defer></script>
+  <script type="module" src="../src/js/pages/mainPage.js" defer></script>
 </head>
 
 
@@ -47,8 +47,8 @@
     </div>
 
     <div class="tab-navigation flex space-x-4 mb-4">
-      <button id="tab-graph" class="tab-button active-tab px-4 py-2 bg-gray-200 rounded">Historischer Verlauf</button>
       <button id="tab-table" class="tab-button px-4 py-2 bg-gray-100 rounded">Aktuell</button>
+      <button id="tab-graph" class="tab-button active-tab px-4 py-2 bg-gray-200 rounded">Historischer Verlauf</button>
     </div>
 
     <div id="graph-section" class="content-box mb-4">
@@ -56,6 +56,9 @@
     </div>
 
     <div id="table-section" class="content-box hidden">
+      <div id="currentKeyFiguresCompanyInfo" class="mb-4">
+
+      </div>
       <table class="data-table w-full border border-gray-300">
         <thead>
         <tr class="bg-gray-200">
@@ -64,18 +67,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td class="p-2">Anlagedeckungsgrad 1</td>
-          <td class="p-2 text-green-500 font-bold">Grün</td>
-        </tr>
-        <tr>
-          <td class="p-2">Liquiditätsgrad 2</td>
-          <td class="p-2 text-yellow-500 font-bold">Gelb</td>
-        </tr>
-        <tr>
-          <td class="p-2">Anlagedeckungsgrad 2</td>
-          <td class="p-2 text-red-500 font-bold">Rot</td>
-        </tr>
+
         </tbody>
       </table>
     </div>
