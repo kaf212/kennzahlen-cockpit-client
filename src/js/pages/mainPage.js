@@ -1,4 +1,5 @@
 import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
+import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
 
 function logout() {
     sessionStorage.removeItem("token");
@@ -35,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
             showTab('table');
         });
     }
+
+    restrictCustomKeyFigureAccess()
 
     getCurrentKeyFigureData().then((keyFigureData) => {
         insertKeyFiguresToTable(keyFigureData);
@@ -87,4 +90,19 @@ function insertKeyFiguresToTable(data) {
 
         tbody.appendChild(row);
     }
+}
+
+function restrictCustomKeyFigureAccess() {
+    const button = document.getElementById("customKeyFigureEditorButton")
+    if (!button) return; // <- this prevents errors if button doesn't exist
+    checkUserPrivileges().then((result) => {
+        if (result === true) {
+            button.setAttribute("href", "custom_figure.html")
+            button.classList.remove("greyed-out")
+        }
+        else {
+            button.removeAttribute("href")
+            button.classList.add("greyed-out")
+        }
+    })
 }

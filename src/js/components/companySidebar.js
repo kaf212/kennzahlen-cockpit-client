@@ -1,5 +1,5 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js"
-
+import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
 
 async function deleteCompany(companyId) {
     await sendServerRequest("DELETE", "http://localhost:5000/companies/" + companyId, null, false)
@@ -43,13 +43,26 @@ async function loadCompanySidebar() {
                                            <div class="sidebar-item-content-wrapper company-sidebar-item">
                                            <b>${company.name}</b>
                                            </div>
-                                           <button class="sidebar-delete-button">×</button>
+                                           <button class="greyed-out sidebar-delete-button">×</button>
                                            </div>`
 
             sidebar.innerHTML += htmlToInsert
         })
     }
-    addCompanyDeleteButtonEventListeners()
+
+    const userIsAdmin = await checkUserPrivileges()
+    if (userIsAdmin === true) {
+        // The delete buttons should only have eventListeners if the user is allowed to delete companies
+        addCompanyDeleteButtonEventListeners()
+        Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
+            button.classList.remove("greyed-out")
+        })
+    } else {
+        // If the user doesn't have admin privileges, the delete buttons are greyed out
+        Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
+            button.classList.add("greyed-out")
+        })
+        }
     addCompanyElementEventListeners()
 }
 
