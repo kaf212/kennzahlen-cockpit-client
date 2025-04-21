@@ -12,7 +12,7 @@ export const translations = {
         "Anlagevermögen": "fixed_assets",
         "Maschinen": "machines",
         "Mobilien": "movables",
-        "Immobilien": "real_estate"
+        "Immobilien": "active_real_estate"
     },
     "passives": {
         "Fremdkapital": "debt",
