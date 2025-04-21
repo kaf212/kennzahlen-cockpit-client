@@ -1,5 +1,6 @@
 import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
 import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
+import {sendServerRequest} from "../utils/serverResponseHandling.js";
 
 function logout() {
     sessionStorage.removeItem("token");
@@ -44,10 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 });
 
-function insertKeyFiguresToTable(data) {
-    const tbody = document.querySelector("#table-section tbody");
-    tbody.innerHTML = "";
-
+async function insertKeyFiguresToTable(data) {
     const figures = data.keyFigures;
 
     const period = data.period ? data.period : ""
@@ -72,6 +70,12 @@ function insertKeyFiguresToTable(data) {
         workingCapitalIntensity: "Umlaufintensität"
     };
 
+    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    const customKeyFigureNames = []
+    customKeyFigures.forEach(customKeyFigure => {
+        customKeyFigureNames.push(customKeyFigure.name)
+    })
+
     for (const key in figures) {
         const value = figures[key];
         const row = document.createElement("tr");
@@ -88,7 +92,16 @@ function insertKeyFiguresToTable(data) {
         row.appendChild(nameCell);
         row.appendChild(valueCell);
 
-        tbody.appendChild(row);
+        console.log(customKeyFigureNames)
+        console.log(key)
+
+        let targetTable = document.getElementById("keyFigureTable")
+
+        if (customKeyFigureNames.includes(key)) {
+            targetTable = document.getElementById("customKeyFigureTable")
+        }
+
+        targetTable.appendChild(row);
     }
 }
 
