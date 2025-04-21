@@ -1,4 +1,5 @@
 import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
+import {sendServerRequest} from "../utils/serverResponseHandling.js";
 
 function logout() {
     sessionStorage.removeItem("token");
@@ -35,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
             showTab('table');
         });
     }
+
+    restrictCustomKeyFigureAccess()
 
     getCurrentKeyFigureData().then((keyFigureData) => {
         insertKeyFiguresToTable(keyFigureData);
@@ -87,4 +90,28 @@ function insertKeyFiguresToTable(data) {
 
         tbody.appendChild(row);
     }
+}
+
+async function checkUserPrivileges() {
+    const response = await fetch('http://localhost:5000/auth/admin', {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+    const statusCode = response.status
+    if (statusCode === 401) {
+        return false
+    }
+    return true
+}
+
+function restrictCustomKeyFigureAccess() {
+    const button = document.getElementById("customKeyFigureEditorButton")
+    if (!button) return; // <- this prevents errors if button doesn't exist
+    checkUserPrivileges().then((result) => {
+        if (result === true) {
+            button.setAttribute("href", "custom_figure.html")
+            button.classList.remove("greyed-out")
+        }
+        else {
+            button.removeAttribute("href")
+            button.classList.add("greyed-out")
+        }
+    })
 }

@@ -281,4 +281,11 @@ body {
     background-color: #2563eb;
 }
 
+.greyed-out {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    border: 1px solid #999;
+    opacity: 0.4;
+}
 
