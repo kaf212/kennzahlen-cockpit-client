@@ -1,5 +1,5 @@
 import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
-import {sendServerRequest} from "../utils/serverResponseHandling.js";
+import {checkUserPrivileges} from "../utils/userPrivilegeVerification";
 
 function logout() {
     sessionStorage.removeItem("token");
@@ -90,15 +90,6 @@ function insertKeyFiguresToTable(data) {
 
         tbody.appendChild(row);
     }
-}
-
-async function checkUserPrivileges() {
-    const response = await fetch('http://localhost:5000/auth/admin', {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
-    const statusCode = response.status
-    if (statusCode === 401) {
-        return false
-    }
-    return true
 }
 
 function restrictCustomKeyFigureAccess() {
