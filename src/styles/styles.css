@@ -282,9 +282,8 @@ body {
 }
 
 .greyed-out {
-    background-color: #ccc;
     color: #666;
-    cursor: not-allowed;
+    cursor: not-allowed !important;
     border: 1px solid #999;
     opacity: 0.4;
 }

@@ -1,5 +1,5 @@
 import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
-import {checkUserPrivileges} from "../utils/userPrivilegeVerification";
+import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
 
 function logout() {
     sessionStorage.removeItem("token");
