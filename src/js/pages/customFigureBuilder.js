@@ -32,12 +32,14 @@ export const translations = {
        "Sonstiger BA": "other_expenses",
        "Abschreibungen": "depreciation",
        "Finanzaufwand": "financial_expense",
-       "Liegenschaftsaufwand": "real_estate_expense"
+       "Liegenschaftsaufwand": "real_estate_expense",
+       "Gesamtaufwand": "expense"
    },
     "earnings": {
         "Betriebsertrag": "operating_income",
         "Finanzertrag": "financial_income",
-        "Liegenschaftsertrag": "real_estate_income"
+        "Liegenschaftsertrag": "real_estate_income",
+        "Gesamtertrag": "earnings"
     }
 }
 
