@@ -71,8 +71,10 @@ async function insertKeyFiguresToTable(data) {
     };
 
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    const customKeyFigureTypes = {}
     const customKeyFigureNames = []
     customKeyFigures.forEach(customKeyFigure => {
+        customKeyFigureTypes[customKeyFigure.name] = customKeyFigure.type
         customKeyFigureNames.push(customKeyFigure.name)
     })
 
@@ -86,20 +88,32 @@ async function insertKeyFiguresToTable(data) {
 
         const valueCell = document.createElement("td");
         valueCell.className = "p-2 border";
-        const percentage = (value * 100).toFixed(0)
-        valueCell.textContent = `${percentage} %`
 
-        row.appendChild(nameCell);
-        row.appendChild(valueCell);
+        if (customKeyFigureTypes[key] === "percentage" || !customKeyFigureNames.includes(key)) {
+            /* If the type of the custom key figure is percentage, or it's a regular key figure, transform the value
+            to a percentage. */
+            const percentage = (value * 100).toFixed(0)
+            valueCell.textContent = `${percentage} %`
+        } else {
+            // If
+            const monetaryAmount = value * 1000
 
-        console.log(customKeyFigureNames)
-        console.log(key)
+            /* Format the money amounts so that large numbers have apostrophes
+             Source: https://chatgpt.com/share/68076e7a-d5fc-8011-84d3-217a8b9f8153 */
+            const formattedAmount = monetaryAmount.toLocaleString('en-US')
+                .replace(/,/g, "'")
+
+            valueCell.textContent = `${formattedAmount} CHF`
+        }
 
         let targetTable = document.getElementById("keyFigureTable")
 
         if (customKeyFigureNames.includes(key)) {
             targetTable = document.getElementById("customKeyFigureTable")
         }
+
+        row.appendChild(nameCell);
+        row.appendChild(valueCell);
 
         targetTable.appendChild(row);
     }

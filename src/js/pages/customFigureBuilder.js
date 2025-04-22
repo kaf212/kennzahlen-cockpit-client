@@ -167,13 +167,16 @@ function addSubmitEventListener() {
     customFigureBuilderForm.addEventListener("submit", (event)=>{
         const parsedFormula = parseFormulaString(formulaField.value)
         const formulaName = document.getElementById("formulaNameField").value
-        saveNewCustomKeyFigure(formulaName, parsedFormula)
+        // Source: https://chatgpt.com/share/68076901-26c4-8011-ae36-1ae4a76c50d3
+        const customKeyFigureType = document.querySelector('input[name="customKeyFigureType"]:checked').value
+
+        saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType)
         event.preventDefault() // Prevent page from refreshing
         document.getElementById("customFigureBuilderForm").reset()
     })
 }
 
-async function saveNewCustomKeyFigure(formulaName, formulaStr) {
+async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureType) {
     /*
     Sends a POST request to the backend to save the new custom key figure on the server.
     The response is then passed to handleServerResponse() to display the success or error message in the UI.
@@ -183,7 +186,8 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr) {
      */
     await sendServerRequest("POST", "http://localhost:5000/customKeyFigures", {
         name: formulaName,
-        formula: formulaStr
+        formula: formulaStr,
+        type: customKeyFigureType
     })
 }
 
