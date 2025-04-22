@@ -26,6 +26,12 @@
     <label for="formulaNameField" class="form-label">Bezeichnung</label>
     <input type="text" id="formulaNameField" class="form-input" required/>
 
+    <input type="radio" id="customKeyFigureTypePercentage" name="customKeyFigureType" value="percentage" checked/>
+    <label for="customKeyFigureTypePercentage">Prozentzahl</label>
+    <input type="radio" id="customKeyFigureTypeNumeric" name="customKeyFigureType" value="numeric"/>
+    <label for="customKeyFigureTypeNumeric">Frankenbetrag</label>
+    <br><br>
+
     <div class="category-tabs">
       <button type="button" id="activesTabButton" data-account-group="actives" class="tab-button category-included">Aktiven</button>
       <button type="button" id="passivesTabButton" data-account-group="passives" class="tab-button category-included">Passiven</button>
