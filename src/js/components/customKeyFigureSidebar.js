@@ -139,7 +139,7 @@ function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) 
     sidebarItem.classList.add("edit-mode")
 
     const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
-    pageHeader.innerText = `"${customKeyFigureName}" bearbeiten`
+    pageHeader.innerText = `${customKeyFigureName} bearbeiten`
 
     const url = new URL(window.location.href)
     url.searchParams.set('editMode', 'true')
