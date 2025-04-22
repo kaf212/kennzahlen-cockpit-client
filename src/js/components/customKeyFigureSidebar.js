@@ -155,11 +155,11 @@ function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) 
 function addCustomKeyFigureEventListeners() {
     Array.from(document.getElementsByClassName("sidebar-item-content-wrapper")).forEach(item => {
         item.addEventListener("click", async (event)=>{
-            const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
-            const customKeyFigureName = event.currentTarget.dataset.customKeyFigureName
+            const customKeyFigureId = event.currentTarget.parentNode.dataset.customKeyFigureId
+            const customKeyFigureName = event.currentTarget.parentNode.dataset.customKeyFigureName
             await editCustomKeyFigure(customKeyFigureId)
 
-            setPageToEditMode(customKeyFigureId, customKeyFigureName, item)
+            setPageToEditMode(customKeyFigureId, customKeyFigureName, item.parentNode)
 
         })
     })
