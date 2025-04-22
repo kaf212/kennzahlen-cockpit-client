@@ -67,6 +67,7 @@ async function loadSidebar() {
         })
     }
     addCustomKeyFigureEventListeners()
+    addEndEditModeButtonEventListener()
     addCustomKeyFigureDeleteButtonEventListeners()
 
 }
@@ -111,6 +112,24 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
     })
 }
 
+function endEditMode() {
+    const endEditModeButton = document.getElementById("endEditModeButton")
+
+    const url = new URL(window.location.href)
+    url.searchParams.delete("editMode")
+    window.history.replaceState(null, '', url.toString())
+    endEditModeButton.classList.add("invisible")
+
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+        item.classList.remove("edit-mode")
+    })
+
+    const customKeyFigureForm = document.getElementById("customFigureBuilderForm")
+    customKeyFigureForm.reset()
+    const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
+    pageHeader.innerText = "Neue Kennzahl erstellen"
+}
+
 function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) {
     // Remove the edit-mode class from all other sidebar items
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
@@ -121,7 +140,16 @@ function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) 
 
     const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
     pageHeader.innerText = `"${customKeyFigureName}" bearbeiten`
+
+    const url = new URL(window.location.href)
+    url.searchParams.set('editMode', 'true')
+    window.history.replaceState(null, '', url.toString())
+
+    const endEditModeButton = document.getElementById("endEditModeButton")
+    endEditModeButton.classList.remove("invisible")
 }
+
+
 
 function addCustomKeyFigureEventListeners() {
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
@@ -134,6 +162,11 @@ function addCustomKeyFigureEventListeners() {
 
         })
     })
+}
+
+function addEndEditModeButtonEventListener() {
+    const endEditModeButton = document.getElementById("endEditModeButton")
+    endEditModeButton.addEventListener("click", endEditMode)
 }
 
 addInfoBoxEventListener(loadSidebar)
