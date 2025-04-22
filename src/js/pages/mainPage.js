@@ -10,7 +10,7 @@ function logout() {
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logoutButton").addEventListener("click", logout);
 
-    // Tabs wechseln
+    // Tabs wechselnnb
     function showTab(tab) {
         document.getElementById("graph-section").classList.add("hidden");
         document.getElementById("table-section").classList.add("hidden");
