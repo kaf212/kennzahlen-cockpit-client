@@ -223,6 +223,7 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
     }
 
     await sendServerRequest("PATCH", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, updatedCustomKeyFigure, true)
+    endEditMode()
 }
 
 
