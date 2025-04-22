@@ -133,3 +133,7 @@ body {
     margin-bottom: 1rem;
 }
 
+.edit-mode {
+    background-color: darkgray !important;
+}
+

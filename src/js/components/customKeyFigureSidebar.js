@@ -116,6 +116,13 @@ function addCustomKeyFigureEventListeners() {
         item.addEventListener("click", async (event)=>{
             const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
             await editCustomKeyFigure(customKeyFigureId)
+
+            Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+                item.classList.remove("edit-mode")
+            })
+
+            item.classList.add("edit-mode")
+
         })
     })
 }
