@@ -66,6 +66,7 @@ async function loadSidebar() {
             sidebar.innerHTML += htmlToInsert
         })
     }
+    addCustomKeyFigureEventListeners()
     addCustomKeyFigureDeleteButtonEventListeners()
 
 }
@@ -73,6 +74,25 @@ async function loadSidebar() {
 function deleteCustomKeyFigure(customKeyFigureId) {
     const url = "http://localhost:5000/customKeyFigures/" + customKeyFigureId
     sendServerRequest("DELETE", url, null, false)
+}
+
+async function editCustomKeyFigure(customKeyFigureId) {
+    const customKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
+
+    const nameField = document.getElementById("formulaNameField")
+    const formulaField = document.getElementById("formulaField")
+
+    nameField.value = customKeyFigure.name
+    formulaField.value = reverseParseFormulaString(customKeyFigure.formula) // Translate formula back to german
+
+    let typeRadioButton = document.getElementById("customKeyFigureTypePercentage")
+
+    if (customKeyFigure.type === "numeric") {
+        typeRadioButton = document.getElementById("customKeyFigureTypeNumeric")
+    }
+
+    typeRadioButton.checked = true
+
 }
 
 function addCustomKeyFigureDeleteButtonEventListeners() {
@@ -87,6 +107,15 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
                 customKeyFigureItem.remove()
             }
 
+        })
+    })
+}
+
+function addCustomKeyFigureEventListeners() {
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+        item.addEventListener("click", async (event)=>{
+            const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
+            await editCustomKeyFigure(customKeyFigureId)
         })
     })
 }
