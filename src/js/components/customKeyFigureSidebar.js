@@ -115,13 +115,18 @@ function addCustomKeyFigureEventListeners() {
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
         item.addEventListener("click", async (event)=>{
             const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
+            const customKeyFigureName = event.currentTarget.dataset.customKeyFigureName
             await editCustomKeyFigure(customKeyFigureId)
 
+            // Remove the edit-mode class from all other sidebar items
             Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
                 item.classList.remove("edit-mode")
             })
 
             item.classList.add("edit-mode")
+
+            const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
+            pageHeader.innerText = `"${customKeyFigureName}" bearbeiten`
 
         })
     })
