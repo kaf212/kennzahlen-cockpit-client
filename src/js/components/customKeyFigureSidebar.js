@@ -111,6 +111,18 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
     })
 }
 
+function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) {
+    // Remove the edit-mode class from all other sidebar items
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+        item.classList.remove("edit-mode")
+    })
+
+    sidebarItem.classList.add("edit-mode")
+
+    const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
+    pageHeader.innerText = `"${customKeyFigureName}" bearbeiten`
+}
+
 function addCustomKeyFigureEventListeners() {
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
         item.addEventListener("click", async (event)=>{
@@ -118,15 +130,7 @@ function addCustomKeyFigureEventListeners() {
             const customKeyFigureName = event.currentTarget.dataset.customKeyFigureName
             await editCustomKeyFigure(customKeyFigureId)
 
-            // Remove the edit-mode class from all other sidebar items
-            Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
-                item.classList.remove("edit-mode")
-            })
-
-            item.classList.add("edit-mode")
-
-            const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
-            pageHeader.innerText = `"${customKeyFigureName}" bearbeiten`
+            setPageToEditMode(customKeyFigureId, customKeyFigureName, item)
 
         })
     })
