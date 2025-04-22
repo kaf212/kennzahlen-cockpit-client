@@ -112,7 +112,7 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
     })
 }
 
-function endEditMode() {
+export function endEditMode() {
     const endEditModeButton = document.getElementById("endEditModeButton")
 
     const url = new URL(window.location.href)
@@ -143,6 +143,7 @@ function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) 
 
     const url = new URL(window.location.href)
     url.searchParams.set('editMode', 'true')
+    url.searchParams.set('id', customKeyFigureId)
     window.history.replaceState(null, '', url.toString())
 
     const endEditModeButton = document.getElementById("endEditModeButton")
