@@ -1,4 +1,5 @@
 import {sendServerRequest} from "../utils/serverResponseHandling.js";
+import {endEditMode} from "../components/customKeyFigureSidebar.js"
 
 export const translations = {
     "actives": {
@@ -170,7 +171,16 @@ function addSubmitEventListener() {
         // Source: https://chatgpt.com/share/68076901-26c4-8011-ae36-1ae4a76c50d3
         const customKeyFigureType = document.querySelector('input[name="customKeyFigureType"]:checked').value
 
-        saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType)
+        const url = new URL(window.location.href);
+        const editModeEnabled = url.searchParams.get('editMode')
+
+        if (editModeEnabled === "true") {
+            const editedKeyFigureId = url.searchParams.get('id')
+            patchCustomKeyFigure(editedKeyFigureId, formulaName, parsedFormula, customKeyFigureType)
+        } else {
+            saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType)
+        }
+
         event.preventDefault() // Prevent page from refreshing
         document.getElementById("customFigureBuilderForm").reset()
     })
@@ -189,6 +199,31 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
         formula: formulaStr,
         type: customKeyFigureType
     })
+}
+
+async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType) {
+    const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
+    const updatedCustomKeyFigure = {
+        "name": formulaName,
+        "formula": parsedFormula,
+        "type": customKeyFigureType
+    }
+
+    for (const [attribute, updatedValue] of Object.entries(updatedCustomKeyFigure)) {
+        if (originalCustomKeyFigure[attribute] === updatedValue) {
+            // Delete all attributes from the updated object that haven't been modified
+            delete updatedCustomKeyFigure[attribute]
+        }
+    }
+
+    if (Object.keys(updatedCustomKeyFigure).length === 0) {
+        alert("Keine Werte wurden bearbeitet.")
+        endEditMode()
+        return null
+    }
+
+    await sendServerRequest("PATCH", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, updatedCustomKeyFigure, true)
+    endEditMode()
 }
 
 

@@ -8,11 +8,9 @@
     margin-bottom: 10px;
     background-color: #ffffff;
     box-shadow: 0 0 5px rgba(0,0,0,0.05);
-}
-
-.company-sidebar-item {
     cursor: pointer;
 }
+
 
 .sidebar-item-content-wrapper {
     display: flex;

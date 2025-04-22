@@ -66,6 +66,8 @@ async function loadSidebar() {
             sidebar.innerHTML += htmlToInsert
         })
     }
+    addCustomKeyFigureEventListeners()
+    addEndEditModeButtonEventListener()
     addCustomKeyFigureDeleteButtonEventListeners()
 
 }
@@ -73,6 +75,25 @@ async function loadSidebar() {
 function deleteCustomKeyFigure(customKeyFigureId) {
     const url = "http://localhost:5000/customKeyFigures/" + customKeyFigureId
     sendServerRequest("DELETE", url, null, false)
+}
+
+async function editCustomKeyFigure(customKeyFigureId) {
+    const customKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
+
+    const nameField = document.getElementById("formulaNameField")
+    const formulaField = document.getElementById("formulaField")
+
+    nameField.value = customKeyFigure.name
+    formulaField.value = reverseParseFormulaString(customKeyFigure.formula) // Translate formula back to german
+
+    let typeRadioButton = document.getElementById("customKeyFigureTypePercentage")
+
+    if (customKeyFigure.type === "numeric") {
+        typeRadioButton = document.getElementById("customKeyFigureTypeNumeric")
+    }
+
+    typeRadioButton.checked = true
+
 }
 
 function addCustomKeyFigureDeleteButtonEventListeners() {
@@ -89,6 +110,64 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
 
         })
     })
+}
+
+export function endEditMode() {
+    const endEditModeButton = document.getElementById("endEditModeButton")
+
+    const url = new URL(window.location.href)
+    url.searchParams.delete("editMode")
+    window.history.replaceState(null, '', url.toString())
+    endEditModeButton.classList.add("invisible")
+
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+        item.classList.remove("edit-mode")
+    })
+
+    const customKeyFigureForm = document.getElementById("customFigureBuilderForm")
+    customKeyFigureForm.reset()
+    const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
+    pageHeader.innerText = "Neue Kennzahl erstellen"
+}
+
+function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) {
+    // Remove the edit-mode class from all other sidebar items
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+        item.classList.remove("edit-mode")
+    })
+
+    sidebarItem.classList.add("edit-mode")
+
+    const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
+    pageHeader.innerText = `"${customKeyFigureName}" bearbeiten`
+
+    const url = new URL(window.location.href)
+    url.searchParams.set('editMode', 'true')
+    url.searchParams.set('id', customKeyFigureId)
+    window.history.replaceState(null, '', url.toString())
+
+    const endEditModeButton = document.getElementById("endEditModeButton")
+    endEditModeButton.classList.remove("invisible")
+}
+
+
+
+function addCustomKeyFigureEventListeners() {
+    Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
+        item.addEventListener("click", async (event)=>{
+            const customKeyFigureId = event.currentTarget.dataset.customKeyFigureId
+            const customKeyFigureName = event.currentTarget.dataset.customKeyFigureName
+            await editCustomKeyFigure(customKeyFigureId)
+
+            setPageToEditMode(customKeyFigureId, customKeyFigureName, item)
+
+        })
+    })
+}
+
+function addEndEditModeButtonEventListener() {
+    const endEditModeButton = document.getElementById("endEditModeButton")
+    endEditModeButton.addEventListener("click", endEditMode)
 }
 
 addInfoBoxEventListener(loadSidebar)
