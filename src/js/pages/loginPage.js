@@ -16,7 +16,15 @@ if (form) {
 
         if (jsonData.hasOwnProperty("token")) {
             sessionStorage.setItem("token", jsonData.token);
-            window.location.href = "index.html";
+
+            /* If the user has been on a different page when the login prompt was triggered, he will be sent back
+            to his last location (referrer). If not, he will be sent to index.html.
+            Source: https://chatgpt.com/share/6807b56d-66e4-8011-aaeb-5d074c8b0489 */
+            if (window.history.length <= 1) {
+                window.location = "index.html";
+            } else {
+                window.location = document.referrer
+            }
         }
     });
 }
