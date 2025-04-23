@@ -145,7 +145,6 @@ body {
 }
 
 .custom-figure-builder-tab {
-    height: 200px;
     border: 1px solid grey;
     border-radius: 4px;
     background: #ffffff;
@@ -156,11 +155,25 @@ body {
     align-content: start;
 }
 
+.balance-sheet-tab * {
+    border: 1px solid #087c2a;
+    color: #087c2a;
+}
+
+.income-statement-tab * {
+    border: 1px solid #da1e28;
+    color: #da1e28;
+}
+
 .account-button {
     flex: 0 0 1rem;
     height: 2rem;
     margin: 0.25rem;
     white-space: nowrap;
+    padding: 0 1rem 0 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
 }
 
 /* Buttons */
