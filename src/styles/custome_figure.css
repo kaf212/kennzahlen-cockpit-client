@@ -67,13 +67,24 @@ body {
     border-radius: 4px;
 }
 
-.category-included {
+.tab-button-balance-sheet {
     color: #087c2a;
 }
 
-.category-excluded {
+.tab-button-income-statement {
     color: #da1e28;
 }
+
+.selected-tab-button-balance-sheet {
+    background: #087c2a;
+    color: white;
+}
+
+.selected-tab-button-income-statement {
+    background: #da1e28;
+    color: white;
+}
+
 
 /* Formel-Box */
 .formula-textarea {
