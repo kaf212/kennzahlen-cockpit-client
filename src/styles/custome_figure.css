@@ -45,13 +45,14 @@ body {
     background: #fff;
     border-radius: 4px;
     margin-bottom: 1rem;
+    box-sizing: border-box;
 }
 
 /* Kategorie-Tabs */
 .category-tabs {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
@@ -60,20 +61,83 @@ body {
     padding: 0.75rem;
     font: inherit;
     font-weight: bold;
-    background: #f1f1f1;
+    background: rgba(152, 152, 152, 0.2);
     cursor: pointer;
     text-align: center;
-    border: none;
+    border: 1px solid #989898;
     border-radius: 4px;
 }
 
-.category-included {
+.tab-button:hover {
+    background: rgba(152, 152, 152, 0.4);
+}
+
+.tab-button-balance-sheet {
     color: #087c2a;
 }
 
-.category-excluded {
+.tab-button-income-statement {
     color: #da1e28;
 }
+
+.selected-tab-button {
+    border: none;
+}
+
+.selected-tab-button-balance-sheet {
+    background: #087c2a;
+    color: white;
+}
+
+.selected-tab-button-balance-sheet:hover {
+    background: #087c2a;
+    color: white;
+}
+
+.selected-tab-button-income-statement {
+    background: #da1e28;
+    color: white;
+}
+
+.selected-tab-button-income-statement:hover {
+    background: #da1e28;
+    color: white;
+}
+
+.radio-button {
+    cursor: pointer;
+}
+
+.operator-button-container {
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.operator-button-container > * {
+    /*All operator buttons should grow to the exact same size*/
+    flex: 1;
+}
+
+.operator-button {
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: rgba(152, 152, 152, 0.2);
+    border: 1px solid #989898;
+    border-radius: 4px;
+    color: black;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.operator-button:hover {
+    background: rgba(152, 152, 152, 0.4);
+}
+
 
 /* Formel-Box */
 .formula-textarea {
@@ -82,22 +146,43 @@ body {
     border: 1px solid #999;
     background: #fff;
     resize: vertical;
-    margin-bottom: 1rem;
 }
 
 .custom-figure-builder-tab {
-    width: 100%;
-    height: 200px;
-    border: 2px solid black;
+    border: 1px solid grey;
+    border-radius: 4px;
     background: #ffffff;
-    margin-top: 16px;
+    padding: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+}
+
+.balance-sheet-tab * {
+    border: 1px solid #087c2a;
+    color: #087c2a;
+}
+
+.income-statement-tab * {
+    border: 1px solid #da1e28;
+    color: #da1e28;
+}
+
+.account-button {
+    flex: 0 0 1rem;
+    height: 2rem;
+    margin: 0.25rem;
+    white-space: nowrap;
+    padding: 0 1rem 0 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
 }
 
 /* Buttons */
 .button-gruppe {
     display: flex;
     justify-content: center;
-    margin-top: 1.5rem;
 }
 
 .button {

@@ -62,12 +62,31 @@ function addTabButtonEventListeners() {
             except for the account group that corresponds to the given button
              */
             Array.from(document.getElementsByClassName("custom-figure-builder-tab")).forEach(tab=>{
+                const tabAccountGroup = tab.dataset.accountGroup
+                const clickedTabButton = event.currentTarget
+                const clickedTabButtonAccountGroup = event.currentTarget.dataset.accountGroup
                 // if the account group of the button is the same as the one of the tab:
-                if (tab.dataset.accountGroup !== event.currentTarget.dataset.accountGroup) {
-                    tab.classList.add("invisible")
+                if (tabAccountGroup === clickedTabButtonAccountGroup) {
+                    tab.classList.remove("invisible")
+
+                    // Remove the "selected tab button" classes from the previously selected tab button
+                    const previouslySelectedTabButton = document.querySelector(".selected-tab-button")
+                    previouslySelectedTabButton.classList.remove("selected-tab-button-balance-sheet")
+                    previouslySelectedTabButton.classList.remove("selected-tab-button-income-statement")
+                    previouslySelectedTabButton.classList.remove("selected-tab-button")
+
+                    // Add the "selected-tab-button" class to the newly selected tab button
+                    clickedTabButton.classList.add("selected-tab-button")
+
+                    // Add the corresponding "selected tab button" class to the tab button
+                    if (clickedTabButtonAccountGroup === "actives" || clickedTabButtonAccountGroup === "passives") {
+                        clickedTabButton.classList.add("selected-tab-button-balance-sheet")
+                    } else {
+                        clickedTabButton.classList.add("selected-tab-button-income-statement")
+                    }
                 }
                 else {
-                    tab.classList.remove("invisible") // All other tabs should remain or be made invisible
+                    tab.classList.add("invisible") // All other tabs should remain or be made invisible
                 }
             })
         })
@@ -86,7 +105,7 @@ function createAccountButtons() {
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             const targetAccountButtonDiv = `${accountGroup}Tab` // Is equal to the id of the account button divs
-            const buttonHtml = `<button class='accountButton' data-translation="${englishAccount}">${germanAccount}</button>`
+            const buttonHtml = `<button class='account-button' data-translation="${englishAccount}">${germanAccount}</button>`
 
             document.getElementById(targetAccountButtonDiv).innerHTML += buttonHtml
         }
@@ -102,7 +121,7 @@ function addButtonEventListeners() {
     const formulaField = document.getElementById("formulaField")
 
     // Add eventListeners to all account buttons
-    Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
+    Array.from(document.getElementsByClassName("account-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             event.preventDefault() // buttons inside the form would else automatically trigger a submit when pressed
             formulaField.value += button.innerText
@@ -113,7 +132,7 @@ function addButtonEventListeners() {
     Array.from(document.getElementsByClassName("operator-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             event.preventDefault()
-            const operator = event.currentTarget.innerText
+            const operator = event.currentTarget.value
             let strToInsert = ""
             if (operator === "(" || operator === ")") {
                 strToInsert = operator // insert parentheses without any whitespace
