@@ -38,23 +38,25 @@
     <label for="customKeyFigureTypeNumeric">Frankenbetrag</label>
     <br><br>
 
+
+
+    <label for="formulaField" class="form-label">Formel</label>
+    <input type="text" id="formulaField" class="form-input" required/>
+
+    <div id="operatorButtonContainer" class="operator-button-container">
+      <button class="operator-button" value="+">+</button>
+      <button class="operator-button" value="-">-</button>
+      <button class="operator-button" value="*">×</button>
+      <button class="operator-button" value="/">÷</button>
+      <button class="operator-button" value="(">(</button>
+      <button class="operator-button" value=")">)</button>
+    </div>
+
     <div class="category-tabs">
       <button type="button" id="activesTabButton" data-account-group="actives" class="tab-button tab-button-balance-sheet selected-tab-button selected-tab-button-balance-sheet">Aktiven</button>
       <button type="button" id="passivesTabButton" data-account-group="passives" class="tab-button tab-button-balance-sheet">Passiven</button>
       <button type="button" id="expenseTabButton" data-account-group="expense" class="tab-button tab-button-income-statement">Aufwand</button>
       <button type="button" id="earningsTabButton" data-account-group="earnings" class="tab-button tab-button-income-statement">Ertrag</button>
-    </div>
-
-    <label for="formulaField" class="form-label">Formel</label>
-    <input type="text" id="formulaField" class="form-input" required/>
-
-    <div id="operatorButtonContainer">
-      <button class="operator-button">+</button>
-      <button class="operator-button">-</button>
-      <button class="operator-button">*</button>
-      <button class="operator-button">/</button>
-      <button class="operator-button">(</button>
-      <button class="operator-button">)</button>
     </div>
 
     <div id="activesTab" data-account-group="actives" class="custom-figure-builder-tab"></div>

@@ -132,7 +132,7 @@ function addButtonEventListeners() {
     Array.from(document.getElementsByClassName("operator-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             event.preventDefault()
-            const operator = event.currentTarget.innerText
+            const operator = event.currentTarget.value
             let strToInsert = ""
             if (operator === "(" || operator === ")") {
                 strToInsert = operator // insert parentheses without any whitespace
