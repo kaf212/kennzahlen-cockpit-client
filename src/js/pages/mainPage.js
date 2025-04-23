@@ -1,6 +1,8 @@
 import {getCurrentKeyFigureData} from "../keyFigureData/loadCompanyData.js";
 import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
 import {sendServerRequest} from "../utils/serverResponseHandling.js";
+import { loadHistoricKeyFigures } from "../keyFigureData/loadCompanyData.js";
+
 
 function logout() {
     sessionStorage.removeItem("token");
@@ -127,7 +129,7 @@ async function insertKeyFiguresToTable(data) {
 
 function restrictCustomKeyFigureAccess() {
     const button = document.getElementById("customKeyFigureEditorButton")
-    if (!button) return; // <- this prevents errors if button doesn't exist
+    if (!button) return;
     checkUserPrivileges().then((result) => {
         if (result === true) {
             button.setAttribute("href", "custom_figure.html")
@@ -139,3 +141,95 @@ function restrictCustomKeyFigureAccess() {
         }
     })
 }
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const params = new URLSearchParams(window.location.search);
+    const companyId = params.get('id');
+    if (!companyId) return;
+
+    const dropdown = document.getElementById("category");
+    const chartCanvas = document.getElementById("historicChart");
+    const ctx = chartCanvas.getContext("2d");
+    let chart;
+
+    const labelToKey = {
+        "Anlagedeckungsgrad 1": "fixedAssetCoverage1",
+        "Anlagedeckungsgrad 2": "fixedAssetCoverage2",
+        "Liquiditätsgrad 2": "quickCash"
+    };
+
+    let historicData;
+    try {
+        historicData = await sendServerRequest("GET", `http://localhost:5000/keyFigures/historic/${companyId}`, null, false);
+        console.log("Daten von /historic/:id:", historicData);
+    } catch (err) {
+        console.error("Fehler beim Abrufen der historischen Daten:", err);
+        chartCanvas.parentElement.innerHTML = `<p class="text-center text-red-500">Fehler beim Laden der Daten.</p>`;
+        return;
+    }
+
+    function getChartData(key) {
+        const keyData = historicData[key];
+        if (!Array.isArray(keyData)) return { labels: [], values: [] };
+
+        const sortedData = [...keyData].sort((a, b) => a.period - b.period);
+
+        const labels = [];
+        const values = [];
+
+        sortedData.forEach(entry => {
+            if (entry.period && entry.key_figure !== undefined && entry.key_figure !== null) {
+                labels.push(entry.period);
+                values.push(entry.key_figure);
+            }
+        });
+
+        return { labels, values };
+    }
+
+    function renderChart(labelText) {
+        const dataKey = labelToKey[labelText];
+        if (!dataKey) return;
+
+        const { labels, values } = getChartData(dataKey);
+
+        if (chart) chart.destroy();
+
+        if (labels.length === 0 || values.length === 0) {
+            chartCanvas.parentElement.innerHTML = `<p class="text-center text-gray-500">Keine Daten für "${labelText}" verfügbar.</p>`;
+            return;
+        }
+
+        chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels,
+                datasets: [{
+                    label: labelText,
+                    data: values,
+                    borderColor: "blue",
+                    backgroundColor: "rgba(0, 0, 255, 0.1)",
+                    fill: false,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    }
+
+    dropdown.addEventListener("change", function () {
+        if (this.value && this.value !== "") {
+            renderChart(this.value);
+        } else {
+            chartCanvas.parentElement.innerHTML = "";
+            if (chart) chart.destroy();
+        }
+    });
+});

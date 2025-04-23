@@ -12,6 +12,7 @@
   <script type="module" src="../src/js/keyFigureData/loadCompanyData.js" defer></script>
   <script type="module" src="../src/js/auth/auth.js" defer></script>
   <script type="module" src="../src/js/pages/mainPage.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 
@@ -34,10 +35,12 @@
       <div>
         <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
         <select id="category" class="select-dropdown mt-1 border border-gray-300 p-2 rounded">
+          <option disabled selected value="">-- Bitte Kennzahl wählen --</option>
           <option>Anlagedeckungsgrad 1</option>
           <option>Liquiditätsgrad 2</option>
           <option>Anlagedeckungsgrad 2</option>
         </select>
+
       </div>
 
       <div class="flex space-x-2">
@@ -52,8 +55,9 @@
     </div>
 
     <div id="graph-section" class="content-box mb-4">
-      <p class="text-center text-gray-600">[Graphische Darstellung]</p>
+      <canvas id="historicChart"></canvas>
     </div>
+
 
     <div id="table-section" class="content-box hidden">
       <div id="currentKeyFiguresCompanyInfo" class="mb-4">
