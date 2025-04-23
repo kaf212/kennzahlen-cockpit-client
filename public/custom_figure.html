@@ -31,17 +31,23 @@
   <form id="customFigureBuilderForm">
     <label for="formulaNameField" class="form-label">Bezeichnung</label>
     <input type="text" id="formulaNameField" class="form-input" maxlength="30" required/>
+    <br>
+    <br>
 
-    <input type="radio" id="customKeyFigureTypePercentage" name="customKeyFigureType" value="percentage" checked/>
-    <label for="customKeyFigureTypePercentage">Prozentzahl</label>
-    <input type="radio" id="customKeyFigureTypeNumeric" name="customKeyFigureType" value="numeric"/>
-    <label for="customKeyFigureTypeNumeric">Frankenbetrag</label>
-    <br><br>
+    <label class="form-label">Typ</label>
+    <input type="radio" id="customKeyFigureTypePercentage" name="customKeyFigureType" value="percentage" class="radio-button" checked/>
+    <label for="customKeyFigureTypePercentage" class="radio-button">Prozentzahl</label>
+    <input type="radio" id="customKeyFigureTypeNumeric" name="customKeyFigureType" value="numeric" class="radio-button"/>
+    <label for="customKeyFigureTypeNumeric" class="radio-button">Frankenbetrag</label>
+    <br>
+    <br>
 
 
 
     <label for="formulaField" class="form-label">Formel</label>
     <input type="text" id="formulaField" class="form-input" required/>
+    <br>
+    <br>
 
     <div id="operatorButtonContainer" class="operator-button-container">
       <button class="operator-button" value="+">+</button>
@@ -51,6 +57,7 @@
       <button class="operator-button" value="(">(</button>
       <button class="operator-button" value=")">)</button>
     </div>
+    <br>
 
     <div class="category-tabs">
       <button type="button" id="activesTabButton" data-account-group="actives" class="tab-button tab-button-balance-sheet selected-tab-button selected-tab-button-balance-sheet">Aktiven</button>
@@ -64,6 +71,7 @@
     <div id="expenseTab" data-account-group="expense" class="custom-figure-builder-tab income-statement-tab invisible"></div>
     <div id="earningsTab" data-account-group="earnings" class="custom-figure-builder-tab income-statement-tab invisible"></div>
 
+    <br>
       <div class="button-gruppe">
         <button type="submit" class="button save-button">Kennzahl speichern</button>
       </div>

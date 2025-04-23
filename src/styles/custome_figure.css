@@ -45,6 +45,7 @@ body {
     background: #fff;
     border-radius: 4px;
     margin-bottom: 1rem;
+    box-sizing: border-box;
 }
 
 /* Kategorie-Tabs */
@@ -103,6 +104,10 @@ body {
     color: white;
 }
 
+.radio-button {
+    cursor: pointer;
+}
+
 .operator-button-container {
     margin-bottom: 1rem;
     width: 100%;
@@ -141,14 +146,12 @@ body {
     border: 1px solid #999;
     background: #fff;
     resize: vertical;
-    margin-bottom: 1rem;
 }
 
 .custom-figure-builder-tab {
     border: 1px solid grey;
     border-radius: 4px;
     background: #ffffff;
-    margin-top: 16px;
     padding: 0.25rem;
     display: flex;
     flex-wrap: wrap;
@@ -180,7 +183,6 @@ body {
 .button-gruppe {
     display: flex;
     justify-content: center;
-    margin-top: 1.5rem;
 }
 
 .button {
