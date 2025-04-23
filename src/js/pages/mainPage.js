@@ -40,9 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     restrictCustomKeyFigureAccess()
 
-    getCurrentKeyFigureData().then((keyFigureData) => {
-        insertKeyFiguresToTable(keyFigureData);
-    })
+    const urlParams = new URLSearchParams(window.location.search)
+
+    if (urlParams.has("id")) {
+        // Only fetch company data if one has been selected
+        getCurrentKeyFigureData().then((keyFigureData) => {
+            insertKeyFiguresToTable(keyFigureData)
+        })
+    }
+
 });
 
 async function insertKeyFiguresToTable(data) {
