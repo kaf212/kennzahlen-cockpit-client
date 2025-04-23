@@ -86,7 +86,7 @@ function createAccountButtons() {
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             const targetAccountButtonDiv = `${accountGroup}Tab` // Is equal to the id of the account button divs
-            const buttonHtml = `<button class='accountButton' data-translation="${englishAccount}">${germanAccount}</button>`
+            const buttonHtml = `<button class='account-button' data-translation="${englishAccount}">${germanAccount}</button>`
 
             document.getElementById(targetAccountButtonDiv).innerHTML += buttonHtml
         }
@@ -102,7 +102,7 @@ function addButtonEventListeners() {
     const formulaField = document.getElementById("formulaField")
 
     // Add eventListeners to all account buttons
-    Array.from(document.getElementsByClassName("accountButton")).forEach(button => {
+    Array.from(document.getElementsByClassName("account-button")).forEach(button => {
         button.addEventListener("click", (event)=>{
             event.preventDefault() // buttons inside the form would else automatically trigger a submit when pressed
             formulaField.value += button.innerText
