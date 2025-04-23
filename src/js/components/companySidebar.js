@@ -50,18 +50,27 @@ async function loadCompanySidebar() {
         })
     }
 
+    const newCompanyTextField = document.getElementById("companyNameInput")
+    const companySideBarDeleteButtons = Array.from(document.getElementsByClassName("sidebar-delete-button"))
+
     const userIsAdmin = await checkUserPrivileges()
     if (userIsAdmin === true) {
-        // The delete buttons should only have eventListeners if the user is allowed to delete companies
+        // The delete buttons should only have eventListeners if the user is allowed to delete companies (admins)
         addCompanyDeleteButtonEventListeners()
-        Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
+        companySideBarDeleteButtons.forEach(button => {
             button.classList.remove("greyed-out")
         })
+        // Only enable the new company text field if the user is allowed to create new companies (admins)
+        newCompanyTextField.classList.remove("greyed-out")
+        newCompanyTextField.removeAttribute("disabled")
     } else {
         // If the user doesn't have admin privileges, the delete buttons are greyed out
-        Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
+        companySideBarDeleteButtons.forEach(button => {
             button.classList.add("greyed-out")
         })
+        // The new company text field is also greyed out and disabled
+        newCompanyTextField.classList.add("greyed-out")
+        newCompanyTextField.setAttribute("disabled", "true")
         }
     addCompanyElementEventListeners()
 }
