@@ -108,7 +108,13 @@ function addCompanyElementEventListeners() {
             const companyId = companyItem.dataset.companyId
             const companyName = companyItem.dataset.companyName
 
-            window.location.href = `${window.location.pathname}?id=${companyId}&company=${companyName}`
+            const url = new URL(window.location.href)
+            url.searchParams.set("id", companyId)
+            url.searchParams.set("company", companyName)
+
+            window.history.replaceState(null, '', url.toString())
+            window.location.reload()
+
         })
     })
 }
