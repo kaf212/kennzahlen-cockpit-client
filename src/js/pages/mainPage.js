@@ -117,6 +117,31 @@ function displayNoKeyFiguresSelectedMessage() {
     }
 }
 
+async function findCustomKeyFigure(customKeyFigureName) {
+    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    customKeyFigures.forEach(customKeyFigure => {
+        if (customKeyFigure.name === customKeyFigureName) {
+            return customKeyFigure
+        }
+    })
+}
+
+function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
+    for (const [keyFigureName, historicValueArray] of Object.entries(historicDataObject)) {
+        let multiplicator = 100
+        const foundCustomKeyFigure = findCustomKeyFigure(keyFigureName)
+        if (foundCustomKeyFigure && foundCustomKeyFigure.type === "numeric") {
+            multiplicator = 1000
+        }
+
+        historicValueArray.forEach(yearlyValue => {
+            yearlyValue.key_figure *= multiplicator
+        })
+    }
+
+    return historicDataObject
+}
+
 async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, labelToKey, setChart, getChart) {
     const currentChart = getChart();
     if (currentChart) currentChart.destroy();
@@ -144,6 +169,8 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         }
         return;
     }
+
+    historicData = multiplyKeyFigureValuesBasedOnType(historicData)
 
     const datasets = [];
     let commonLabels = [];
@@ -182,8 +209,12 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         if (labels.length === 0 || values.length === 0) continue;
         if (commonLabels.length === 0) commonLabels = labels;
 
+        const translation = keyFigureNames[label] || label
+
+        console.log(values)
+
         datasets.push({
-            label: label,
+            label: translation,
             data: values,
             fill: false,
             tension: 0.3
