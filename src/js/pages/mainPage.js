@@ -2,6 +2,22 @@ import { sendServerRequest } from '../utils/serverResponseHandling.js';
 import { checkUserPrivileges } from '../utils/userPrivilegeVerification.js';
 import { getCurrentKeyFigureData } from '../keyFigureData/loadCompanyData.js';
 
+const keyFigureNames = {
+    cashRatio: "Liquiditätsgrad 1",
+    quickCash: "Liquiditätsgrad 2",
+    currentRatio: "Liquiditätsgrad 3",
+    debtRatio: "Verschuldungsgrad",
+    equityRatio: "Eigenfinanzierungsgrad",
+    fixedAssetCoverage1: "Anlagedeckungsgrad 1",
+    fixedAssetCoverage2: "Anlagedeckungsgrad 2",
+    fixedAssetIntensity: "Anlageintensität",
+    profitMargin: "Gewinnmarge",
+    roa: "Gesamtkapitalrendite",
+    roe: "Eigenkapitalrendite",
+    selfFinancingRatio: "Selbstfinanzierungsgrad",
+    workingCapitalIntensity: "Umlaufintensität"
+}
+
 export function showTab(tab) {
     const url = new URL(window.location.href)
     url.searchParams.set("view", tab)
@@ -44,22 +60,6 @@ export async function insertKeyFiguresToTable(data) {
     const companyName = urlParams.get("company");
     const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
     companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`;
-
-    const keyFigureNames = {
-        cashRatio: "Liquiditätsgrad 1",
-        quickCash: "Liquiditätsgrad 2",
-        currentRatio: "Liquiditätsgrad 3",
-        debtRatio: "Verschuldungsgrad",
-        equityRatio: "Eigenfinanzierungsgrad",
-        fixedAssetCoverage1: "Anlagedeckungsgrad 1",
-        fixedAssetCoverage2: "Anlagedeckungsgrad 2",
-        fixedAssetIntensity: "Anlageintensität",
-        profitMargin: "Gewinnmarge",
-        roa: "Gesamtkapitalrendite",
-        roe: "Eigenkapitalrendite",
-        selfFinancingRatio: "Selbstfinanzierungsgrad",
-        workingCapitalIntensity: "Umlaufintensität"
-    };
 
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
     const customKeyFigureTypes = {};
@@ -215,8 +215,9 @@ function setupCheckboxListeners(container, dropdownLabel, ctx, chartCanvas, comp
         cb.addEventListener("change", () => {
             const selected = Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
                 .map(c => c.value);
-            dropdownLabel.textContent = selected.length > 0 ? selected.join(", ") : "Kennzahlen auswählen";
+
             updateSelectedKeyFiguresInUrlParams()
+            insertKeyFigureNamesIntoDropdownLabel()
             renderMultiChart(selected, ctx, chartCanvas, companyId, labelToKey, setChart, getChart);
         });
     });
@@ -234,15 +235,36 @@ function updateSelectedKeyFiguresInUrlParams() {
     const uriEncodedList = encodeURIComponent(selectedKeyFigures.join(','))
 
     const url = new URL(window.location.href)
-    url.searchParams.set("selectedKeyFigures", uriEncodedList)
+    if (uriEncodedList.length === 0) {
+        url.searchParams.delete("selectedKeyFigures")
+    } else {
+        url.searchParams.set("selectedKeyFigures", uriEncodedList)
+    }
     window.history.replaceState(null, '', url.toString())
+}
+
+function insertKeyFigureNamesIntoDropdownLabel() {
+    const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
+    const dropdownLabel = document.getElementById("dropdownLabel")
+    const keyFigureNamesToInsert = []
+
+    selectedKeyFigures.forEach(keyFigure => {
+        const translation = keyFigureNames[keyFigure] || keyFigure
+        keyFigureNamesToInsert.push(translation)
+    })
+
+    if (keyFigureNamesToInsert.length === 0) {
+        dropdownLabel.innerText = "Kennzahlen auswählen"
+    } else {
+        dropdownLabel.innerText = keyFigureNamesToInsert.join(", ")
+    }
 
 }
 
 function getSelectedKeyFiguresFromUrlParams() {
     const url = new URL(window.location.href)
     const urlList = decodeURIComponent(url.searchParams.get("selectedKeyFigures"))
-    if (urlList === null) {
+    if (urlList === "null") {
         return []
     }
     const selectedKeyFigures = urlList.split(",")
@@ -292,6 +314,7 @@ async function setupDropdown(companyId) {
     const getChart = () => chart
 
     setupCheckboxListeners(dropdownList, dropdownLabel, ctx, chartCanvas, companyId, labelToKey, setChart, getChart);
+    insertKeyFigureNamesIntoDropdownLabel()
 
     const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
     if (selectedKeyFigures.length > 0) {
