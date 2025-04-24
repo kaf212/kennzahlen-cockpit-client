@@ -35,6 +35,13 @@ export function showTab(tab) {
 
     document.getElementById(`tab-${tab}`).classList.add("border-gray-800");
     document.getElementById(`tab-${tab}`).classList.remove("border-transparent");
+
+    const dropdownElement = document.getElementById("historicTabDropdown")
+    if (tab === "graph") {
+        dropdownElement.style.visibility = ""
+    } else {
+        dropdownElement.style.visibility = "hidden"
+    }
 }
 
 export function restrictCustomKeyFigureAccess() {
