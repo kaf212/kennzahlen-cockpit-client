@@ -18,6 +18,8 @@ export function showTab(tab) {
 }
 
 export function restrictCustomKeyFigureAccess() {
+    /* Due to reformatting of the file, this function appears so be authored by laiba-bzz in the git blame.
+       The original author is Jan (kaf212). */
     const button = document.getElementById("customKeyFigureEditorButton")
     if (!button) return;
     checkUserPrivileges().then((result) => {
