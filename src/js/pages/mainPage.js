@@ -127,13 +127,27 @@ async function findCustomKeyFigure(customKeyFigureName) {
 }
 
 function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
+    /**
+     * Takes a historic data object and multiplies all the historic key figure values based on their type.
+     * Percentage key figures are delivered by the server as the raw ratios,
+     * so they need to be multiplied with 100.
+     * Numeric key figures are delivered by the server as accounting short figures,
+     * so they need to be multiplied with 1000.
+     *
+     * @param {Object} historicDataObject - An object containing historic data for multiple key figures
+     * @returns {Object} The modified historicDataObject with the multiplied values
+     */
+
     for (const [keyFigureName, historicValueArray] of Object.entries(historicDataObject)) {
         let multiplicator = 100
+
+        // Only custom key figures can have a non-percentage type, so it is checked, if it is one
         const foundCustomKeyFigure = findCustomKeyFigure(keyFigureName)
         if (foundCustomKeyFigure && foundCustomKeyFigure.type === "numeric") {
             multiplicator = 1000
         }
 
+        // Multiply the key figure values for all years in the historical array
         historicValueArray.forEach(yearlyValue => {
             yearlyValue.key_figure *= multiplicator
         })
