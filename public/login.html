@@ -10,32 +10,44 @@
   <link rel="stylesheet" href="../src/styles/styles.css">
   <link rel="stylesheet" href="../src/styles/infobox.css">
 </head>
-<body class="bg-gray-100 flex justify-center items-center h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
 <div class="infobox-overlay" id="infoBoxOverlay">
   <div class="infobox"></div>
 </div>
 
-<div class="login-box">
-  <h1 class="title">Login</h1>
+<main class="flex-grow flex justify-center items-center">
+  <div class="login-box">
+    <h1 class="title">Login</h1>
+    <form id="loginForm" class="mt-6 flex flex-col gap-4">
+      <div>
+        <label for="role" class="label">Benutzer</label>
+        <select id="role" class="select-dropdown w-full">
+          <option value="Admin">Admin</option>
+          <option value="Standard">Standardbenutzer</option>
+        </select>
+      </div>
+      <div>
+        <label for="pass" class="label">Passwort</label>
+        <input type="password" id="pass" class="input w-full" placeholder="Passwort eingeben">
+      </div>
+      <button type="submit" class="button w-full mt-4">Login</button>
+    </form>
+  </div>
+</main>
 
-  <form id="loginForm" class="mt-6 flex flex-col gap-4">
-    <div>
-      <label for="role" class="label">Benutzer</label>
-      <select id="role" class="select-dropdown w-full">
-        <option value="Admin">Admin</option>
-        <option value="Standard">Standardbenutzer</option>
-      </select>
+<footer class="footer-container bg-gray-200 p-4 text-sm mt-auto">
+  <div class="footer-content flex justify-between items-center">
+    <p class="footer-text">&copy; 2025 Kennzahlen Cockpit. Alle Rechte vorbehalten. | ISO 9001:2015 | ISO 27001</p>
+    <div class="footer-links space-x-4">
+      <a href="impressum.html" class="hover:underline">Impressum</a>
+      <a href="datenschutz.html" class="hover:underline">Datenschutz</a>
     </div>
-
-    <div>
-      <label for="pass" class="label">Passwort</label>
-      <input type="password" id="pass" class="input w-full" placeholder="Passwort eingeben">
-    </div>
-
-    <button type="submit" class="button w-full mt-4">Login</button>
-  </form>
-</div>
+  </div>
+</footer>
 
 </body>
+
+
 </html>
+
