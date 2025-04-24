@@ -101,24 +101,29 @@ export async function insertKeyFiguresToTable(data) {
     }
 }
 
+function displayNoKeyFiguresSelectedMessage() {
+    const chartCanvas = document.getElementById("historicChart")
+    if (chartCanvas) {
+        chartCanvas.classList.add("hidden")
+
+        const existingMsg = document.getElementById("noChartMessage")
+        if (!existingMsg) {
+            const p = document.createElement("p")
+            p.id = "noChartMessage"
+            p.className = "text-center text-gray-500"
+            p.textContent = "Bitte Kennzahlen auswählen."
+            chartCanvas.parentElement.appendChild(p)
+        }
+    }
+}
+
 async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, labelToKey, setChart, getChart) {
     const currentChart = getChart();
     if (currentChart) currentChart.destroy();
     setChart(null);
 
     if (selectedLabels.length === 0) {
-        if (chartCanvas) {
-            chartCanvas.classList.add("hidden");
-
-            const existingMsg = document.getElementById("noChartMessage");
-            if (!existingMsg) {
-                const p = document.createElement("p");
-                p.id = "noChartMessage";
-                p.className = "text-center text-gray-500";
-                p.textContent = "Bitte Kennzahlen auswählen.";
-                chartCanvas.parentElement.appendChild(p);
-            }
-        }
+        displayNoKeyFiguresSelectedMessage()
         return;
     }
 
@@ -379,6 +384,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (url.searchParams.has("id")) {
         getCurrentKeyFigureData().then(insertKeyFiguresToTable);
+    }
+
+    if (getSelectedKeyFiguresFromUrlParams().length === 0) {
+        displayNoKeyFiguresSelectedMessage()
     }
 
     setupDropdown(companyId);
