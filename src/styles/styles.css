@@ -288,3 +288,11 @@ body {
     opacity: 0.4;
 }
 
+.select-dropdown {
+    min-width: 200px;
+    background-color: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+}
+
+
