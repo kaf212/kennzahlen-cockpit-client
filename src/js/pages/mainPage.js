@@ -102,6 +102,12 @@ export async function insertKeyFiguresToTable(data) {
 }
 
 function displayNoKeyFiguresSelectedMessage() {
+    /**
+     * Hides the empty historic chart element in the historic tab and inserts a message which informs the
+     * user that he needs to select a key figure in order to have the graph display data.
+     *
+     * @returns {void}
+     */
     const chartCanvas = document.getElementById("historicChart")
     if (chartCanvas) {
         chartCanvas.classList.add("hidden")
@@ -118,6 +124,12 @@ function displayNoKeyFiguresSelectedMessage() {
 }
 
 async function findCustomKeyFigure(customKeyFigureName) {
+    /**
+     * Searches for a custom key figure by name via the API and returns the object if found.
+     *
+     * @param {String} customKeyFigureName - The name of the searched custom key figure
+     * @returns {Object|void} The found custom key figure or nothing, if none was found
+     */
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
     customKeyFigures.forEach(customKeyFigure => {
         if (customKeyFigure.name === customKeyFigureName) {
@@ -264,9 +276,16 @@ function setupCheckboxListeners(container, dropdownLabel, ctx, chartCanvas, comp
 }
 
 function updateSelectedKeyFiguresInUrlParams() {
+    /**
+     * Iterates over all key figures inside the dropdown menu in the historic tab
+     * and saves the selected ones in the URL-parameter selectedKeyFigures.
+     *
+     * @returns {void}
+     */
     const selectedKeyFigures = []
     Array.from(document.getElementsByClassName("key-figure-checkbox")).forEach(checkbox => {
         if (checkbox.checked === true) {
+            // The english name of the key figure is stored inside the value attribute of the checkbox
             const keyFigureName = checkbox.value
             selectedKeyFigures.push(keyFigureName)
         }
@@ -276,6 +295,7 @@ function updateSelectedKeyFiguresInUrlParams() {
 
     const url = new URL(window.location.href)
     if (uriEncodedList.length === 0) {
+        // If no key figures are selected, the URL-parameter is deleted to avoid errors
         url.searchParams.delete("selectedKeyFigures")
     } else {
         url.searchParams.set("selectedKeyFigures", uriEncodedList)
@@ -284,11 +304,19 @@ function updateSelectedKeyFiguresInUrlParams() {
 }
 
 function insertKeyFigureNamesIntoDropdownLabel() {
+    /**
+     * Inserts the german translations of the selected key figure names into the label of the dropdown
+     * so that the user can instantly see which key figures he has selected.
+     *
+     * @returns {void}
+     */
+
     const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
     const dropdownLabel = document.getElementById("dropdownLabel")
     const keyFigureNamesToInsert = []
 
     selectedKeyFigures.forEach(keyFigure => {
+        // Translate the key figure name or leave the original name if no translation exists (custom key figures)
         const translation = keyFigureNames[keyFigure] || keyFigure
         keyFigureNamesToInsert.push(translation)
     })
@@ -320,6 +348,11 @@ function markSelectedCustomKeyFiguresAsChecked() {
 }
 
 function getSelectedKeyFiguresFromUrlParams() {
+    /**
+     * Reads the list of all selected key figures inside the URL parameter selectedKeyFigures.
+     *
+     * @returns {Array} A list of selected key figure names
+     */
     const url = new URL(window.location.href)
     const urlList = decodeURIComponent(url.searchParams.get("selectedKeyFigures"))
     if (urlList === "null") {
