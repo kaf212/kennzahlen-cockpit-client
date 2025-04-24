@@ -144,7 +144,7 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     let commonLabels = [];
 
     for (const label of selectedLabels) {
-        const key = labelToKey[label];
+        const key = label
         if (!key) continue;
 
         let keyData = historicData[key];
@@ -214,7 +214,7 @@ function setupCheckboxListeners(container, dropdownLabel, ctx, chartCanvas, comp
     container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
         cb.addEventListener("change", () => {
             const selected = Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
-                .map(c => c.parentElement.textContent.trim());
+                .map(c => c.value);
             dropdownLabel.textContent = selected.length > 0 ? selected.join(", ") : "Kennzahlen auswählen";
             updateSelectedKeyFiguresInUrlParams()
             renderMultiChart(selected, ctx, chartCanvas, companyId, labelToKey, setChart, getChart);
@@ -230,11 +230,23 @@ function updateSelectedKeyFiguresInUrlParams() {
             selectedKeyFigures.push(keyFigureName)
         }
     })
+    // Source: https://chatgpt.com/share/680a5b89-dee8-8011-aac7-daeb50dc4923
     const uriEncodedList = encodeURIComponent(selectedKeyFigures.join(','))
+
     const url = new URL(window.location.href)
     url.searchParams.set("selectedKeyFigures", uriEncodedList)
     window.history.replaceState(null, '', url.toString())
 
+}
+
+function getSelectedKeyFiguresFromUrlParams() {
+    const url = new URL(window.location.href)
+    const urlList = decodeURIComponent(url.searchParams.get("selectedKeyFigures"))
+    if (urlList === null) {
+        return []
+    }
+    const selectedKeyFigures = urlList.split(",")
+    return selectedKeyFigures
 }
 
 async function setupDropdown(companyId) {
@@ -276,7 +288,15 @@ async function setupDropdown(companyId) {
         labelToKey[fig.name] = fig.name;
     });
 
-    setupCheckboxListeners(dropdownList, dropdownLabel, ctx, chartCanvas, companyId, labelToKey, (newChart) => chart = newChart, () => chart);
+    const setChart = (newChart) => chart = newChart
+    const getChart = () => chart
+
+    setupCheckboxListeners(dropdownList, dropdownLabel, ctx, chartCanvas, companyId, labelToKey, setChart, getChart);
+
+    const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
+    if (selectedKeyFigures.length > 0) {
+        await renderMultiChart(selectedKeyFigures, ctx, chartCanvas, companyId, labelToKey, setChart, getChart)
+    }
 
     dropdownToggle.addEventListener("click", () => dropdownMenu.classList.toggle("hidden"));
     document.addEventListener("click", e => {
