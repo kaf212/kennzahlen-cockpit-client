@@ -3,6 +3,10 @@ import { checkUserPrivileges } from '../utils/userPrivilegeVerification.js';
 import { getCurrentKeyFigureData } from '../keyFigureData/loadCompanyData.js';
 
 export function showTab(tab) {
+    const url = new URL(window.location.href)
+    url.searchParams.set("view", tab)
+    window.history.replaceState(null, '', url.toString())
+
     document.getElementById("graph-section").classList.add("hidden");
     document.getElementById("table-section").classList.add("hidden");
 
@@ -212,9 +216,25 @@ function setupCheckboxListeners(container, dropdownLabel, ctx, chartCanvas, comp
             const selected = Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
                 .map(c => c.parentElement.textContent.trim());
             dropdownLabel.textContent = selected.length > 0 ? selected.join(", ") : "Kennzahlen auswählen";
+            updateSelectedKeyFiguresInUrlParams()
             renderMultiChart(selected, ctx, chartCanvas, companyId, labelToKey, setChart, getChart);
         });
     });
+}
+
+function updateSelectedKeyFiguresInUrlParams() {
+    const selectedKeyFigures = []
+    Array.from(document.getElementsByClassName("key-figure-checkbox")).forEach(checkbox => {
+        if (checkbox.checked === true) {
+            const keyFigureName = checkbox.value
+            selectedKeyFigures.push(keyFigureName)
+        }
+    })
+    const uriEncodedList = encodeURIComponent(selectedKeyFigures.join(','))
+    const url = new URL(window.location.href)
+    url.searchParams.set("selectedKeyFigures", uriEncodedList)
+    window.history.replaceState(null, '', url.toString())
+
 }
 
 async function setupDropdown(companyId) {
@@ -249,7 +269,7 @@ async function setupDropdown(companyId) {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
             <label class="flex items-center px-4 py-2 hover:bg-gray-100">
-                <input type="checkbox" value="${fig.name}" class="mr-2">${fig.name}
+                <input type="checkbox" value="${fig.name}" class="key-figure-checkbox mr-2">${fig.name}
             </label>
         `;
         dropdownList.appendChild(listItem);
@@ -272,10 +292,18 @@ export function logout() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    const url = new URL(window.location.href)
+
     document.getElementById("logoutButton").addEventListener("click", logout);
 
     if (document.getElementById("tab-graph") && document.getElementById("tab-table")) {
-        showTab('table');
+
+        let targetTab = url.searchParams.get("view")
+        if (targetTab === null) {
+            targetTab = "table"
+        }
+
+        showTab(targetTab)
 
         document.getElementById("tab-graph").addEventListener("click", () => showTab('graph'));
         document.getElementById("tab-table").addEventListener("click", () => showTab('table'));
@@ -283,11 +311,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     restrictCustomKeyFigureAccess();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const companyId = urlParams.get("id");
+
+    const companyId = url.searchParams.get("id");
     if (!companyId) return;
 
-    if (urlParams.has("id")) {
+    if (url.searchParams.has("id")) {
         getCurrentKeyFigureData().then(insertKeyFiguresToTable);
     }
 
