@@ -261,6 +261,24 @@ function insertKeyFigureNamesIntoDropdownLabel() {
 
 }
 
+function markSelectedCustomKeyFiguresAsChecked() {
+    /**
+     * Inside the dropdown menu in the historic graph tab, custom key figures
+     * are loaded dynamically when the page loads.
+     * For this reason, they appear as unchecked after a page refresh even if they are still selected.
+     * This function iterates over all key figures in the dropdown marks their checkboxes as checked, if they
+     * are selected in the URL parameter selectedKeyFigures.
+     */
+    const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
+    Array.from(document.getElementsByClassName("key-figure-checkbox")).forEach(checkbox => {
+        const checkBoxKeyFigure = checkbox.value
+        if (selectedKeyFigures.includes(checkBoxKeyFigure) && checkbox.checked === false) {
+            // If the key figure is selected in the URL but its checkbox is unchecked:
+            checkbox.checked = true // mark it as checked
+        }
+    })
+}
+
 function getSelectedKeyFiguresFromUrlParams() {
     const url = new URL(window.location.href)
     const urlList = decodeURIComponent(url.searchParams.get("selectedKeyFigures"))
@@ -315,6 +333,7 @@ async function setupDropdown(companyId) {
 
     setupCheckboxListeners(dropdownList, dropdownLabel, ctx, chartCanvas, companyId, labelToKey, setChart, getChart);
     insertKeyFigureNamesIntoDropdownLabel()
+    markSelectedCustomKeyFiguresAsChecked()
 
     const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
     if (selectedKeyFigures.length > 0) {
