@@ -101,15 +101,36 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     setChart(null);
 
     if (selectedLabels.length === 0) {
-        chartCanvas.parentElement.innerHTML = "<p class='text-center text-gray-500'>Bitte Kennzahlen auswählen.</p>";
+        if (chartCanvas) {
+            chartCanvas.classList.add("hidden");
+
+            const existingMsg = document.getElementById("noChartMessage");
+            if (!existingMsg) {
+                const p = document.createElement("p");
+                p.id = "noChartMessage";
+                p.className = "text-center text-gray-500";
+                p.textContent = "Bitte Kennzahlen auswählen.";
+                chartCanvas.parentElement.appendChild(p);
+            }
+        }
         return;
     }
+
 
     let historicData;
     try {
         historicData = await sendServerRequest("GET", `http://localhost:5000/keyFigures/historic/${companyId}`, null, false);
     } catch (err) {
-        chartCanvas.parentElement.innerHTML = `<p class=\"text-center text-red-500\">Fehler beim Laden der Daten.</p>`;
+        chartCanvas.classList.add("hidden");
+
+        const messageElement = document.getElementById("noChartMessage");
+        if (!messageElement) {
+            const p = document.createElement("p");
+            p.id = "noChartMessage";
+            p.className = "text-center text-gray-500";
+            p.textContent = "Bitte Kennzahlen auswählen.";
+            chartCanvas.parentElement.appendChild(p);
+        }
         return;
     }
 
@@ -162,6 +183,10 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         chartCanvas.parentElement.innerHTML = "<p class='text-center text-gray-500'>Keine Daten gefunden oder Fehler beim Abrufen.</p>";
         return;
     }
+    const existingMsg = document.getElementById("noChartMessage");
+    if (existingMsg) existingMsg.remove();
+    chartCanvas.classList.remove("hidden");
+
 
     const chart = new Chart(ctx, {
         type: "line",
@@ -192,6 +217,7 @@ function setupCheckboxListeners(container, dropdownLabel, ctx, chartCanvas, comp
 
 async function setupDropdown(companyId) {
     const chartCanvas = document.getElementById("historicChart");
+    if (!chartCanvas) return;
     const ctx = chartCanvas.getContext("2d");
     let chart = null;
 
