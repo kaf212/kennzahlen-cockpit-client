@@ -149,7 +149,7 @@ function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
 
         // Multiply the key figure values for all years in the historical array
         historicValueArray.forEach(yearlyValue => {
-            yearlyValue.key_figure *= multiplicator
+            yearlyValue.key_figure = (yearlyValue.key_figure * multiplicator).toFixed(0)
         })
     }
 
