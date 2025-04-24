@@ -12,6 +12,7 @@
   <script type="module" src="../src/js/keyFigureData/loadCompanyData.js" defer></script>
   <script type="module" src="../src/js/auth/auth.js" defer></script>
   <script type="module" src="../src/js/pages/mainPage.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 
@@ -31,16 +32,36 @@
 
 
     <div class="control-section flex justify-between items-center mb-4">
-      <div>
-        <label for="category" class="block font-medium text-gray-700">Auswertung auswählen</label>
-        <select id="category" class="select-dropdown mt-1 border border-gray-300 p-2 rounded">
-          <option>Anlagedeckungsgrad 1</option>
-          <option>Liquiditätsgrad 2</option>
-          <option>Anlagedeckungsgrad 2</option>
-        </select>
+      <div class="relative w-80">
+        <label class="block font-medium text-gray-700 mb-1">Auswertung auswählen</label>
+
+        <div id="dropdownToggle" class="select-dropdown bg-white border border-gray-300 rounded p-2 cursor-pointer relative">
+          <span id="dropdownLabel">Kennzahlen auswählen</span>
+          <svg class="absolute right-3 top-3 w-4 h-4 text-gray-600 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <div id="dropdownMenu" class="absolute left-0 mt-1 hidden z-50 w-full bg-white border border-gray-300 rounded shadow max-h-64 overflow-y-auto">
+          <ul class="text-sm text-gray-700">
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="fixedAssetCoverage1" class="mr-2">Anlagedeckungsgrad 1</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="fixedAssetCoverage2" class="mr-2">Anlagedeckungsgrad 2</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="cashRatio" class="mr-2">Liquiditätsgrad 1</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="quickCash" class="mr-2">Liquiditätsgrad 2</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="currentRatio" class="mr-2">Liquiditätsgrad 3</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="debtRatio" class="mr-2">Verschuldungsgrad</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="equityRatio" class="mr-2">Eigenfinanzierungsgrad</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="fixedAssetIntensity" class="mr-2">Anlageintensität</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="profitMargin" class="mr-2">Gewinnmarge</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="roa" class="mr-2">Gesamtkapitalrendite</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="roe" class="mr-2">Eigenkapitalrendite</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="selfFinancingRatio" class="mr-2">Selbstfinanzierungsgrad</label></li>
+            <li><label class="flex items-center px-4 py-2 hover:bg-gray-100"><input type="checkbox" value="workingCapitalIntensity" class="mr-2">Umlaufintensität</label></li>
+          </ul>
+        </div>
       </div>
 
-      <div class="flex space-x-2">
+    <div class="flex space-x-2">
         <a id="customKeyFigureEditorButton" class="greyed-out custom-button bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-300 transition">Neue Kennzahl</a>
         <a href="import.html" class="import-button bg-emerald-400 text-white px-4 py-2 rounded hover:bg-emerald-300 transition">Excel Import</a>
       </div>
@@ -52,8 +73,9 @@
     </div>
 
     <div id="graph-section" class="content-box mb-4">
-      <p class="text-center text-gray-600">[Graphische Darstellung]</p>
+      <canvas id="historicChart" width="400" height="200"></canvas>
     </div>
+
 
     <div id="table-section" class="content-box hidden">
       <div id="currentKeyFiguresCompanyInfo" class="mb-4">
