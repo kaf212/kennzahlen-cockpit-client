@@ -195,16 +195,6 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
         let keyData = historicData[key];
 
-        if (!keyData) {
-            try {
-                const customDataObj = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/historic/${companyId}/${key}`, null, false);
-                keyData = customDataObj;
-            } catch (err) {
-                console.error(`Fehler beim Laden der Custom-Kennzahl '${key}':`, err);
-                continue;
-            }
-        }
-
         if (!Array.isArray(keyData) || keyData.length === 0) continue;
         keyData.sort((a, b) => (a.period || 0) - (b.period || 0));
 
