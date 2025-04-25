@@ -103,7 +103,7 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
             const customKeyFigureId = customKeyFigureItem.dataset.customKeyFigureId
             const customKeyFigureName = customKeyFigureItem.dataset.customKeyFigureName
 
-            if (confirm(`Sind Sie sicher, dass sie die Custom-Kennzahl "${customKeyFigureName}" löschen wollen?`)) {
+            if (confirm(`Sind Sie sicher, dass Sie die Custom-Kennzahl "${customKeyFigureName}" löschen wollen?`)) {
                 deleteCustomKeyFigure(customKeyFigureId)
                 customKeyFigureItem.remove()
             }

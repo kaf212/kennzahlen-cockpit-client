@@ -12,7 +12,7 @@ function addCompanyDeleteButtonEventListeners() {
             const companyId = companyItem.dataset.companyId
             const companyName = companyItem.dataset.companyName
 
-            if (confirm(`Sind Sie sicher, dass sie die Custom-Kennzahl "${companyName}" löschen wollen?`)) {
+            if (confirm(`Sind Sie sicher, dass Sie das Unternehmen "${companyName}" löschen wollen?`)) {
                 deleteCompany(companyId)
                 companyItem.remove()
             }
