@@ -297,6 +297,15 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         }
     });
 
+    const totalHistoricalPeriod = commonLabels
+    const firstYear = totalHistoricalPeriod[0]
+    const lastYear = totalHistoricalPeriod[totalHistoricalPeriod.length - 1]
+
+    const url = new URL(window.location.href)
+    const companyName = url.searchParams.get("company");
+    const companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo");
+    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Zeitperiode: </b>${firstYear} - ${lastYear}`;
+
     setChart(chart);
 }
 
