@@ -46,7 +46,7 @@ export function showTab(tab) {
     if (url.searchParams.get("id") === null) {
         displayUserMessageInTab("Bitte wählen Sie ein Unternehmen aus.")
     }
-    if (getSelectedKeyFiguresFromUrlParams().length === 0 && tab === "graph") {
+    else if (getSelectedKeyFiguresFromUrlParams().length === 0 && tab === "graph") {
         displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
     }
 }
@@ -128,7 +128,11 @@ function displayUserMessageInTab(message) {
      * @returns {void}
      */
     const url = new URL(window.location.href)
-    const htmlToInsert = `<p id="tabMessage" class="text-center text-gray-500">${message}</p>`
+
+    const messageElement = document.createElement("p")
+    messageElement.id = "tabMessage"
+    messageElement.classList = "text-center text-gray-500"
+    messageElement.innerText = message
 
     const existingMessage = document.getElementById("tabMessage")
     if (existingMessage) {
@@ -137,17 +141,17 @@ function displayUserMessageInTab(message) {
 
     if (url.searchParams.get("view") === "graph") {
         const chartCanvas = document.getElementById("historicChart")
+        const graphTab = document.getElementById("graph-section")
         if (chartCanvas) {
             chartCanvas.classList.add("hidden")
-
-            chartCanvas.parentElement.innerHTML += htmlToInsert
+            graphTab.appendChild(messageElement)
         }
     } else {
         const tableTab = document.getElementById("table-section")
         Array.from(tableTab.querySelectorAll("table")).forEach(table => {
             table.classList.add("hidden")
         })
-        tableTab.innerHTML += htmlToInsert
+        tableTab.appendChild(messageElement)
     }
 
 
@@ -206,10 +210,19 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
     if (selectedLabels.length === 0) {
         chartCanvas.classList.add("hidden")
+        displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
         return;
     }
 
-    chartCanvas.classList.remove("hidden")
+    document.getElementById("historicChart").classList.remove("hidden")
+
+    const tabMessage = document.getElementById("tabMessage")
+    if (tabMessage) {
+        tabMessage.remove()
+
+    }
+
+
 
     let historicData;
     try {
@@ -480,8 +493,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         getCurrentKeyFigureData().then(insertKeyFiguresToTable);
     }
 
-    if (getSelectedKeyFiguresFromUrlParams().length === 0) {
-        displayUserMessageInTab("Bitte Kennzahl auswählen.")
+    if (getSelectedKeyFiguresFromUrlParams().length === 0 && url.searchParams.get("view") === "graph") {
+        displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
     }
 
     setupDropdown(companyId);
