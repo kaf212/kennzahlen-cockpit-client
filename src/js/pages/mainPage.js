@@ -42,6 +42,13 @@ export function showTab(tab) {
     } else {
         dropdownElement.style.visibility = "hidden"
     }
+
+    if (url.searchParams.get("id") === null) {
+        displayUserMessageInTab("Bitte wählen Sie ein Unternehmen aus.")
+    }
+    else if (getSelectedKeyFiguresFromUrlParams().length === 0 && tab === "graph") {
+        displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
+    }
 }
 
 export function restrictCustomKeyFigureAccess() {
@@ -67,6 +74,11 @@ export async function insertKeyFiguresToTable(data) {
     const companyName = urlParams.get("company");
     const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
     companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`;
+
+    Array.from(document.getElementsByClassName("data-table")).forEach(keyFigureTable => {
+        // Unhide the tables with the current key figure data
+        keyFigureTable.classList.remove("hidden")
+    })
 
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
     const customKeyFigureTypes = {};
@@ -108,26 +120,43 @@ export async function insertKeyFiguresToTable(data) {
     }
 }
 
-function displayNoKeyFiguresSelectedMessage() {
+function displayUserMessageInTab(message) {
     /**
-     * Hides the empty historic chart element in the historic tab and inserts a message which informs the
-     * user that he needs to select a key figure in order to have the graph display data.
+     * Hides the empty historic chart element in the historic tab and inserts a message informing the user
+     * why no key figure data is being displayed. (no company selected, no key figure selected etc.)
      *
+     * @param {String} message - The message that is to be displayed to the user
      * @returns {void}
      */
-    const chartCanvas = document.getElementById("historicChart")
-    if (chartCanvas) {
-        chartCanvas.classList.add("hidden")
+    const url = new URL(window.location.href)
 
-        const existingMsg = document.getElementById("noChartMessage")
-        if (!existingMsg) {
-            const p = document.createElement("p")
-            p.id = "noChartMessage"
-            p.className = "text-center text-gray-500"
-            p.textContent = "Bitte Kennzahlen auswählen."
-            chartCanvas.parentElement.appendChild(p)
-        }
+    const messageElement = document.createElement("p")
+    messageElement.id = "tabMessage"
+    messageElement.classList = "text-center text-gray-500"
+    messageElement.innerText = message
+
+    const existingMessage = document.getElementById("tabMessage")
+    if (existingMessage) {
+        existingMessage.remove()
     }
+
+    if (url.searchParams.get("view") === "graph") {
+        const chartCanvas = document.getElementById("historicChart")
+        const graphTab = document.getElementById("graph-section")
+        if (chartCanvas) {
+            chartCanvas.classList.add("hidden")
+            graphTab.appendChild(messageElement)
+        }
+    } else {
+        const tableTab = document.getElementById("table-section")
+        Array.from(tableTab.querySelectorAll("table")).forEach(table => {
+            table.classList.add("hidden")
+        })
+        tableTab.appendChild(messageElement)
+    }
+
+
+
 }
 
 async function findCustomKeyFigure(customKeyFigureName) {
@@ -181,9 +210,19 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     setChart(null);
 
     if (selectedLabels.length === 0) {
-        displayNoKeyFiguresSelectedMessage()
+        chartCanvas.classList.add("hidden")
+        displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
         return;
     }
+
+    document.getElementById("historicChart").classList.remove("hidden")
+
+    const tabMessage = document.getElementById("tabMessage")
+    if (tabMessage) {
+        tabMessage.remove()
+
+    }
+
 
 
     let historicData;
@@ -192,14 +231,6 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     } catch (err) {
         chartCanvas.classList.add("hidden");
 
-        const messageElement = document.getElementById("noChartMessage");
-        if (!messageElement) {
-            const p = document.createElement("p");
-            p.id = "noChartMessage";
-            p.className = "text-center text-gray-500";
-            p.textContent = "Bitte Kennzahlen auswählen.";
-            chartCanvas.parentElement.appendChild(p);
-        }
         return;
     }
 
@@ -265,6 +296,15 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
             plugins: { legend: { position: "top" } }
         }
     });
+
+    const totalHistoricalPeriod = commonLabels
+    const firstYear = totalHistoricalPeriod[0]
+    const lastYear = totalHistoricalPeriod[totalHistoricalPeriod.length - 1]
+
+    const url = new URL(window.location.href)
+    const companyName = url.searchParams.get("company");
+    const companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo");
+    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Zeitperiode: </b>${firstYear} - ${lastYear}`;
 
     setChart(chart);
 }
@@ -455,14 +495,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     const companyId = url.searchParams.get("id");
-    if (!companyId) return;
+    if (!companyId) {
+        return
+    }
 
     if (url.searchParams.has("id")) {
         getCurrentKeyFigureData().then(insertKeyFiguresToTable);
     }
 
-    if (getSelectedKeyFiguresFromUrlParams().length === 0) {
-        displayNoKeyFiguresSelectedMessage()
+    if (getSelectedKeyFiguresFromUrlParams().length === 0 && url.searchParams.get("view") === "graph") {
+        displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
     }
 
     setupDropdown(companyId);
