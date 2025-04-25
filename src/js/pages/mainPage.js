@@ -42,6 +42,10 @@ export function showTab(tab) {
     } else {
         dropdownElement.style.visibility = "hidden"
     }
+
+    if (url.searchParams.get("id") === null) {
+        displayUserMessageInTab("Bitte wählen Sie ein Unternehmen aus.")
+    }
 }
 
 export function restrictCustomKeyFigureAccess() {
@@ -108,26 +112,38 @@ export async function insertKeyFiguresToTable(data) {
     }
 }
 
-function displayNoKeyFiguresSelectedMessage() {
+function displayUserMessageInTab(message) {
     /**
-     * Hides the empty historic chart element in the historic tab and inserts a message which informs the
-     * user that he needs to select a key figure in order to have the graph display data.
+     * Hides the empty historic chart element in the historic tab and inserts a message informing the user
+     * why no chart is displayed (no company selected, no key figure selected etc.)
      *
      * @returns {void}
      */
-    const chartCanvas = document.getElementById("historicChart")
-    if (chartCanvas) {
-        chartCanvas.classList.add("hidden")
+    const url = new URL(window.location.href)
+    const htmlToInsert = `<p id="tabMessage" class="text-center text-gray-500">${message}</p>`
 
-        const existingMsg = document.getElementById("noChartMessage")
-        if (!existingMsg) {
-            const p = document.createElement("p")
-            p.id = "noChartMessage"
-            p.className = "text-center text-gray-500"
-            p.textContent = "Bitte Kennzahlen auswählen."
-            chartCanvas.parentElement.appendChild(p)
-        }
+    const existingMessage = document.getElementById("tabMessage")
+    if (existingMessage) {
+        existingMessage.remove()
     }
+
+    if (url.searchParams.get("view") === "graph") {
+        const chartCanvas = document.getElementById("historicChart")
+        if (chartCanvas) {
+            chartCanvas.classList.add("hidden")
+
+            chartCanvas.parentElement.innerHTML += htmlToInsert
+        }
+    } else {
+        const tableTab = document.getElementById("table-section")
+        Array.from(tableTab.querySelectorAll("table")).forEach(table => {
+            table.classList.add("hidden")
+        })
+        tableTab.innerHTML += htmlToInsert
+    }
+
+
+
 }
 
 async function findCustomKeyFigure(customKeyFigureName) {
@@ -181,7 +197,7 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     setChart(null);
 
     if (selectedLabels.length === 0) {
-        displayNoKeyFiguresSelectedMessage()
+        displayUserMessageInTab("Bitte Kennzahl auswählen.")
         return;
     }
 
@@ -455,14 +471,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     const companyId = url.searchParams.get("id");
-    if (!companyId) return;
+    if (!companyId) {
+        return
+    }
 
     if (url.searchParams.has("id")) {
         getCurrentKeyFigureData().then(insertKeyFiguresToTable);
     }
 
     if (getSelectedKeyFiguresFromUrlParams().length === 0) {
-        displayNoKeyFiguresSelectedMessage()
+        displayUserMessageInTab("Bitte Kennzahl auswählen.")
     }
 
     setupDropdown(companyId);
