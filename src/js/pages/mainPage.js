@@ -123,8 +123,9 @@ export async function insertKeyFiguresToTable(data) {
 function displayUserMessageInTab(message) {
     /**
      * Hides the empty historic chart element in the historic tab and inserts a message informing the user
-     * why no chart is displayed (no company selected, no key figure selected etc.)
+     * why no key figure data is being displayed. (no company selected, no key figure selected etc.)
      *
+     * @param {String} message - The message that is to be displayed to the user
      * @returns {void}
      */
     const url = new URL(window.location.href)
