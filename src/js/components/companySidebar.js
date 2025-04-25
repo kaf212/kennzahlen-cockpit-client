@@ -2,7 +2,7 @@ import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverRespons
 import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
 
 async function deleteCompany(companyId) {
-    await sendServerRequest("DELETE", "http://localhost:5000/companies/" + companyId, null, false)
+    await sendServerRequest("DELETE", "/api/companies/" + companyId, null, false)
 }
 
 function addCompanyDeleteButtonEventListeners() {
@@ -22,7 +22,7 @@ function addCompanyDeleteButtonEventListeners() {
 }
 
 async function getCompanies() {
-    const data = await sendServerRequest("GET", "http://localhost:5000/companies", null, false)
+    const data = await sendServerRequest("GET", "/api/companies", null, false)
     return data
 }
 
@@ -76,7 +76,7 @@ async function loadCompanySidebar() {
 }
 
 async function saveNewCompany(companyName) {
-    await sendServerRequest("POST", "http://localhost:5000/companies", {name: companyName})
+    await sendServerRequest("POST", "/api/companies", {name: companyName})
 }
 
 

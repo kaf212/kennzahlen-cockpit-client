@@ -68,7 +68,7 @@ export async function insertKeyFiguresToTable(data) {
     const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
     companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`;
 
-    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
+    const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false);
     const customKeyFigureTypes = {};
     const customKeyFigureNames = [];
 
@@ -137,7 +137,7 @@ async function findCustomKeyFigure(customKeyFigureName) {
      * @param {String} customKeyFigureName - The name of the searched custom key figure
      * @returns {Object|void} The found custom key figure or nothing, if none was found
      */
-    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false)
     customKeyFigures.forEach(customKeyFigure => {
         if (customKeyFigure.name === customKeyFigureName) {
             return customKeyFigure
@@ -188,7 +188,7 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
     let historicData;
     try {
-        historicData = await sendServerRequest("GET", `http://localhost:5000/keyFigures/historic/${companyId}`, null, false);
+        historicData = await sendServerRequest("GET", `/api/keyFigures/historic/${companyId}`, null, false);
     } catch (err) {
         chartCanvas.classList.add("hidden");
 
@@ -396,7 +396,7 @@ async function setupDropdown(companyId) {
         "Umlaufintensität": "workingCapitalIntensity"
     };
 
-    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
+    const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false);
     customKeyFigures.forEach(fig => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `

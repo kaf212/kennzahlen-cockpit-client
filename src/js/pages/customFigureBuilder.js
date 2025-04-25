@@ -213,7 +213,7 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
     :param: formulaStr (str): The translated formula
     :return: void
      */
-    await sendServerRequest("POST", "http://localhost:5000/customKeyFigures", {
+    await sendServerRequest("POST", "/api/customKeyFigures", {
         name: formulaName,
         formula: formulaStr,
         type: customKeyFigureType
@@ -221,7 +221,7 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
 }
 
 async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType) {
-    const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
+    const originalCustomKeyFigure = await sendServerRequest("GET", `/api/customKeyFigures/${customKeyFigureId}`, null, false)
     const updatedCustomKeyFigure = {
         "name": formulaName,
         "formula": parsedFormula,
@@ -241,7 +241,7 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
         return null
     }
 
-    await sendServerRequest("PATCH", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, updatedCustomKeyFigure, true)
+    await sendServerRequest("PATCH", `/api/customKeyFigures/${customKeyFigureId}`, updatedCustomKeyFigure, true)
     endEditMode()
 }
 

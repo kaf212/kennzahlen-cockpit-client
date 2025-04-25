@@ -39,7 +39,7 @@ function reverseParseFormulaString(formulaStr) {
 
 
 async function getCustomKeyFigures() {
-    const data = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false)
+    const data = await sendServerRequest("GET", "/api/customKeyFigures", null, false)
     return data
 }
 
@@ -73,12 +73,12 @@ async function loadSidebar() {
 }
 
 function deleteCustomKeyFigure(customKeyFigureId) {
-    const url = "http://localhost:5000/customKeyFigures/" + customKeyFigureId
+    const url = "/api/customKeyFigures/" + customKeyFigureId
     sendServerRequest("DELETE", url, null, false)
 }
 
 async function editCustomKeyFigure(customKeyFigureId) {
-    const customKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
+    const customKeyFigure = await sendServerRequest("GET", `/api/customKeyFigures/${customKeyFigureId}`, null, false)
 
     const nameField = document.getElementById("formulaNameField")
     const formulaField = document.getElementById("formulaField")
