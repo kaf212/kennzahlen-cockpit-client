@@ -7,8 +7,15 @@
     border-radius: 4px;
     margin-bottom: 10px;
     background-color: #ffffff;
-    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    box-shadow: 0 0 5px rgba(0,0,0,0.15);
     cursor: pointer;
+}
+
+.selected-sidebar-item {
+    /* Source: https://chatgpt.com/share/680b72a9-d080-8011-9b20-e88210dd209d */
+    background-color: #e0f0ff;
+    box-shadow: 0 0 0 2px #3399ff inset;
+    color: #0057b8;
 }
 
 
