@@ -121,7 +121,7 @@ export function endEditMode() {
     endEditModeButton.classList.add("invisible")
 
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
-        item.classList.remove("edit-mode")
+        item.classList.remove("selected-sidebar-item")
     })
 
     const customKeyFigureForm = document.getElementById("customFigureBuilderForm")
@@ -133,10 +133,10 @@ export function endEditMode() {
 function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) {
     // Remove the edit-mode class from all other sidebar items
     Array.from(document.getElementsByClassName("sidebar-item")).forEach(item => {
-        item.classList.remove("edit-mode")
+        item.classList.remove("selected-sidebar-item")
     })
 
-    sidebarItem.classList.add("edit-mode")
+    sidebarItem.classList.add("selected-sidebar-item")
 
     const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
     pageHeader.innerText = `${customKeyFigureName} bearbeiten`
