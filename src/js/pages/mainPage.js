@@ -72,6 +72,11 @@ export async function insertKeyFiguresToTable(data) {
     const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
     companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`;
 
+    Array.from(document.getElementsByClassName("data-table")).forEach(keyFigureTable => {
+        // Unhide the tables with the current key figure data
+        keyFigureTable.classList.remove("hidden")
+    })
+
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
     const customKeyFigureTypes = {};
     const customKeyFigureNames = [];
