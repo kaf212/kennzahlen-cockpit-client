@@ -12,7 +12,7 @@ function addCompanyDeleteButtonEventListeners() {
             const companyId = companyItem.dataset.companyId
             const companyName = companyItem.dataset.companyName
 
-            if (confirm(`Sind Sie sicher, dass sie die Custom-Kennzahl "${companyName}" löschen wollen?`)) {
+            if (confirm(`Sind Sie sicher, dass Sie das Unternehmen "${companyName}" löschen wollen?`)) {
                 deleteCompany(companyId)
                 companyItem.remove()
             }
@@ -36,6 +36,9 @@ async function loadCompanySidebar() {
         const itemsToRemove = sidebar.querySelectorAll(".sidebar-item")
         itemsToRemove.forEach(item => item.remove())
 
+        const url = new URL(window.location.href)
+        const selectedCompanyId = url.searchParams.get("id")
+
         companies.forEach(company => {
             const htmlToInsert = `<div class="sidebar-item" 
                                            data-company-id="${company._id}"
@@ -47,6 +50,14 @@ async function loadCompanySidebar() {
                                            </div>`
 
             sidebar.innerHTML += htmlToInsert
+        })
+
+        // Iterate over all sidebar items and check if their ID is equal to the selected id in the URL params
+        Array.from(document.getElementsByClassName("sidebar-item")).forEach(sidebarItem => {
+            if (sidebarItem.dataset.companyId === selectedCompanyId) {
+                // Add the selected class to the item if is the item of the selected company
+                sidebarItem.classList.add("selected-sidebar-item")
+            }
         })
     }
 
