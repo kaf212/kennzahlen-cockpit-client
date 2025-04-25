@@ -46,6 +46,9 @@ export function showTab(tab) {
     if (url.searchParams.get("id") === null) {
         displayUserMessageInTab("Bitte wählen Sie ein Unternehmen aus.")
     }
+    if (getSelectedKeyFiguresFromUrlParams().length === 0 && tab === "graph") {
+        displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
+    }
 }
 
 export function restrictCustomKeyFigureAccess() {
@@ -202,10 +205,11 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     setChart(null);
 
     if (selectedLabels.length === 0) {
-        displayUserMessageInTab("Bitte Kennzahl auswählen.")
+        chartCanvas.classList.add("hidden")
         return;
     }
 
+    chartCanvas.classList.remove("hidden")
 
     let historicData;
     try {
@@ -213,14 +217,6 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     } catch (err) {
         chartCanvas.classList.add("hidden");
 
-        const messageElement = document.getElementById("noChartMessage");
-        if (!messageElement) {
-            const p = document.createElement("p");
-            p.id = "noChartMessage";
-            p.className = "text-center text-gray-500";
-            p.textContent = "Bitte Kennzahlen auswählen.";
-            chartCanvas.parentElement.appendChild(p);
-        }
         return;
     }
 
