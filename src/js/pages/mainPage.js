@@ -68,14 +68,51 @@ export function restrictCustomKeyFigureAccess() {
     })
 }
 
+function insertCompanyInfo(targetTab, companyName, period) {
+    /**
+     * Inserts the currently selected company's name and the viewed period into the top of the
+     * active tab.
+     *
+     * @param {String} targetTab - The tab that is viewed by the user
+     * @param {String} companyName - The name of the selected company
+     * @param {Number|String} - The current period or the start and end period if the historical tab is active
+     * @returns {void}
+     */
+    let companyInfoDiv
+    if (targetTab === "table") {
+        companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo")
+    } else {
+        companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo")
+    }
+
+    companyInfoDiv.innerHTML = "" // Clear leftover company infos
+
+    const companyLabel = document.createElement("b")
+    companyLabel.textContent = "Unternehmen: "
+
+    const companyNameTextNode = document.createTextNode(companyName)
+
+    const br = document.createElement("br")
+
+    const periodLabel = document.createElement("b")
+    periodLabel.textContent = "Rechnungsjahr:"
+
+    const periodTextNode = document.createTextNode(" " + period)
+
+    companyInfoDiv.appendChild(companyLabel)
+    companyInfoDiv.appendChild(companyNameTextNode)
+    companyInfoDiv.appendChild(br)
+    companyInfoDiv.appendChild(periodLabel)
+    companyInfoDiv.appendChild(periodTextNode)
+}
+
 export async function insertKeyFiguresToTable(data) {
     const figures = data.keyFigures;
     const period = data.period ? data.period : "";
     const urlParams = new URLSearchParams(window.location.search);
     const companyName = urlParams.get("company");
-    const secureCompanyName = escapeHtml(companyName)
-    const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
-    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${secureCompanyName}<br><b>Rechnungsjahr:</b> ${period}`;
+
+    insertCompanyInfo("table", companyName, period)
 
     Array.from(document.getElementsByClassName("data-table")).forEach(keyFigureTable => {
         // Unhide the tables with the current key figure data
@@ -305,9 +342,8 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
     const url = new URL(window.location.href)
     const companyName = url.searchParams.get("company");
-    const secureCompanyName = escapeHtml(companyName)
-    const companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo");
-    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${secureCompanyName}<br><b>Zeitperiode: </b>${firstYear} - ${lastYear}`;
+
+    insertCompanyInfo("graph", companyName, `${firstYear} - ${lastYear}`);
 
     setChart(chart);
 }
