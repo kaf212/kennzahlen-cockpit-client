@@ -1,5 +1,6 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js";
 import {translations} from "../pages/customFigureBuilder.js";
+import {escapeHtml} from "../utils/escapeHtml";
 
 function reverseParseFormulaString(formulaStr) {
     /**
@@ -53,12 +54,13 @@ async function loadSidebar() {
         itemsToRemove.forEach(item => item.remove())
 
         customKeyFigures.forEach(customKeyFigure => {
+            const secureCustomKeyFigureName = escapeHtml(customKeyFigure.name)
             const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
             const htmlToInsert = `<div class="sidebar-item" 
                                            data-custom-key-figure-id="${customKeyFigure._id}"
-                                           data-custom-key-figure-name="${customKeyFigure.name}">
+                                           data-custom-key-figure-name="${secureCustomKeyFigureName}">
                                            <div class="sidebar-item-content-wrapper">
-                                           <b>${customKeyFigure.name}</b>${reverseParsedFormula}
+                                           <b>${secureCustomKeyFigureName}</b>${reverseParsedFormula}
                                            </div>
                                            <button class="sidebar-delete-button">×</button>
                                            </div>`
