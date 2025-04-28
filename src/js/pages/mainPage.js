@@ -480,11 +480,21 @@ async function setupDropdown(companyId) {
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
     customKeyFigures.forEach(fig => {
         const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <label class="flex items-center px-4 py-2 hover:bg-gray-100">
-                <input type="checkbox" value="${fig.name}" class="key-figure-checkbox mr-2">${fig.name}
-            </label>
-        `;
+
+        const checkBoxElement = document.createElement("input")
+        checkBoxElement.type = "checkbox"
+        checkBoxElement.value = fig.name
+        checkBoxElement.classList.add("key-figure-checkbox", "mr-2")
+
+        const customKeyFigureLabel = document.createElement("label")
+        customKeyFigureLabel.classList.add("flex", "items-center", "px-4", "py-2", "hover:bg-gray-100")
+        customKeyFigureLabel.appendChild(checkBoxElement)
+
+        const customKeyFigureTextNode = document.createTextNode(fig.name)
+        customKeyFigureLabel.appendChild(customKeyFigureTextNode)
+
+        listItem.appendChild(customKeyFigureLabel)
+
         dropdownList.appendChild(listItem);
         labelToKey[fig.name] = fig.name;
     });
