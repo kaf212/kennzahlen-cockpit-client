@@ -1,5 +1,6 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js";
 import {translations} from "../pages/customFigureBuilder.js";
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 function reverseParseFormulaString(formulaStr) {
     /**
@@ -53,17 +54,35 @@ async function loadSidebar() {
         itemsToRemove.forEach(item => item.remove())
 
         customKeyFigures.forEach(customKeyFigure => {
-            const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
-            const htmlToInsert = `<div class="sidebar-item" 
-                                           data-custom-key-figure-id="${customKeyFigure._id}"
-                                           data-custom-key-figure-name="${customKeyFigure.name}">
-                                           <div class="sidebar-item-content-wrapper">
-                                           <b>${customKeyFigure.name}</b>${reverseParsedFormula}
-                                           </div>
-                                           <button class="sidebar-delete-button">×</button>
-                                           </div>`
+            const secureCustomKeyFigureName = escapeHtml(customKeyFigure.name)
 
-            sidebar.innerHTML += htmlToInsert
+            const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
+            const div = document.createElement("div")
+            div.className = "sidebar-item"
+            div.dataset.customKeyFigureId = customKeyFigure._id
+            div.dataset.customKeyFigureName = customKeyFigure.name
+
+            const innerDiv = document.createElement("div")
+            innerDiv.className = "sidebar-item-content-wrapper"
+
+            const bold = document.createElement("b")
+            bold.textContent = customKeyFigure.name
+
+            innerDiv.appendChild(bold)
+
+            const formulaSpan = document.createElement("span")
+            formulaSpan.textContent = reverseParsedFormula
+
+            innerDiv.appendChild(formulaSpan)
+
+            const button = document.createElement("button")
+            button.className = "sidebar-delete-button"
+            button.textContent = "×"
+
+            div.appendChild(innerDiv)
+            div.appendChild(button)
+
+            sidebar.appendChild(div)
         })
     }
     addCustomKeyFigureEventListeners()

@@ -1,4 +1,5 @@
 import {sendServerRequest, addInfoBoxEventListener} from "../utils/serverResponseHandling.js";
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 // Datei-Upload per Drag & Drop
 const dropArea = document.getElementById("drop");
@@ -46,7 +47,8 @@ if (dropArea && fileInput && uploadButton) {
     });
 
     function updateDropArea(fileName) {
-        dropArea.innerHTML = `<p class='text-green-600 font-bold'>${fileName} wurde ausgewählt</p>`;
+        const secureFilename = escapeHtml(fileName)
+        dropArea.innerHTML = `<p class='text-green-600 font-bold'>${secureFilename} wurde ausgewählt</p>`;
     }
 } else {
     console.error("Elemente nicht gefunden! Stelle sicher, dask,iots IDs korrekt sind.");
