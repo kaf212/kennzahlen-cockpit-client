@@ -72,6 +72,8 @@ function insertCompanyInfo(targetTab, companyName, period) {
     /**
      * Inserts the currently selected company's name and the viewed period into the top of the
      * active tab.
+     * The function replaces the need to use the innerHTML attribute to insert company info
+     * in order to prevent DOM-based XSS attacks.
      *
      * @param {String} targetTab - The tab that is viewed by the user
      * @param {String} companyName - The name of the selected company
