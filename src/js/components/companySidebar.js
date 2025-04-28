@@ -41,18 +41,25 @@ async function loadCompanySidebar() {
         const selectedCompanyId = url.searchParams.get("id")
 
         companies.forEach(company => {
-            const secureCompanyName = escapeHtml(company.name)
+            const div = document.createElement("div")
+            div.className = "sidebar-item"
+            div.dataset.companyId = company._id
+            div.dataset.companyName = company.name
 
-            const htmlToInsert = `<div class="sidebar-item" 
-                                           data-company-id="${company._id}"
-                                           data-company-name="${secureCompanyName}">
-                                           <div class="sidebar-item-content-wrapper company-sidebar-item">
-                                           <b>${secureCompanyName}</b>
-                                           </div>
-                                           <button class="greyed-out sidebar-delete-button">×</button>
-                                           </div>`
+            const innerDiv = document.createElement("div")
+            innerDiv.className = "sidebar-item-content-wrapper company-sidebar-item"
+            const bold = document.createElement("b")
+            bold.textContent = company.name
 
-            sidebar.innerHTML += htmlToInsert
+            const button = document.createElement("button")
+            button.className = "greyed-out sidebar-delete-button"
+            button.textContent = "×"
+
+            innerDiv.appendChild(bold)
+            div.appendChild(innerDiv)
+            div.appendChild(button)
+
+            sidebar.appendChild(div)
         })
 
         // Iterate over all sidebar items and check if their ID is equal to the selected id in the URL params

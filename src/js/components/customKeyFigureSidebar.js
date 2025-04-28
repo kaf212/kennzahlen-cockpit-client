@@ -55,17 +55,34 @@ async function loadSidebar() {
 
         customKeyFigures.forEach(customKeyFigure => {
             const secureCustomKeyFigureName = escapeHtml(customKeyFigure.name)
-            const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
-            const htmlToInsert = `<div class="sidebar-item" 
-                                           data-custom-key-figure-id="${customKeyFigure._id}"
-                                           data-custom-key-figure-name="${secureCustomKeyFigureName}">
-                                           <div class="sidebar-item-content-wrapper">
-                                           <b>${secureCustomKeyFigureName}</b>${reverseParsedFormula}
-                                           </div>
-                                           <button class="sidebar-delete-button">×</button>
-                                           </div>`
 
-            sidebar.innerHTML += htmlToInsert
+            const reverseParsedFormula = reverseParseFormulaString(customKeyFigure.formula)
+            const div = document.createElement("div")
+            div.className = "sidebar-item"
+            div.dataset.customKeyFigureId = customKeyFigure._id
+            div.dataset.customKeyFigureName = customKeyFigure.name
+
+            const innerDiv = document.createElement("div")
+            innerDiv.className = "sidebar-item-content-wrapper"
+
+            const bold = document.createElement("b")
+            bold.textContent = customKeyFigure.name
+
+            innerDiv.appendChild(bold)
+
+            const formulaSpan = document.createElement("span")
+            formulaSpan.textContent = reverseParsedFormula
+
+            innerDiv.appendChild(formulaSpan)
+
+            const button = document.createElement("button")
+            button.className = "sidebar-delete-button"
+            button.textContent = "×"
+
+            div.appendChild(innerDiv)
+            div.appendChild(button)
+
+            sidebar.appendChild(div)
         })
     }
     addCustomKeyFigureEventListeners()
