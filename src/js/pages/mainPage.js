@@ -1,6 +1,7 @@
 import { sendServerRequest } from '../utils/serverResponseHandling.js';
 import { checkUserPrivileges } from '../utils/userPrivilegeVerification.js';
 import { getCurrentKeyFigureData } from '../keyFigureData/loadCompanyData.js';
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 const keyFigureNames = {
     cashRatio: "Liquiditätsgrad 1",
@@ -72,8 +73,9 @@ export async function insertKeyFiguresToTable(data) {
     const period = data.period ? data.period : "";
     const urlParams = new URLSearchParams(window.location.search);
     const companyName = urlParams.get("company");
+    const secureCompanyName = escapeHtml(companyName)
     const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
-    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`;
+    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${secureCompanyName}<br><b>Rechnungsjahr:</b> ${period}`;
 
     Array.from(document.getElementsByClassName("data-table")).forEach(keyFigureTable => {
         // Unhide the tables with the current key figure data
