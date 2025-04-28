@@ -1,6 +1,7 @@
 import { sendServerRequest } from '../utils/serverResponseHandling.js';
 import { checkUserPrivileges } from '../utils/userPrivilegeVerification.js';
 import { getCurrentKeyFigureData } from '../keyFigureData/loadCompanyData.js';
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 const keyFigureNames = {
     cashRatio: "Liquiditätsgrad 1",
@@ -67,13 +68,53 @@ export function restrictCustomKeyFigureAccess() {
     })
 }
 
+function insertCompanyInfo(targetTab, companyName, period) {
+    /**
+     * Inserts the currently selected company's name and the viewed period into the top of the
+     * active tab.
+     * The function replaces the need to use the innerHTML attribute to insert company info
+     * in order to prevent DOM-based XSS attacks.
+     *
+     * @param {String} targetTab - The tab that is viewed by the user
+     * @param {String} companyName - The name of the selected company
+     * @param {Number|String} - The current period or the start and end period if the historical tab is active
+     * @returns {void}
+     */
+    let companyInfoDiv
+    if (targetTab === "table") {
+        companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo")
+    } else {
+        companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo")
+    }
+
+    companyInfoDiv.innerHTML = "" // Clear leftover company infos
+
+    const companyLabel = document.createElement("b")
+    companyLabel.textContent = "Unternehmen: "
+
+    const companyNameTextNode = document.createTextNode(companyName)
+
+    const br = document.createElement("br")
+
+    const periodLabel = document.createElement("b")
+    periodLabel.textContent = "Rechnungsjahr:"
+
+    const periodTextNode = document.createTextNode(" " + period)
+
+    companyInfoDiv.appendChild(companyLabel)
+    companyInfoDiv.appendChild(companyNameTextNode)
+    companyInfoDiv.appendChild(br)
+    companyInfoDiv.appendChild(periodLabel)
+    companyInfoDiv.appendChild(periodTextNode)
+}
+
 export async function insertKeyFiguresToTable(data) {
     const figures = data.keyFigures;
     const period = data.period ? data.period : "";
     const urlParams = new URLSearchParams(window.location.search);
     const companyName = urlParams.get("company");
-    const companyInfoDiv = document.getElementById("currentKeyFiguresCompanyInfo");
-    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Rechnungsjahr:</b> ${period}`;
+
+    insertCompanyInfo("table", companyName, period)
 
     Array.from(document.getElementsByClassName("data-table")).forEach(keyFigureTable => {
         // Unhide the tables with the current key figure data
@@ -303,8 +344,8 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
     const url = new URL(window.location.href)
     const companyName = url.searchParams.get("company");
-    const companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo");
-    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Zeitperiode: </b>${firstYear} - ${lastYear}`;
+
+    insertCompanyInfo("graph", companyName, `${firstYear} - ${lastYear}`);
 
     setChart(chart);
 }
@@ -439,11 +480,21 @@ async function setupDropdown(companyId) {
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/customKeyFigures", null, false);
     customKeyFigures.forEach(fig => {
         const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <label class="flex items-center px-4 py-2 hover:bg-gray-100">
-                <input type="checkbox" value="${fig.name}" class="key-figure-checkbox mr-2">${fig.name}
-            </label>
-        `;
+
+        const checkBoxElement = document.createElement("input")
+        checkBoxElement.type = "checkbox"
+        checkBoxElement.value = fig.name
+        checkBoxElement.classList.add("key-figure-checkbox", "mr-2")
+
+        const customKeyFigureLabel = document.createElement("label")
+        customKeyFigureLabel.classList.add("flex", "items-center", "px-4", "py-2", "hover:bg-gray-100")
+        customKeyFigureLabel.appendChild(checkBoxElement)
+
+        const customKeyFigureTextNode = document.createTextNode(fig.name)
+        customKeyFigureLabel.appendChild(customKeyFigureTextNode)
+
+        listItem.appendChild(customKeyFigureLabel)
+
         dropdownList.appendChild(listItem);
         labelToKey[fig.name] = fig.name;
     });

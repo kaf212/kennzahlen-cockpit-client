@@ -1,5 +1,6 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js"
 import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 async function deleteCompany(companyId) {
     await sendServerRequest("DELETE", "http://localhost:5000/companies/" + companyId, null, false)
@@ -40,16 +41,25 @@ async function loadCompanySidebar() {
         const selectedCompanyId = url.searchParams.get("id")
 
         companies.forEach(company => {
-            const htmlToInsert = `<div class="sidebar-item" 
-                                           data-company-id="${company._id}"
-                                           data-company-name="${company.name}">
-                                           <div class="sidebar-item-content-wrapper company-sidebar-item">
-                                           <b>${company.name}</b>
-                                           </div>
-                                           <button class="greyed-out sidebar-delete-button">×</button>
-                                           </div>`
+            const div = document.createElement("div")
+            div.className = "sidebar-item"
+            div.dataset.companyId = company._id
+            div.dataset.companyName = company.name
 
-            sidebar.innerHTML += htmlToInsert
+            const innerDiv = document.createElement("div")
+            innerDiv.className = "sidebar-item-content-wrapper company-sidebar-item"
+            const bold = document.createElement("b")
+            bold.textContent = company.name
+
+            const button = document.createElement("button")
+            button.className = "greyed-out sidebar-delete-button"
+            button.textContent = "×"
+
+            innerDiv.appendChild(bold)
+            div.appendChild(innerDiv)
+            div.appendChild(button)
+
+            sidebar.appendChild(div)
         })
 
         // Iterate over all sidebar items and check if their ID is equal to the selected id in the URL params
