@@ -1,6 +1,6 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js";
 import {translations} from "../pages/customFigureBuilder.js";
-import {escapeHtml} from "../utils/escapeHtml";
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 function reverseParseFormulaString(formulaStr) {
     /**

@@ -1,6 +1,6 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js"
 import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
-import {escapeHtml} from "../utils/escapeHtml";
+import {escapeHtml} from "../utils/escapeHtml.js";
 
 async function deleteCompany(companyId) {
     await sendServerRequest("DELETE", "http://localhost:5000/companies/" + companyId, null, false)

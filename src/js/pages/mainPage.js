@@ -305,8 +305,9 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
     const url = new URL(window.location.href)
     const companyName = url.searchParams.get("company");
+    const secureCompanyName = escapeHtml(companyName)
     const companyInfoDiv = document.getElementById("historicKeyFiguresCompanyInfo");
-    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${companyName}<br><b>Zeitperiode: </b>${firstYear} - ${lastYear}`;
+    companyInfoDiv.innerHTML = `<b>Unternehmen: </b>${secureCompanyName}<br><b>Zeitperiode: </b>${firstYear} - ${lastYear}`;
 
     setChart(chart);
 }
