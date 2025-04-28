@@ -11,13 +11,13 @@ async function handleServerResponse(res, displaySuccessMessage) {
 
     const infoBox = document.querySelector(".infobox")
 
-    if (statusCode.startsWith("20") && displaySuccessMessage === true) {
+    if (statusCode.startsWith("2") && displaySuccessMessage === true) {
         infoBox.classList.remove("error-message")
         infoBox.classList.add("success-message")
         infoBox.innerText = jsonData.message
         document.querySelector(".infobox-overlay").style.display = "flex"
     }
-    else if (statusCode.startsWith("40")) {
+    else if (statusCode.startsWith("4") || statusCode.startsWith("5")) {
         infoBox.classList.remove("success-message")
         infoBox.classList.add("error-message")
         infoBox.innerText = jsonData.message
