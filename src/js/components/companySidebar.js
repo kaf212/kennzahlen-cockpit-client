@@ -1,5 +1,6 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js"
 import {checkUserPrivileges} from "../utils/userPrivilegeVerification.js";
+import {escapeHtml} from "../utils/escapeHtml";
 
 async function deleteCompany(companyId) {
     await sendServerRequest("DELETE", "http://localhost:5000/companies/" + companyId, null, false)
@@ -40,11 +41,13 @@ async function loadCompanySidebar() {
         const selectedCompanyId = url.searchParams.get("id")
 
         companies.forEach(company => {
+            const secureCompanyName = escapeHtml(company.name)
+
             const htmlToInsert = `<div class="sidebar-item" 
                                            data-company-id="${company._id}"
-                                           data-company-name="${company.name}">
+                                           data-company-name="${secureCompanyName}">
                                            <div class="sidebar-item-content-wrapper company-sidebar-item">
-                                           <b>${company.name}</b>
+                                           <b>${secureCompanyName}</b>
                                            </div>
                                            <button class="greyed-out sidebar-delete-button">×</button>
                                            </div>`
