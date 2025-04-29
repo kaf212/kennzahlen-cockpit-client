@@ -58,7 +58,7 @@ function uploadFile() {
     const formData = new FormData()
     formData.append("file", selectedFile)
 
-    sendServerRequest("POST", "http://localhost:5000/upload", formData, true, false)
+    sendServerRequest("POST", "http://localhost:5000/api/upload", formData, true, false)
 }
 
 function resetUploadField() {
