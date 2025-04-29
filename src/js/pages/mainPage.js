@@ -143,6 +143,7 @@ export async function insertKeyFiguresToTable(data) {
 
     customKeyFigures.forEach(customKeyFigure => {
         customKeyFigureTypes[customKeyFigure.name] = customKeyFigure.type;
+        keyFigureReferenceValues[customKeyFigure.name] = customKeyFigure.reference_value || "-"
         customKeyFigureNames.push(customKeyFigure.name);
     });
 
@@ -156,7 +157,7 @@ export async function insertKeyFiguresToTable(data) {
 
         const referenceValueCell = document.createElement("td")
         referenceValueCell.classList.add("p-2", "border")
-        referenceValueCell.textContent = keyFigureReferenceValues[key] || key
+        referenceValueCell.textContent = keyFigureReferenceValues[key]
 
         const valueCell = document.createElement("td");
         valueCell.className = "p-2 border";
@@ -177,9 +178,7 @@ export async function insertKeyFiguresToTable(data) {
 
 
         row.appendChild(nameCell);
-        if (!customKeyFigureNames.includes(key)) {
-            row.appendChild(referenceValueCell)
-        }
+        row.appendChild(referenceValueCell)
         row.appendChild(valueCell);
 
         targetTable.appendChild(row);
