@@ -11,7 +11,7 @@ if (form) {
 
         console.log("Login versendet:", role, password);
 
-        const jsonData = await sendServerRequest("POST", "http://localhost:5000/auth/login", {role, password}, false)
+        const jsonData = await sendServerRequest("POST", "http://localhost:5000/api/auth/login", {role, password}, false)
 
 
         if (jsonData.hasOwnProperty("token")) {
