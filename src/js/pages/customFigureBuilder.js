@@ -258,7 +258,7 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
 }
 
 async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue) {
-    const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
+    const originalCustomKeyFigure = await sendServerRequest("GET", `/api/customKeyFigures/${customKeyFigureId}`, null, false)
     const updatedCustomKeyFigure = {
         "name": formulaName,
         "formula": parsedFormula,
