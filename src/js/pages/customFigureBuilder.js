@@ -93,6 +93,21 @@ function addTabButtonEventListeners() {
     })
 }
 
+export function refreshReferenceValueTextField() {
+    const textField = document.getElementById("referenceValueTextField")
+    const deactivatedRadioButton = document.getElementById("referenceValueDeactivated")
+
+    if (deactivatedRadioButton.checked === true) {
+        // If the "deactivated" button is checked, replace the contents with a "-"
+        textField.value = "-"
+        textField.disabled = true
+    } else {
+        // If the "activated" button is checked, the field should be empty
+        textField.value = ""
+        textField.disabled = false
+    }
+}
+
 function addReferenceValueInputEventListeners() {
     const radioButtons = Array.from(document.getElementsByClassName("reference-value-radio-button"))
     radioButtons.forEach(radioButton => {
@@ -103,6 +118,9 @@ function addReferenceValueInputEventListeners() {
             } else {
                 textField.disabled = true
             }
+
+            refreshReferenceValueTextField()
+
         })
     })
 }
@@ -205,10 +223,8 @@ function addSubmitEventListener() {
         // Source: https://chatgpt.com/share/68076901-26c4-8011-ae36-1ae4a76c50d3
         const customKeyFigureType = document.querySelector('input[name="customKeyFigureType"]:checked').value
 
-        let referenceValue = undefined
-        if (document.querySelector('input[id="referenceValueActivated"]:checked') !== null) {
-            referenceValue = document.getElementById("referenceValueTextField").value
-        }
+        // The reference value is "-" when reference value is deactivated
+        const referenceValue = document.getElementById("referenceValueTextField").value
 
         const url = new URL(window.location.href);
         const editModeEnabled = url.searchParams.get('editMode')
@@ -241,12 +257,13 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
     })
 }
 
-async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType) {
+async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue) {
     const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
     const updatedCustomKeyFigure = {
         "name": formulaName,
         "formula": parsedFormula,
-        "type": customKeyFigureType
+        "type": customKeyFigureType,
+        "reference_value": referenceValue
     }
 
     for (const [attribute, updatedValue] of Object.entries(updatedCustomKeyFigure)) {
