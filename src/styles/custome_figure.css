@@ -48,6 +48,14 @@ body {
     box-sizing: border-box;
 }
 
+.form-input:disabled {
+    /* Source: https://chatgpt.com/share/6810a4d5-6b94-8011-a0e1-27e268208768 */
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+    border-color: #ccc;
+}
+
 /* Kategorie-Tabs */
 .category-tabs {
     display: flex;

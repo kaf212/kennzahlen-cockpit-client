@@ -93,6 +93,38 @@ function addTabButtonEventListeners() {
     })
 }
 
+export function refreshReferenceValueTextField() {
+    const textField = document.getElementById("referenceValueTextField")
+    const deactivatedRadioButton = document.getElementById("referenceValueDeactivated")
+
+    if (deactivatedRadioButton.checked === true) {
+        // If the "deactivated" button is checked, replace the contents with a "-"
+        textField.value = "-"
+        textField.disabled = true
+    } else {
+        // If the "activated" button is checked, the field should be empty
+        textField.value = ""
+        textField.disabled = false
+    }
+}
+
+function addReferenceValueInputEventListeners() {
+    const radioButtons = Array.from(document.getElementsByClassName("reference-value-radio-button"))
+    radioButtons.forEach(radioButton => {
+        radioButton.addEventListener("change", ()=> {
+            const textField = document.getElementById("referenceValueTextField")
+            if (textField.disabled) {
+                textField.disabled = false
+            } else {
+                textField.disabled = true
+            }
+
+            refreshReferenceValueTextField()
+
+        })
+    })
+}
+
 
 
 function createAccountButtons() {
@@ -187,17 +219,21 @@ function addSubmitEventListener() {
     customFigureBuilderForm.addEventListener("submit", (event)=>{
         const parsedFormula = parseFormulaString(formulaField.value)
         const formulaName = document.getElementById("formulaNameField").value
+
         // Source: https://chatgpt.com/share/68076901-26c4-8011-ae36-1ae4a76c50d3
         const customKeyFigureType = document.querySelector('input[name="customKeyFigureType"]:checked').value
+
+        // The reference value is "-" when reference value is deactivated
+        const referenceValue = document.getElementById("referenceValueTextField").value
 
         const url = new URL(window.location.href);
         const editModeEnabled = url.searchParams.get('editMode')
 
         if (editModeEnabled === "true") {
             const editedKeyFigureId = url.searchParams.get('id')
-            patchCustomKeyFigure(editedKeyFigureId, formulaName, parsedFormula, customKeyFigureType)
+            patchCustomKeyFigure(editedKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue)
         } else {
-            saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType)
+            saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType, referenceValue)
         }
 
         event.preventDefault() // Prevent page from refreshing
@@ -205,7 +241,7 @@ function addSubmitEventListener() {
     })
 }
 
-async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureType) {
+async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureType, referenceValue) {
     /*
     Sends a POST request to the backend to save the new custom key figure on the server.
     The response is then passed to handleServerResponse() to display the success or error message in the UI.
@@ -216,16 +252,18 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
     await sendServerRequest("POST", "/api/customKeyFigures", {
         name: formulaName,
         formula: formulaStr,
-        type: customKeyFigureType
+        type: customKeyFigureType,
+        reference_value: referenceValue
     })
 }
 
-async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType) {
-    const originalCustomKeyFigure = await sendServerRequest("GET", `/api/customKeyFigures/${customKeyFigureId}`, null, false)
+async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue) {
+    const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/customKeyFigures/${customKeyFigureId}`, null, false)
     const updatedCustomKeyFigure = {
         "name": formulaName,
         "formula": parsedFormula,
-        "type": customKeyFigureType
+        "type": customKeyFigureType,
+        "reference_value": referenceValue
     }
 
     for (const [attribute, updatedValue] of Object.entries(updatedCustomKeyFigure)) {
@@ -248,7 +286,7 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
 
 
 
-
+addReferenceValueInputEventListeners()
 addTabButtonEventListeners()
 createAccountButtons()
 addButtonEventListeners()

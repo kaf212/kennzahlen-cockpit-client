@@ -1,5 +1,5 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js";
-import {translations} from "../pages/customFigureBuilder.js";
+import {refreshReferenceValueTextField, translations} from "../pages/customFigureBuilder.js";
 import {escapeHtml} from "../utils/escapeHtml.js";
 
 function reverseParseFormulaString(formulaStr) {
@@ -101,9 +101,22 @@ async function editCustomKeyFigure(customKeyFigureId) {
 
     const nameField = document.getElementById("formulaNameField")
     const formulaField = document.getElementById("formulaField")
+    const referenceValueFiled = document.getElementById("referenceValueTextField")
 
     nameField.value = customKeyFigure.name
     formulaField.value = reverseParseFormulaString(customKeyFigure.formula) // Translate formula back to german
+
+
+    if (!customKeyFigure.hasOwnProperty("reference_value") || customKeyFigure.reference_value === "-") {
+        document.getElementById("referenceValueDeactivated").checked = true
+        // If the custom key figure does not have a reference value, set the text field to deactivated
+        refreshReferenceValueTextField()
+    } else {
+        document.getElementById("referenceValueActivated").checked = true
+        refreshReferenceValueTextField()
+        // Insert the reference value into the text field if the custom key figure has one
+        referenceValueFiled.value = customKeyFigure.reference_value
+    }
 
     let typeRadioButton = document.getElementById("customKeyFigureTypePercentage")
 
@@ -147,6 +160,8 @@ export function endEditMode() {
     customKeyFigureForm.reset()
     const pageHeader = document.getElementById("customKeyFigureBuilderHeader")
     pageHeader.innerText = "Neue Kennzahl erstellen"
+
+    refreshReferenceValueTextField()
 }
 
 function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) {

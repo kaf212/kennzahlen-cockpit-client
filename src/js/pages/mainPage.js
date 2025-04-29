@@ -19,6 +19,22 @@ const keyFigureNames = {
     workingCapitalIntensity: "Umlaufintensität"
 }
 
+const keyFigureReferenceValues = {
+    cashRatio: "Mind. 20 %",
+    quickCash: "Mind. 100 %",
+    currentRatio: "Mind. 150 %",
+    debtRatio: "Max. 70 %",
+    equityRatio: "Mind. 30 %",
+    fixedAssetCoverage1: "Mind. 75 %",
+    fixedAssetCoverage2: "Mind. 100 %",
+    fixedAssetIntensity: "-",
+    profitMargin: "1.5 % / 5 %",
+    roa: "Mind. 6 %",
+    roe: "Mind. 8 %",
+    selfFinancingRatio: "-",
+    workingCapitalIntensity: "-"
+}
+
 export function showTab(tab) {
     const url = new URL(window.location.href)
     url.searchParams.set("view", tab)
@@ -127,6 +143,7 @@ export async function insertKeyFiguresToTable(data) {
 
     customKeyFigures.forEach(customKeyFigure => {
         customKeyFigureTypes[customKeyFigure.name] = customKeyFigure.type;
+        keyFigureReferenceValues[customKeyFigure.name] = customKeyFigure.reference_value || "-"
         customKeyFigureNames.push(customKeyFigure.name);
     });
 
@@ -137,6 +154,10 @@ export async function insertKeyFiguresToTable(data) {
         const nameCell = document.createElement("td");
         nameCell.className = "p-2 border";
         nameCell.textContent = keyFigureNames[key] || key;
+
+        const referenceValueCell = document.createElement("td")
+        referenceValueCell.classList.add("p-2", "border")
+        referenceValueCell.textContent = keyFigureReferenceValues[key]
 
         const valueCell = document.createElement("td");
         valueCell.className = "p-2 border";
@@ -155,8 +176,11 @@ export async function insertKeyFiguresToTable(data) {
             targetTable = document.getElementById("customKeyFigureTable");
         }
 
+
         row.appendChild(nameCell);
+        row.appendChild(referenceValueCell)
         row.appendChild(valueCell);
+
         targetTable.appendChild(row);
     }
 }
