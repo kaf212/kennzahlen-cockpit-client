@@ -93,6 +93,20 @@ function addTabButtonEventListeners() {
     })
 }
 
+function addReferenceValueInputEventListeners() {
+    const radioButtons = Array.from(document.getElementsByClassName("reference-value-radio-button"))
+    radioButtons.forEach(radioButton => {
+        radioButton.addEventListener("change", ()=> {
+            const textField = document.getElementById("referenceValueTextField")
+            if (textField.disabled) {
+                textField.disabled = false
+            } else {
+                textField.disabled = true
+            }
+        })
+    })
+}
+
 
 
 function createAccountButtons() {
@@ -248,7 +262,7 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
 
 
 
-
+addReferenceValueInputEventListeners()
 addTabButtonEventListeners()
 createAccountButtons()
 addButtonEventListeners()
