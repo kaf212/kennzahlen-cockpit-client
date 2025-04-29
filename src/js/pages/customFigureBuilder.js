@@ -201,17 +201,23 @@ function addSubmitEventListener() {
     customFigureBuilderForm.addEventListener("submit", (event)=>{
         const parsedFormula = parseFormulaString(formulaField.value)
         const formulaName = document.getElementById("formulaNameField").value
+
         // Source: https://chatgpt.com/share/68076901-26c4-8011-ae36-1ae4a76c50d3
         const customKeyFigureType = document.querySelector('input[name="customKeyFigureType"]:checked').value
+
+        let referenceValue = undefined
+        if (document.querySelector('input[id="referenceValueActivated"]:checked') !== null) {
+            referenceValue = document.getElementById("referenceValueTextField").value
+        }
 
         const url = new URL(window.location.href);
         const editModeEnabled = url.searchParams.get('editMode')
 
         if (editModeEnabled === "true") {
             const editedKeyFigureId = url.searchParams.get('id')
-            patchCustomKeyFigure(editedKeyFigureId, formulaName, parsedFormula, customKeyFigureType)
+            patchCustomKeyFigure(editedKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue)
         } else {
-            saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType)
+            saveNewCustomKeyFigure(formulaName, parsedFormula, customKeyFigureType, referenceValue)
         }
 
         event.preventDefault() // Prevent page from refreshing
@@ -219,7 +225,7 @@ function addSubmitEventListener() {
     })
 }
 
-async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureType) {
+async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureType, referenceValue) {
     /*
     Sends a POST request to the backend to save the new custom key figure on the server.
     The response is then passed to handleServerResponse() to display the success or error message in the UI.
@@ -230,7 +236,8 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
     await sendServerRequest("POST", "http://localhost:5000/customKeyFigures", {
         name: formulaName,
         formula: formulaStr,
-        type: customKeyFigureType
+        type: customKeyFigureType,
+        reference_value: referenceValue
     })
 }
 
