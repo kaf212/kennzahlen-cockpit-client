@@ -6,9 +6,13 @@
   <title>Impressum</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module" src="/js/auth/auth.js" defer></script>
+  <script src='/js/components/mainPageButton.js' defer></script>
   <link rel="stylesheet" href="/styles/styles.css">
+  <link rel="stylesheet" href="/styles/main_page_button.css">
 </head>
 <body class="bg-gray-100 flex flex-col items-center p-4 min-h-screen">
+<button id="backToMainPageButton">← Hauptseite</button>
+
 
 <div class="main-container">
   <h1 class="text-xl font-bold mb-4">Impressum</h1>
@@ -19,7 +23,6 @@
   <p>Schweiz</p>
   <p>Geschäftsführer: Jan Atzgerstorfer</p>
   <p>Email: info@kennzahlen-cockpit.ch</p>
-  <p class="mt-4"><a onclick="window.location = document.referrer;" class="button">Zurück</a></p>
 </div>
 
 </body>
