@@ -21,7 +21,7 @@ function reverseParseFormulaString(formulaStr) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             if (formulaStr.includes(englishAccount)) {
                 // Replace English account name with German translation
-                formulaStr = formulaStr.replace(new RegExp(englishAccount, 'g'), germanAccount)
+                formulaStr = formulaStr.replaceAll(new RegExp(englishAccount, 'g'), germanAccount)
             }
         }
     }
@@ -54,10 +54,10 @@ function reverseParseAnnualProfitAndLossFormulas(formulaStr) {
     const annualLossFormula = translations["earnings"]["Jahresverlust"]
 
     if (formulaStr.includes(annualLossFormula)) {
-        formulaStr = formulaStr.replace(annualLossFormula, "Jahresverlust")
+        formulaStr = formulaStr.replaceAll(annualLossFormula, "Jahresverlust")
     }
     if (formulaStr.includes(annualProfitFormula)) {
-        formulaStr = formulaStr.replace(annualProfitFormula, "Jahresgewinn")
+        formulaStr = formulaStr.replaceAll(annualProfitFormula, "Jahresgewinn")
     }
 
     return formulaStr

@@ -195,7 +195,7 @@ function parseFormulaString(formulaStr) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             if (formulaStr.includes(germanAccount)) {
                 // replace german account name with english translation
-                formulaStr = formulaStr.replace(germanAccount, englishAccount)
+                formulaStr = formulaStr.replaceAll(germanAccount, englishAccount)
             }
         }
     }
