@@ -11,6 +11,20 @@ function reverseParseFormulaString(formulaStr) {
      * @returns {string} - The formula string translated into german with whitespaces
      */
 
+    /* Before the formula is reverse-parsed, it has to be searched for the annual profit or loss
+    formulas, because they would get destroyed during the regular reverse-parsing. (They include
+    the substrings "earnings" and "expense") */
+    const annualProfitFormula = translations["expense"]["Jahresgewinn"]
+    const annualLossFormula = translations["earnings"]["Jahresverlust"]
+
+    if (formulaStr.includes(annualLossFormula)) {
+        formulaStr = formulaStr.replace(annualLossFormula, "Jahresverlust")
+    }
+    if (formulaStr.includes(annualProfitFormula)) {
+        formulaStr = formulaStr.replace(annualProfitFormula, "Jahresgewinn")
+    }
+
+    // Reverse-parse the formula by iterating over the translations object and replacing substrings.
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             if (formulaStr.includes(englishAccount)) {
