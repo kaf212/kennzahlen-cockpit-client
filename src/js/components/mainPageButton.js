@@ -5,7 +5,7 @@ function addMainPageButtonEventListener() {
         const referrerUrl = new URL(document.referrer)
         const mainPageUrl = new URL("index.html", window.location.origin)
 
-        referrerUrl.searchParams.forEach((param, value) => {
+        referrerUrl.searchParams.forEach((value, param) => {
             mainPageUrl.searchParams.set(param, value)
         })
 
