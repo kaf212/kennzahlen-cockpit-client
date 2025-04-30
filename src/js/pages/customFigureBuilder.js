@@ -38,8 +38,7 @@ export const translations = {
        "Gesamtaufwand": "expense"
    },
     "earnings": {
-        // Source for loss calculation: https://chatgpt.com/share/68124b7f-1448-8011-96ad-64ae28f176be
-        "Jahresverlust": "(earnings-expense<0?abs(earnings-expense):-(abs(earnings-expense)))",
+        "Jahresverlust": "((earnings-expense)*-1)",
         "Betriebsertrag": "operating_income",
         "Finanzertrag": "financial_income",
         "Liegenschaftsertrag": "real_estate_income",
