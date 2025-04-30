@@ -28,7 +28,7 @@ export const translations = {
         "Gewinnvortrag": "retained_earnings"
     },
    "expense": {
-       "Jahresgewinn": "earnings-expense",
+       "Jahresgewinn": "(earnings-expense)",
        "Betriebsaufwand": "operating_expense",
        "Personalaufwand": "staff_expense",
        "Sonstiger BA": "other_expenses",
