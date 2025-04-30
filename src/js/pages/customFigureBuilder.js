@@ -29,7 +29,7 @@ export const translations = {
     },
     // Source for profit/loss calculation: https://chatgpt.com/share/68124b7f-1448-8011-96ad-64ae28f176be
    "expense": {
-        "Jahresgewinn": "earnings-expense>0?earnings-expense:-(abs(earnings-expense))",
+        "Jahresgewinn": "(earnings-expense>0?earnings-expense:-(abs(earnings-expense)))",
        "Betriebsaufwand": "operating_expense",
        "Personalaufwand": "staff_expense",
        "Sonstiger BA": "other_expenses",
@@ -39,7 +39,7 @@ export const translations = {
        "Gesamtaufwand": "expense"
    },
     "earnings": {
-        "Jahresverlust": "earnings-expense<0?abs(earnings-expense):-(abs(earnings-expense))",
+        "Jahresverlust": "(earnings-expense<0?abs(earnings-expense):-(abs(earnings-expense)))",
         "Betriebsertrag": "operating_income",
         "Finanzertrag": "financial_income",
         "Liegenschaftsertrag": "real_estate_income",
