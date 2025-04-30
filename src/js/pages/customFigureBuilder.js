@@ -8,7 +8,7 @@ export const translations = {
         "Kasse": "cash",
         "Post": "postal",
         "Bank": "bank",
-        "Ford. L+L": "receivables",
+        "FLL": "receivables",
         "Warenvorrat": "stocks",
         "Anlagevermögen": "fixed_assets",
         "Maschinen": "machines",
@@ -18,7 +18,7 @@ export const translations = {
     "passives": {
         "Fremdkapital": "debt",
         "Kurzfristiges FK": "short_term",
-        "Verb. L+L": "liabilities",
+        "VLL": "liabilities",
         "Langfristiges FK": "long_term",
         "Passivdarlehen": "loans",
         "Hypothek": "mortgage",
