@@ -28,6 +28,7 @@ export const translations = {
         "Gewinnvortrag": "retained_earnings"
     },
    "expense": {
+        "Jahresgewinn": "earnings-expense",
        "Betriebsaufwand": "operating_expense",
        "Personalaufwand": "staff_expense",
        "Sonstiger BA": "other_expenses",
@@ -37,6 +38,7 @@ export const translations = {
        "Gesamtaufwand": "expense"
    },
     "earnings": {
+        "Jahresverlust": "earnings-expense",
         "Betriebsertrag": "operating_income",
         "Finanzertrag": "financial_income",
         "Liegenschaftsertrag": "real_estate_income",
