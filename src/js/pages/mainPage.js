@@ -224,22 +224,23 @@ function displayUserMessageInTab(message) {
 
 }
 
-async function findCustomKeyFigure(customKeyFigureName) {
+async function findCustomKeyFigure(customKeyFigureName, customKeyFigureList) {
     /**
-     * Searches for a custom key figure by name via the API and returns the object if found.
+     * Searches for a specific custom key figure in an array of custom key figures by name.
      *
      * @param {String} customKeyFigureName - The name of the searched custom key figure
+     * @param {Array} customKeyFigureList - An array of custom key figure objects
      * @returns {Object|void} The found custom key figure or nothing, if none was found
      */
-    const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false)
-    customKeyFigures.forEach(customKeyFigure => {
+
+    customKeyFigureList.forEach(customKeyFigure => {
         if (customKeyFigure.name === customKeyFigureName) {
             return customKeyFigure
         }
     })
 }
 
-function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
+async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
     /**
      * Takes a historic data object and multiplies all the historic key figure values based on their type.
      * Percentage key figures are delivered by the server as the raw ratios,
@@ -251,11 +252,13 @@ function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
      * @returns {Object} The modified historicDataObject with the multiplied values
      */
 
+    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/api/customKeyFigures", null, false)
+
     for (const [keyFigureName, historicValueArray] of Object.entries(historicDataObject)) {
         let multiplicator = 100
 
         // Only custom key figures can have a non-percentage type, so it is checked, if it is one
-        const foundCustomKeyFigure = findCustomKeyFigure(keyFigureName)
+        const foundCustomKeyFigure = findCustomKeyFigure(keyFigureName, customKeyFigures)
         if (foundCustomKeyFigure && foundCustomKeyFigure.type === "numeric") {
             multiplicator = 1000
         }
@@ -299,7 +302,7 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         return;
     }
 
-    historicData = multiplyKeyFigureValuesBasedOnType(historicData)
+    historicData = await multiplyKeyFigureValuesBasedOnType(historicData)
 
     const datasets = [];
     let commonLabels = [];
