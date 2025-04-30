@@ -224,7 +224,7 @@ function displayUserMessageInTab(message) {
 
 }
 
-async function findCustomKeyFigure(customKeyFigureName, customKeyFigureList) {
+function findCustomKeyFigure(customKeyFigureName, customKeyFigureList) {
     /**
      * Searches for a specific custom key figure in an array of custom key figures by name.
      *
@@ -233,11 +233,13 @@ async function findCustomKeyFigure(customKeyFigureName, customKeyFigureList) {
      * @returns {Object|void} The found custom key figure or nothing, if none was found
      */
 
+    let foundCustomKeyFigure
     customKeyFigureList.forEach(customKeyFigure => {
         if (customKeyFigure.name === customKeyFigureName) {
-            return customKeyFigure
+            foundCustomKeyFigure = customKeyFigure
         }
     })
+    return foundCustomKeyFigure
 }
 
 async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
@@ -268,7 +270,7 @@ async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
             yearlyValue.key_figure = (yearlyValue.key_figure * multiplicator).toFixed(0)
         })
     }
-
+    console.log(historicDataObject)
     return historicDataObject
 }
 
@@ -301,7 +303,7 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
 
         return;
     }
-
+    console.log(historicData)
     historicData = await multiplyKeyFigureValuesBasedOnType(historicData)
 
     const datasets = [];
