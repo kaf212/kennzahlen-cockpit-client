@@ -1,5 +1,8 @@
 import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverResponseHandling.js";
-import {refreshReferenceValueTextField, translations} from "../pages/customFigureBuilder.js";
+import {
+    refreshReferenceValueTextField,
+    translations
+} from "../pages/customFigureBuilder.js";
 import {escapeHtml} from "../utils/escapeHtml.js";
 
 function reverseParseFormulaString(formulaStr) {
@@ -11,25 +14,14 @@ function reverseParseFormulaString(formulaStr) {
      * @returns {string} - The formula string translated into german with whitespaces
      */
 
-    /* Before the formula is reverse-parsed, it has to be searched for the annual profit or loss
-    formulas, because they would get destroyed during the regular reverse-parsing. (They include
-    the substrings "earnings" and "expense") */
-    const annualProfitFormula = translations["expense"]["Jahresgewinn"]
-    const annualLossFormula = translations["earnings"]["Jahresverlust"]
-
-    if (formulaStr.includes(annualLossFormula)) {
-        formulaStr = formulaStr.replace(annualLossFormula, "Jahresverlust")
-    }
-    if (formulaStr.includes(annualProfitFormula)) {
-        formulaStr = formulaStr.replace(annualProfitFormula, "Jahresgewinn")
-    }
+    formulaStr = reverseParseAnnualProfitAndLossFormulas(formulaStr)
 
     // Reverse-parse the formula by iterating over the translations object and replacing substrings.
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
             if (formulaStr.includes(englishAccount)) {
                 // Replace English account name with German translation
-                formulaStr = formulaStr.replace(new RegExp(englishAccount, 'g'), germanAccount)
+                formulaStr = formulaStr.replaceAll(new RegExp(englishAccount, 'g'), germanAccount)
             }
         }
     }
@@ -52,6 +44,24 @@ function reverseParseFormulaString(formulaStr) {
     return formulaStr
 }
 
+
+function reverseParseAnnualProfitAndLossFormulas(formulaStr) {
+
+    /* Before the formula is reverse-parsed, it has to be searched for the annual profit or loss
+    formulas, because they would get destroyed during the regular reverse-parsing. (They include
+    the substrings "earnings" and "expense") */
+    const annualProfitFormula = translations["expense"]["Jahresgewinn"]
+    const annualLossFormula = translations["earnings"]["Jahresverlust"]
+
+    if (formulaStr.includes(annualLossFormula)) {
+        formulaStr = formulaStr.replaceAll(annualLossFormula, "Jahresverlust")
+    }
+    if (formulaStr.includes(annualProfitFormula)) {
+        formulaStr = formulaStr.replaceAll(annualProfitFormula, "Jahresgewinn")
+    }
+
+    return formulaStr
+}
 
 async function getCustomKeyFigures() {
     const data = await sendServerRequest("GET", "/api/customKeyFigures", null, false)
