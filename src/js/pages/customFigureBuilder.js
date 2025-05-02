@@ -96,33 +96,38 @@ function addTabButtonEventListeners() {
 }
 
 export function refreshReferenceValueTextField() {
+    /**
+     * Checks if the reference value text field is activated or deactivated based on the current selection
+     * of the corresponding radio buttons in the custom key figure builder form
+     * and enables/disables it based on that selection.
+     */
     const textField = document.getElementById("referenceValueTextField")
     const deactivatedRadioButton = document.getElementById("referenceValueDeactivated")
 
     if (deactivatedRadioButton.checked === true) {
         // If the "deactivated" button is checked, replace the contents with a "-"
         textField.value = "-"
+        // Disable the text field
         textField.disabled = true
     } else {
         // If the "activated" button is checked, the field should be empty
         textField.value = ""
+        // Enable the text field
         textField.disabled = false
     }
 }
 
 function addReferenceValueInputEventListeners() {
+    /**
+     * Adds a change-eventListener to both of the reference value radio buttons
+     * that calls refreshReferenceValuesTextField() when one of the two radio buttons is clicked.
+     *
+     * @returns {void}
+     */
     const radioButtons = Array.from(document.getElementsByClassName("reference-value-radio-button"))
     radioButtons.forEach(radioButton => {
         radioButton.addEventListener("change", ()=> {
-            const textField = document.getElementById("referenceValueTextField")
-            if (textField.disabled) {
-                textField.disabled = false
-            } else {
-                textField.disabled = true
-            }
-
             refreshReferenceValueTextField()
-
         })
     })
 }
@@ -240,6 +245,7 @@ function addSubmitEventListener() {
 
         event.preventDefault() // Prevent page from refreshing
         document.getElementById("customFigureBuilderForm").reset()
+        refreshReferenceValueTextField()
     })
 }
 
@@ -260,6 +266,15 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
 }
 
 async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue) {
+    /**
+     * Sends a PATCH request to the API in order to edit a custom key figure.
+     * First it fetches the original custom key figure from the API using the provided id.
+     * Then it iterates over all attributes of the updated version that was passed as an argument and
+     * compares them to the value of said attribute in the original object that was fetched from the API.
+     * If these two values are the same (the user hasn't updated them), the attribute is deleted from the
+     * object, because it hasn't changed and is therefore not needed by the PATCH endpoint.
+     * The remaining modified attributes are then sent to the API in a PATCH request.
+     */
     const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/api/customKeyFigures/${customKeyFigureId}`, null, false)
     const updatedCustomKeyFigure = {
         "name": formulaName,
@@ -275,6 +290,7 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
         }
     }
 
+    // If no values in the custom key figure have been edited, no PATCH request will be sent.
     if (Object.keys(updatedCustomKeyFigure).length === 0) {
         alert("Keine Werte wurden bearbeitet.")
         endEditMode()
@@ -282,6 +298,8 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
     }
 
     await sendServerRequest("PATCH", `http://localhost:5000/api/customKeyFigures/${customKeyFigureId}`, updatedCustomKeyFigure, true)
+
+    // Set the custom key figure builder back to normal mode
     endEditMode()
 }
 
