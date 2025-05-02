@@ -47,6 +47,7 @@ if (dropArea && fileInput && uploadButton) {
     });
 
     function updateDropArea(fileName) {
+        // Escape the name of the file as it's directly inserted into the DOM.
         const secureFilename = escapeHtml(fileName)
         dropArea.innerHTML = `<p class='text-green-600 font-bold'>${secureFilename} wurde ausgewählt</p>`;
     }
@@ -55,9 +56,15 @@ if (dropArea && fileInput && uploadButton) {
 }
 
 function uploadFile() {
+    /**
+     * Creates a formdata object with the selected file inside and sends it to the upload endpoint in the API.
+     *
+     * @returns {void}
+     */
     const formData = new FormData()
     formData.append("file", selectedFile)
 
+    // Upload the file to the upload endpoint in the API
     sendServerRequest("POST", "http://localhost:5000/api/upload", formData, true, false)
 }
 
