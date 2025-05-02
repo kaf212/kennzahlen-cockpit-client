@@ -27,16 +27,16 @@ export const translations = {
         "Ges. Gewinnreserve": "legal_reserve",
         "Gewinnvortrag": "retained_earnings"
     },
-   "expense": {
-       "Jahresgewinn": "(earnings-expense)",
-       "Betriebsaufwand": "operating_expense",
-       "Personalaufwand": "staff_expense",
-       "Sonstiger BA": "other_expenses",
-       "Abschreibungen": "depreciation",
-       "Finanzaufwand": "financial_expense",
-       "Liegenschaftsaufwand": "real_estate_expense",
-       "Gesamtaufwand": "expense"
-   },
+    "expense": {
+        "Jahresgewinn": "(earnings-expense)",
+        "Betriebsaufwand": "operating_expense",
+        "Personalaufwand": "staff_expense",
+        "Sonstiger BA": "other_expenses",
+        "Abschreibungen": "depreciation",
+        "Finanzaufwand": "financial_expense",
+        "Liegenschaftsaufwand": "real_estate_expense",
+        "Gesamtaufwand": "expense"
+    },
     "earnings": {
         "Jahresverlust": "((earnings-expense)*-1)",
         "Betriebsertrag": "operating_income",
@@ -58,13 +58,13 @@ function addTabButtonEventListeners() {
      *
      * @returns {void}
      */
-    Array.from(document.getElementsByClassName("tab-button")).forEach(tabButton=>{
-        tabButton.addEventListener( "click",(event) =>{
+    Array.from(document.getElementsByClassName("tab-button")).forEach(tabButton => {
+        tabButton.addEventListener("click", (event) => {
             /*
             When a tab button is clicked, it iterates over all tabs and adds the invisible class
             except for the account group that corresponds to the given button
              */
-            Array.from(document.getElementsByClassName("custom-figure-builder-tab")).forEach(tab=>{
+            Array.from(document.getElementsByClassName("custom-figure-builder-tab")).forEach(tab => {
                 const tabAccountGroup = tab.dataset.accountGroup
                 const clickedTabButton = event.currentTarget
                 const clickedTabButtonAccountGroup = event.currentTarget.dataset.accountGroup
@@ -87,8 +87,7 @@ function addTabButtonEventListeners() {
                     } else {
                         clickedTabButton.classList.add("selected-tab-button-income-statement")
                     }
-                }
-                else {
+                } else {
                     tab.classList.add("invisible") // All other tabs should remain or be made invisible
                 }
             })
@@ -131,7 +130,7 @@ function addReferenceValueInputEventListeners() {
      */
     const radioButtons = Array.from(document.getElementsByClassName("reference-value-radio-button"))
     radioButtons.forEach(radioButton => {
-        radioButton.addEventListener("change", ()=> {
+        radioButton.addEventListener("change", () => {
             refreshReferenceValueTextField()
         })
     })
@@ -167,7 +166,7 @@ function addButtonEventListeners() {
 
     // Add eventListeners to all account buttons
     Array.from(document.getElementsByClassName("account-button")).forEach(button => {
-        button.addEventListener("click", (event)=>{
+        button.addEventListener("click", (event) => {
             event.preventDefault() // buttons inside the form would else automatically trigger a submit when pressed
             formulaField.value += button.innerText
         })
@@ -175,14 +174,13 @@ function addButtonEventListeners() {
 
     // Add eventListeners to all operator buttons
     Array.from(document.getElementsByClassName("operator-button")).forEach(button => {
-        button.addEventListener("click", (event)=>{
+        button.addEventListener("click", (event) => {
             event.preventDefault()
             const operator = event.currentTarget.value
             let strToInsert = ""
             if (operator === "(" || operator === ")") {
                 strToInsert = operator // insert parentheses without any whitespace
-            }
-            else {
+            } else {
                 strToInsert = " " + operator + " "
                 // insert all other arithmetic operators with whitespaces before and after them
             }
@@ -229,7 +227,7 @@ function addSubmitEventListener() {
      */
     const formulaField = document.getElementById("formulaField")
     const customFigureBuilderForm = document.getElementById("customFigureBuilderForm")
-    customFigureBuilderForm.addEventListener("submit", (event)=>{
+    customFigureBuilderForm.addEventListener("submit", (event) => {
         const parsedFormula = parseFormulaString(formulaField.value)
         const formulaName = document.getElementById("formulaNameField").value
 
@@ -319,8 +317,6 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
     // Set the custom key figure builder back to normal mode
     endEditMode()
 }
-
-
 
 
 addReferenceValueInputEventListeners()
