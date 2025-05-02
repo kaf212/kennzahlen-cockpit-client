@@ -1,7 +1,6 @@
 import { sendServerRequest } from '../utils/serverResponseHandling.js';
 import { checkUserPrivileges } from '../utils/userPrivilegeVerification.js';
 import { getCurrentKeyFigureData } from '../keyFigureData/loadCompanyData.js';
-import {escapeHtml} from "../utils/escapeHtml.js";
 
 const keyFigureNames = {
     cashRatio: "Liquiditätsgrad 1",
@@ -53,32 +52,50 @@ export function showTab(tab) {
     document.getElementById(`tab-${tab}`).classList.add("border-gray-800");
     document.getElementById(`tab-${tab}`).classList.remove("border-transparent");
 
+    /* The drop down to select key figures for the historical analysis is made visible
+       dynamically based on the currently selected tab. */
     const dropdownElement = document.getElementById("historicTabDropdown")
     if (tab === "graph") {
+        // Make the dropdown visible if the historical tab (graph) is selected
         dropdownElement.style.visibility = ""
     } else {
+        // Make the dropdown invisible if the current tab (table) is selected
         dropdownElement.style.visibility = "hidden"
     }
 
+    // Inform the user that he has to select a company if none is selected
     if (url.searchParams.get("id") === null) {
         displayUserMessageInTab("Bitte wählen Sie ein Unternehmen aus.")
     }
+    // Inform that the user has to select a key figure if none have been selected
     else if (getSelectedKeyFiguresFromUrlParams().length === 0 && tab === "graph") {
         displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
     }
 }
 
+
 export function restrictCustomKeyFigureAccess() {
+    /**
+     * Calls checkUserPrivileges() to check, if the user has admin privileges.
+     * If that is the case, the button to access the custom key figure builder is made functional.
+     * Else, it either left unfunctional or made unfunctional, if the user has previously been
+     * logged in as admin and switched to standard.
+     */
     /* Due to reformatting of the file, this function appears so be authored by laiba-bzz in the git blame.
        The original author is Jan (kaf212). */
     const button = document.getElementById("customKeyFigureEditorButton")
     if (!button) return;
     checkUserPrivileges().then((result) => {
-        if (result === true) {
+        if (result === true) { // If the user has admin privileges
+            // Make the button functional by adding the href attribute that leads to the editor page
             button.setAttribute("href", "custom_figure.html")
+            // remove the greyed-out class
             button.classList.remove("greyed-out")
-        } else {
+        } else { // If the user only has standard privileges
+            /* Remove the href attribute from the button to make it unfunctional
+               if the user has been logged in as admin before */
             button.removeAttribute("href")
+            // Grey out the button
             button.classList.add("greyed-out")
         }
     })
@@ -130,6 +147,7 @@ export async function insertKeyFiguresToTable(data) {
     const urlParams = new URLSearchParams(window.location.search);
     const companyName = urlParams.get("company");
 
+    // Display the name of the selected company and the currently viewed period above the table
     insertCompanyInfo("table", companyName, period)
 
     Array.from(document.getElementsByClassName("data-table")).forEach(keyFigureTable => {
@@ -137,13 +155,18 @@ export async function insertKeyFiguresToTable(data) {
         keyFigureTable.classList.remove("hidden")
     })
 
+    // Fetch all custom key figures from the API
     const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false);
     const customKeyFigureTypes = {};
     const customKeyFigureNames = [];
 
+    // Iterate over the custom key figures
     customKeyFigures.forEach(customKeyFigure => {
+        // Add an entry with the custom key figure name as key and its type as value into customKeyFigureTypes
         customKeyFigureTypes[customKeyFigure.name] = customKeyFigure.type;
+        // Add an entry with the custom key figure name as key and its reference value as key
         keyFigureReferenceValues[customKeyFigure.name] = customKeyFigure.reference_value || "-"
+        // Append the custom key figure name to the array with all custom key figure names
         customKeyFigureNames.push(customKeyFigure.name);
     });
 
@@ -155,8 +178,10 @@ export async function insertKeyFiguresToTable(data) {
         nameCell.className = "p-2 border";
         nameCell.textContent = keyFigureNames[key] || key;
 
+        // Create a HTML element for the table cell containing the reference value
         const referenceValueCell = document.createElement("td")
         referenceValueCell.classList.add("p-2", "border")
+        // Insert the reference value into the table cell
         referenceValueCell.textContent = keyFigureReferenceValues[key]
 
         const valueCell = document.createElement("td");
@@ -176,11 +201,12 @@ export async function insertKeyFiguresToTable(data) {
             targetTable = document.getElementById("customKeyFigureTable");
         }
 
-
+        // Add the three created table cells to the row of the current iteration
         row.appendChild(nameCell);
         row.appendChild(referenceValueCell)
         row.appendChild(valueCell);
 
+        // Add the row to the table
         targetTable.appendChild(row);
     }
 }
@@ -201,28 +227,32 @@ function displayUserMessageInTab(message) {
     messageElement.innerText = message
 
     const existingMessage = document.getElementById("tabMessage")
+    // If there already is a user message in the tab, delete it
     if (existingMessage) {
         existingMessage.remove()
     }
 
+    // If the currently selected tab is the historical tab
     if (url.searchParams.get("view") === "graph") {
         const chartCanvas = document.getElementById("historicChart")
         const graphTab = document.getElementById("graph-section")
+        // Hide the graph in order to display the user message
         if (chartCanvas) {
             chartCanvas.classList.add("hidden")
+            // Insert the user message element into the tab
             graphTab.appendChild(messageElement)
         }
-    } else {
+    } else { // If the currently selected tab is the current key figures tab
         const tableTab = document.getElementById("table-section")
+        // Hide both tables in the table tab in order to display the user message
         Array.from(tableTab.querySelectorAll("table")).forEach(table => {
             table.classList.add("hidden")
         })
+        // Insert the user message element into the tab
         tableTab.appendChild(messageElement)
     }
-
-
-
 }
+
 
 function findCustomKeyFigure(customKeyFigureName, customKeyFigureList) {
     /**
@@ -234,13 +264,17 @@ function findCustomKeyFigure(customKeyFigureName, customKeyFigureList) {
      */
 
     let foundCustomKeyFigure
+    // Iterate over all custom key figures in the provided list and compare their names with customKeyFigureName
     customKeyFigureList.forEach(customKeyFigure => {
         if (customKeyFigure.name === customKeyFigureName) {
+            // A custom key figure with the provided name has been found in the list
             foundCustomKeyFigure = customKeyFigure
         }
     })
+
     return foundCustomKeyFigure
 }
+
 
 async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
     /**
@@ -254,8 +288,10 @@ async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
      * @returns {Object} The modified historicDataObject with the multiplied values
      */
 
+    // Fetch all custom key figures from the API
     const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/api/customKeyFigures", null, false)
 
+    // Iterate over the key figures inside the historicalDataObject
     for (const [keyFigureName, historicValueArray] of Object.entries(historicDataObject)) {
         let multiplicator = 100
 
@@ -270,9 +306,10 @@ async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
             yearlyValue.key_figure = (yearlyValue.key_figure * multiplicator).toFixed(0)
         })
     }
-    console.log(historicDataObject)
+
     return historicDataObject
 }
+
 
 async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, labelToKey, setChart, getChart) {
     const currentChart = getChart();
@@ -288,22 +325,23 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
     document.getElementById("historicChart").classList.remove("hidden")
 
     const tabMessage = document.getElementById("tabMessage")
+    // If a user message is still present inside the tab, remove it
     if (tabMessage) {
         tabMessage.remove()
 
     }
 
-
-
     let historicData;
     try {
+        // Fetch the historical data of the given company from the API
         historicData = await sendServerRequest("GET", `/api/keyFigures/historic/${companyId}`, null, false);
     } catch (err) {
         chartCanvas.classList.add("hidden");
 
         return;
     }
-    console.log(historicData)
+
+    // Multiply the historical key figure values with 100 or 1000 based on their type (percentage or numeric)
     historicData = await multiplyKeyFigureValuesBasedOnType(historicData)
 
     const datasets = [];
@@ -333,9 +371,8 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         if (labels.length === 0 || values.length === 0) continue;
         if (commonLabels.length === 0) commonLabels = labels;
 
+        // Translate the key figure if a translation exists (custom key figures don't have translations)
         const translation = keyFigureNames[label] || label
-
-        console.log(values)
 
         datasets.push({
             label: translation,
@@ -367,13 +404,17 @@ async function renderMultiChart(selectedLabels, ctx, chartCanvas, companyId, lab
         }
     });
 
+    // totalHistoricalPeriod is the array of all periods that exist for the selected company
     const totalHistoricalPeriod = commonLabels
+    // Get the first and last years of the total historical period
     const firstYear = totalHistoricalPeriod[0]
     const lastYear = totalHistoricalPeriod[totalHistoricalPeriod.length - 1]
 
     const url = new URL(window.location.href)
+    // Get the currently selected company from the URL parameters
     const companyName = url.searchParams.get("company");
 
+    // Display the name of the company and the total historical period above the graph
     insertCompanyInfo("graph", companyName, `${firstYear} - ${lastYear}`);
 
     setChart(chart);
@@ -438,13 +479,16 @@ function insertKeyFigureNamesIntoDropdownLabel() {
         keyFigureNamesToInsert.push(translation)
     })
 
+    // If no key figures are selected, display the message "Kennzahlen auswählen"
     if (keyFigureNamesToInsert.length === 0) {
         dropdownLabel.innerText = "Kennzahlen auswählen"
     } else {
+        // Convert the array to a comma seperated string and insert it into the dropdown's label
         dropdownLabel.innerText = keyFigureNamesToInsert.join(", ")
     }
 
 }
+
 
 function markSelectedCustomKeyFiguresAsChecked() {
     /**
@@ -455,10 +499,11 @@ function markSelectedCustomKeyFiguresAsChecked() {
      * are selected in the URL parameter selectedKeyFigures.
      */
     const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
+    // Iterate over all key figure checkboxes inside the key figure selection dropdown
     Array.from(document.getElementsByClassName("key-figure-checkbox")).forEach(checkbox => {
         const checkBoxKeyFigure = checkbox.value
+        // If the key figure is selected in the URL but its checkbox is unchecked:
         if (selectedKeyFigures.includes(checkBoxKeyFigure) && checkbox.checked === false) {
-            // If the key figure is selected in the URL but its checkbox is unchecked:
             checkbox.checked = true // mark it as checked
         }
     })
@@ -472,9 +517,13 @@ function getSelectedKeyFiguresFromUrlParams() {
      */
     const url = new URL(window.location.href)
     const urlList = decodeURIComponent(url.searchParams.get("selectedKeyFigures"))
+
     if (urlList === "null") {
+        // Return an empty array if no key figure is selected in the URL parameter
         return []
     }
+
+    // Convert the comma seperated string into an array
     const selectedKeyFigures = urlList.split(",")
     return selectedKeyFigures
 }
@@ -506,7 +555,10 @@ async function setupDropdown(companyId) {
         "Umlaufintensität": "workingCapitalIntensity"
     };
 
+    // Fetch all custom key figures from the API
     const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false);
+
+    // Iteratively create a checkbox element for each custom key figure and insert it into the dropdown
     customKeyFigures.forEach(fig => {
         const listItem = document.createElement("li");
 
@@ -525,6 +577,9 @@ async function setupDropdown(companyId) {
         listItem.appendChild(customKeyFigureLabel)
 
         dropdownList.appendChild(listItem);
+
+        /* Create a new entry in the key figure translation object for the custom key figure
+           (It translates to itself) */
         labelToKey[fig.name] = fig.name;
     });
 
@@ -537,6 +592,7 @@ async function setupDropdown(companyId) {
 
     const selectedKeyFigures = getSelectedKeyFiguresFromUrlParams()
     if (selectedKeyFigures.length > 0) {
+        // Only render the chart if at least one key figure has been selected
         await renderMultiChart(selectedKeyFigures, ctx, chartCanvas, companyId, labelToKey, setChart, getChart)
     }
 
@@ -565,6 +621,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             targetTab = "table"
         }
 
+        // Display the selected tab
         showTab(targetTab)
 
         document.getElementById("tab-graph").addEventListener("click", () => showTab('graph'));
@@ -576,13 +633,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const companyId = url.searchParams.get("id");
     if (!companyId) {
+        // Stop execution here if no company has been selected, because no data can be displayed
         return
     }
 
     if (url.searchParams.has("id")) {
+        // Fetch and insert the current key figure data into the tables if the URL parameter "id" exists
         getCurrentKeyFigureData().then(insertKeyFiguresToTable);
     }
 
+    // If the historical tab is selected but no key figures are selected
     if (getSelectedKeyFiguresFromUrlParams().length === 0 && url.searchParams.get("view") === "graph") {
         displayUserMessageInTab("Bitte wählen Sie eine Kennzahl aus.")
     }
