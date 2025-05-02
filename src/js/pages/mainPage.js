@@ -289,7 +289,7 @@ async function multiplyKeyFigureValuesBasedOnType(historicDataObject) {
      */
 
     // Fetch all custom key figures from the API
-    const customKeyFigures = await sendServerRequest("GET", "http://localhost:5000/api/customKeyFigures", null, false)
+    const customKeyFigures = await sendServerRequest("GET", "/api/customKeyFigures", null, false)
 
     // Iterate over the key figures inside the historicalDataObject
     for (const [keyFigureName, historicValueArray] of Object.entries(historicDataObject)) {
