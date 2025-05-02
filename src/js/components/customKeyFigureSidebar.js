@@ -4,6 +4,7 @@ import {
     translations
 } from "../pages/customFigureBuilder.js";
 
+
 function reverseParseFormulaString(formulaStr) {
     /**
      * Translates english account names in the formula string to their german translations
@@ -68,6 +69,7 @@ function reverseParseAnnualProfitAndLossFormulas(formulaStr) {
     return formulaStr
 }
 
+
 async function getCustomKeyFigures() {
     /**
      * Fetches all custom key figures from the API and returns them in JSON format.
@@ -77,6 +79,7 @@ async function getCustomKeyFigures() {
     const data = await sendServerRequest("GET", "http://localhost:5000/api/customKeyFigures", null, false)
     return data
 }
+
 
 async function loadSidebar() {
     /**
@@ -138,6 +141,7 @@ async function loadSidebar() {
 
 }
 
+
 function deleteCustomKeyFigure(customKeyFigureId) {
     /**
      * Sends a DELETE request to the API with the provided custom key figure id.
@@ -147,6 +151,7 @@ function deleteCustomKeyFigure(customKeyFigureId) {
     const url = "http://localhost:5000/api/customKeyFigures/" + customKeyFigureId
     sendServerRequest("DELETE", url, null, false)
 }
+
 
 async function editCustomKeyFigure(customKeyFigureId) {
     /**
@@ -195,6 +200,7 @@ async function editCustomKeyFigure(customKeyFigureId) {
 
 }
 
+
 function addCustomKeyFigureDeleteButtonEventListeners() {
     /**
      * Iterates over all delete buttons in the custom key figure sidebar and adds a click-eventListener.
@@ -203,7 +209,7 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
      *
      */
     Array.from(document.getElementsByClassName("sidebar-delete-button")).forEach(button => {
-        button.addEventListener("click", (event)=>{
+        button.addEventListener("click", (event) => {
             // The sidebar element is the parent of the delete button
             const customKeyFigureItem = event.currentTarget.parentNode
             // reads the custom key figure's id and name from the sidebar element's dataset
@@ -218,6 +224,7 @@ function addCustomKeyFigureDeleteButtonEventListeners() {
         })
     })
 }
+
 
 export function endEditMode() {
     /**
@@ -253,6 +260,7 @@ export function endEditMode() {
     refreshReferenceValueTextField()
 }
 
+
 function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) {
     /**
      * Sets the custom key figure builder into edit mode. This means, that it will send a PATCH
@@ -282,7 +290,6 @@ function setPageToEditMode(customKeyFigureId, customKeyFigureName, sidebarItem) 
 }
 
 
-
 function addCustomKeyFigureEventListeners() {
     /**
      * Iterates over all custom key figure sidebar elements and adds a click-eventListener
@@ -295,7 +302,7 @@ function addCustomKeyFigureEventListeners() {
      * @returns {void}
      */
     Array.from(document.getElementsByClassName("sidebar-item-content-wrapper")).forEach(item => {
-        item.addEventListener("click", async (event)=>{
+        item.addEventListener("click", async (event) => {
             // Read the custom key figure id and name from the sidebar element's dataset
             // (the parent of the content-wrapper)
             const customKeyFigureId = event.currentTarget.parentNode.dataset.customKeyFigureId
@@ -308,6 +315,7 @@ function addCustomKeyFigureEventListeners() {
     })
 }
 
+
 function addEndEditModeButtonEventListener() {
     /**
      * Adds a click-eventListener to the "end edit mode" button that calls endEditMode() when triggered.
@@ -317,6 +325,7 @@ function addEndEditModeButtonEventListener() {
     const endEditModeButton = document.getElementById("endEditModeButton")
     endEditModeButton.addEventListener("click", endEditMode)
 }
+
 
 addInfoBoxEventListener(loadSidebar)
 loadSidebar()
