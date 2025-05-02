@@ -46,16 +46,17 @@ export const translations = {
     }
 }
 
+
 function addTabButtonEventListeners() {
-    /*
-    Adds the necessary EventListeners to the buttons that switch between
-    the tabs containing the account buttons (actives, passives etc.)
-    The EventListeners get triggered with a click and then iterate over all the four tabs and hides them
-    except the one that contains the accounts of the given account group. For example: a press on the "Aktiven" button
-    will hide all tabs except the actives tab. The link between the buttons and the tabs is created with the
-    data-account-group attribute in the HTML-tab-elements.
-    :param: none
-    :return: void
+    /**
+     * Adds the necessary EventListeners to the buttons that switch between
+     * the tabs containing the account buttons (actives, passives etc.)
+     * The EventListeners get triggered with a click and then iterate over all the four tabs and hides them
+     * except the one that contains the accounts of the given account group. For example: a press on the "Aktiven" button
+     * will hide all tabs except the actives tab. The link between the buttons and the tabs is created with the
+     * data-account-group attribute in the HTML-tab-elements.
+     *
+     * @returns {void}
      */
     Array.from(document.getElementsByClassName("tab-button")).forEach(tabButton=>{
         tabButton.addEventListener( "click",(event) =>{
@@ -95,11 +96,14 @@ function addTabButtonEventListeners() {
     })
 }
 
+
 export function refreshReferenceValueTextField() {
     /**
      * Checks if the reference value text field is activated or deactivated based on the current selection
      * of the corresponding radio buttons in the custom key figure builder form
      * and enables/disables it based on that selection.
+     *
+     * @returns {void}
      */
     const textField = document.getElementById("referenceValueTextField")
     const deactivatedRadioButton = document.getElementById("referenceValueDeactivated")
@@ -117,6 +121,7 @@ export function refreshReferenceValueTextField() {
     }
 }
 
+
 function addReferenceValueInputEventListeners() {
     /**
      * Adds a change-eventListener to both of the reference value radio buttons
@@ -133,13 +138,12 @@ function addReferenceValueInputEventListeners() {
 }
 
 
-
 function createAccountButtons() {
-    /*
-    Iterates over all account groups and iterates again over all the nested accounts in said account group and adds
-    a HTML element of a button for this account to the respective account tab in the custom figure builder.
-    :param: none
-    :return: void
+    /**
+     * Iterates over all account groups and iterates again over all the nested accounts in said account group and adds
+     * a HTML element of a button for this account to the respective account tab in the custom figure builder.
+     *
+     * @returns {void}
      */
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
@@ -153,9 +157,11 @@ function createAccountButtons() {
 
 
 function addButtonEventListeners() {
-    /*
-    Adds the necessary eventListeners to all input buttons in the custom figure builder which
-    insert the respective button's value into the text field for the formula when triggered.
+    /**
+     * Adds the necessary eventListeners to all input buttons in the custom figure builder which
+     * insert the respective button's value into the text field for the formula when triggered.
+     *
+     * @returns {void}
      */
     const formulaField = document.getElementById("formulaField")
 
@@ -186,14 +192,16 @@ function addButtonEventListeners() {
     })
 }
 
+
 function parseFormulaString(formulaStr) {
-    /*
-    Iterates over all english account names in the translations object and checks, if they are a substring of the
-    provided formula string. If yes, then the substring is replaced with the corresponding german translation from the
-    translations object.
-    At the end, all whitespaces are removed from the formula to make it processable in the backend.
-    :param: formulaStr (str): The german formula provided by the UI in the formula field
-    :return: formulaStr (str): The translated formula without whitespaces
+    /**
+     * Iterates over all english account names in the translations object and checks, if they are a substring of the
+     * provided formula string. If yes, then the substring is replaced with the corresponding german translation from the
+     * translations object.
+     * At the end, all whitespaces are removed from the formula to make it processable in the backend.
+     *
+     * @param {String} formulaStr - The german formula provided by the UI in the formula field
+     * @returns {String} The translated formula without whitespaces
      */
     for (const [accountGroup, accounts] of Object.entries(translations)) {
         for (const [germanAccount, englishAccount] of Object.entries(accounts)) {
@@ -204,7 +212,6 @@ function parseFormulaString(formulaStr) {
         }
     }
 
-
     // Source: https://stackoverflow.com/questions/10800355/remove-whitespaces-inside-a-string-in-javascript
     formulaStr = formulaStr.replace(/\s+/g, "") // remove all whitespaces from the formula
 
@@ -212,14 +219,13 @@ function parseFormulaString(formulaStr) {
 }
 
 
-
 function addSubmitEventListener() {
-    /*
-    Adds the EventListener to the custom figure builder form that gets triggered with the form submit.
-    Upon submitting, the formula string is read from the formula field in the UI and passed to parseFormulaString()
-    The parsed result is then passed to saveNewCustomKeyFigure() to be sent to the server.
-    :param: none
-    :return: void
+    /**
+     * Adds the EventListener to the custom figure builder form that gets triggered with the form submit.
+     * Upon submitting, the formula string is read from the formula field in the UI and passed to parseFormulaString()
+     * The parsed result is then passed to saveNewCustomKeyFigure() to be sent to the server.
+     *
+     * @returns {void}
      */
     const formulaField = document.getElementById("formulaField")
     const customFigureBuilderForm = document.getElementById("customFigureBuilderForm")
@@ -249,13 +255,15 @@ function addSubmitEventListener() {
     })
 }
 
+
 async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureType, referenceValue) {
-    /*
-    Sends a POST request to the backend to save the new custom key figure on the server.
-    The response is then passed to handleServerResponse() to display the success or error message in the UI.
-    :param: formulaName (str): The name of the new custom key figure
-    :param: formulaStr (str): The translated formula
-    :return: void
+    /**
+     * Sends a POST request to the backend to save the new custom key figure on the server.
+     * The response is then passed to handleServerResponse() to display the success or error message in the UI.
+     *
+     * @param {String} formulaName - The name of the new custom key figure
+     * @param {String} formulaStr - The translated formula
+     * @returns {Promise} An empty promise
      */
     await sendServerRequest("POST", "http://localhost:5000/api/customKeyFigures", {
         name: formulaName,
@@ -264,6 +272,7 @@ async function saveNewCustomKeyFigure(formulaName, formulaStr, customKeyFigureTy
         reference_value: referenceValue
     })
 }
+
 
 async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormula, customKeyFigureType, referenceValue) {
     /**
@@ -274,7 +283,15 @@ async function patchCustomKeyFigure(customKeyFigureId, formulaName, parsedFormul
      * If these two values are the same (the user hasn't updated them), the attribute is deleted from the
      * object, because it hasn't changed and is therefore not needed by the PATCH endpoint.
      * The remaining modified attributes are then sent to the API in a PATCH request.
+     *
+     * @param {String} customKeyFigureId - The id of the edited custom key figure
+     * @param {String} formulaName - The Name of the custom key figure
+     * @param {String} parsedFormula - The translated formula in machine-readable format
+     * @param {String} customKeyFigureType - The type of the custom key figure
+     * @param {String} referenceValue - The reference value of the custom key figure
+     * @returns {Promise} An empty promise
      */
+
     const originalCustomKeyFigure = await sendServerRequest("GET", `http://localhost:5000/api/customKeyFigures/${customKeyFigureId}`, null, false)
     const updatedCustomKeyFigure = {
         "name": formulaName,
