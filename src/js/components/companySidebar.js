@@ -41,7 +41,7 @@ async function getCompanies() {
     /**
      * Fetches all companies from the API and returns the JSON data.
      *
-     * @returns {Object} An array of company objects.
+     * @returns {Array} An array of company objects.
      */
     const data = await sendServerRequest("GET", "http://localhost:5000/api/companies", null, false)
     return data
