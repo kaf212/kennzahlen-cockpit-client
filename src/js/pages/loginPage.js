@@ -3,19 +3,18 @@ import {addInfoBoxEventListener, sendServerRequest} from "../utils/serverRespons
 const form = document.getElementById("loginForm");
 
 if (form) {
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault()
 
-        const role = document.getElementById("role").value;
-        const password = document.getElementById("pass").value;
-
-        console.log("Login versendet:", role, password);
+        const role = document.getElementById("role").value
+        const password = document.getElementById("passwordField").value
 
         const jsonData = await sendServerRequest("POST", "http://localhost:5000/api/auth/login", {role, password}, false)
 
 
         if (jsonData.hasOwnProperty("token")) {
-            sessionStorage.setItem("token", jsonData.token);
+            // Save the received token into sessionStorage with the key "token"
+            sessionStorage.setItem("token", jsonData.token)
 
             /* If the user has been on a different page when the login prompt was triggered, he will be sent back
             to his last location (referrer). If not, he will be sent to index.html.
